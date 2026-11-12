@@ -1,14 +1,10 @@
-import React, { useEffect } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { View } from "../types";
 import Hero from "../components/home/Hero";
-import ServicesSection from "../components/home/sections/ServicesSection";
-import CallBand from "../components/home/sections/CallBand";
-import ProjectsSection from "../components/home/sections/ProjectsSection";
-import ProcessSection from "../components/home/sections/ProcessSection";
-import FaqSection from "../components/home/sections/FaqSection";
-import ContactSection from "../components/home/sections/ContactSection";
 import { scrollToSectionWhenReady } from "../components/home/sections/homeLinks";
 import "../components/home/sections/home.css";
+
+const HomeSections = lazy(() => import("../components/home/sections/HomeSections"));
 
 interface HomeProps {
   onNavigate: (view: View) => void;
@@ -30,12 +26,9 @@ const Home: React.FC<HomeProps> = () => {
   <>
     <Hero />
     <div className="hm">
-      <ServicesSection />
-      <CallBand />
-      <ProjectsSection />
-      <ProcessSection />
-      <FaqSection />
-      <ContactSection />
+      <Suspense fallback={<div style={{ minHeight: "100vh" }} aria-hidden="true" />}>
+        <HomeSections />
+      </Suspense>
     </div>
   </>
   );
