@@ -8,7 +8,8 @@
     "prebuild": "node scripts/fetch-github-projects.mjs",
     "build": "vite build",
     "preview": "vite preview",
-    "github:sync": "node scripts/fetch-github-projects.mjs"
+    "github:sync": "node scripts/fetch-github-projects.mjs",
+    "projects:shots": "node scripts/project-shots.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.26.1",
@@ -29,7 +30,9 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^5.0.0",
     "autoprefixer": "^10.4.23",
+    "playwright": "^1.65.0",
     "postcss": "^8.5.6",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"

@@ -1,9 +1,12 @@
 /**
- * Proyectos desde GitHub (usuario FrankUsqAbant), sin backend:
- * API pública en el navegador + caché de 1 h en localStorage + copia
- * generada en el build (data/github-projects.json) por si la API falla.
+ * Proyectos del inicio: lista curada (data/projects.json, con capturas reales)
+ * enriquecida con GitHub (usuario FrankUsqAbant), sin backend: API pública en
+ * el navegador + caché de 1 h en localStorage + copia del build
+ * (data/github-projects.json) por si la API falla. GitHub solo aporta la fecha
+ * del último push («Activo») y los repos NUEVOS con el topic «portfolio».
  */
 import snapshot from "../data/github-projects.json";
+import curated from "../data/projects.json";
 
 export const GITHUB_USER = "FrankUsqAbant";
 export const GITHUB_REPOS_URL = `https://github.com/${GITHUB_USER}?tab=repositories`;
@@ -37,6 +40,8 @@ export interface Project {
   codeUrl: string;
   demoUrl: string | null;
   image: string;
+  /** true = captura real del sitio; false = tarjeta automática de GitHub. */
+  realShot: boolean;
   language: string | null;
   topics: string[];
 }
@@ -77,31 +82,72 @@ const toProject = (r: RawRepo): Project => {
     .filter((c): c is string => Boolean(c))
     .filter((c, i, a) => a.indexOf(c) === i)
     .slice(0, 3);
-  const pushed = r.pushed_at ? Date.parse(r.pushed_at) : 0;
   return {
     id: r.name,
     title: humanize(r.name),
     description: r.description?.trim() || "Proyecto en desarrollo",
     chips,
-    status: Date.now() - pushed < 30 * DAY ? "Activo" : "Publicado",
+    status: statusOf(r.pushed_at),
     codeUrl: r.html_url,
     demoUrl: normUrl(r.homepage),
     image: `https://opengraph.githubassets.com/1/${r.full_name}`,
+    realShot: false,
     language: r.language,
     topics,
   };
 };
 
-/** Sin forks, archivados ni el repo del README del perfil. Si alguno tiene
- *  el topic «portfolio», solo esos. Orden: «featured» primero, luego el más reciente. */
+interface CuratedProject {
+  repo: string;
+  title: string;
+  description: string;
+  chips: string[];
+  demoUrl: string | null;
+  repoUrl: string;
+  image: string;
+}
+
+const CURATED: CuratedProject[] = curated.projects;
+
+const statusOf = (pushedAt: string | null | undefined): Project["status"] =>
+  pushedAt && Date.now() - Date.parse(pushedAt) < 30 * DAY ? "Activo" : "Publicado";
+
+const eligible = (r: RawRepo) =>
+  !r.fork && !r.archived && r.name.toLowerCase() !== GITHUB_USER.toLowerCase();
+
+/** Curados en su orden (fecha de GitHub si está) + repos nuevos con «portfolio»
+ *  que aún no están en la lista: con «featured» van primero, si no, al final. */
 export const selectProjects = (repos: RawRepo[]): Project[] => {
-  const base = repos.filter((r) => !r.fork && !r.archived && r.name.toLowerCase() !== GITHUB_USER.toLowerCase());
-  const tagged = base.filter((r) => r.topics?.includes(SHOW_TOPIC));
-  const pool = tagged.length > 0 ? tagged : base;
-  const feat = (r: RawRepo) => (r.topics?.includes(FEATURED_TOPIC) ? 1 : 0);
-  return [...pool]
-    .sort((a, b) => feat(b) - feat(a) || Date.parse(b.pushed_at ?? "0") - Date.parse(a.pushed_at ?? "0"))
+  const byName = new Map(repos.map((r) => [r.name.toLowerCase(), r]));
+  const curatedNames = new Set(CURATED.map((c) => c.repo.toLowerCase()));
+
+  const list: Project[] = CURATED.filter((c) => {
+    const r = byName.get(c.repo.toLowerCase());
+    return !r || eligible(r); // si lo archiva o lo hace fork, desaparece
+  }).map((c) => {
+    const r = byName.get(c.repo.toLowerCase());
+    return {
+      id: c.repo,
+      title: c.title,
+      description: c.description,
+      chips: c.chips.slice(0, 3),
+      status: statusOf(r?.pushed_at),
+      codeUrl: c.repoUrl,
+      demoUrl: c.demoUrl,
+      image: c.image,
+      realShot: true,
+      language: r?.language ?? null,
+      topics: r?.topics ?? [],
+    };
+  });
+
+  const extra = repos
+    .filter((r) => eligible(r) && r.topics?.includes(SHOW_TOPIC) && !curatedNames.has(r.name.toLowerCase()))
+    .sort((a, b) => Date.parse(b.pushed_at ?? "0") - Date.parse(a.pushed_at ?? "0"))
     .map(toProject);
+  const feat = extra.filter((p) => p.topics.includes(FEATURED_TOPIC));
+  const rest = extra.filter((p) => !p.topics.includes(FEATURED_TOPIC));
+  return [...feat, ...list, ...rest];
 };
 
 const isRepoList = (v: unknown): v is RawRepo[] =>

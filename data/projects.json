@@ -1,0 +1,305 @@
+{
+  "_doc": "Proyectos curados del inicio, en orden. Las imágenes se generan con `npm run projects:shots` (README → captura). Ver README.",
+  "projects": [
+    {
+      "repo": "chavez-originals",
+      "title": "Chavez Originals",
+      "description": "Web demo para negocios: tienda de calzado con vitrina interactiva, catálogo administrable y pedidos por WhatsApp.",
+      "chips": [
+        "React",
+        "Supabase",
+        "Tailwind CSS"
+      ],
+      "demoUrl": "https://chavez-originals.pages.dev",
+      "repoUrl": "https://github.com/FrankUsqAbant/chavez-originals",
+      "image": "/images/projects/chavez-originals.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/chavez-originals/main/docs/preview.webp"
+      }
+    },
+    {
+      "repo": "hostal-aguilar",
+      "title": "Hostal Aguilar",
+      "description": "Web demo para negocios: hospedaje con reservas por WhatsApp y panel de administración.",
+      "chips": [
+        "React",
+        "Supabase",
+        "Tailwind CSS"
+      ],
+      "demoUrl": "https://hostal-aguilar.pages.dev",
+      "repoUrl": "https://github.com/FrankUsqAbant/hostal-aguilar",
+      "image": "/images/projects/hostal-aguilar.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/hostal-aguilar/main/docs/preview.webp"
+      }
+    },
+    {
+      "repo": "jireh-pasteleria",
+      "title": "JIRÉH Pastelería",
+      "description": "Web demo para negocios: catálogo de tortas con «Arma tu torta» en vivo y pedidos por WhatsApp.",
+      "chips": [
+        "React",
+        "Supabase",
+        "Tailwind CSS"
+      ],
+      "demoUrl": "https://jireh-pasteleria.pages.dev",
+      "repoUrl": "https://github.com/FrankUsqAbant/jireh-pasteleria",
+      "image": "/images/projects/jireh-pasteleria.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/jireh-pasteleria/main/docs/preview.webp"
+      }
+    },
+    {
+      "repo": "kasa-nord",
+      "title": "Kasa Nord",
+      "description": "Web demo para negocios: landing de una inmobiliaria de lujo en Lima, sin dependencias.",
+      "chips": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/kasa-nord/",
+      "repoUrl": "https://github.com/FrankUsqAbant/kasa-nord",
+      "image": "/images/projects/kasa-nord.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/kasa-nord/main/docs/hero.webp"
+      }
+    },
+    {
+      "repo": "aurea-dental",
+      "title": "Áurea Dental",
+      "description": "Web demo para negocios: clínica dental con un diseño elegante y adaptable a móvil.",
+      "chips": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/aurea-dental/",
+      "repoUrl": "https://github.com/FrankUsqAbant/aurea-dental",
+      "image": "/images/projects/aurea-dental.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/aurea-dental/main/imagenes/preview-aurea-dental.webp"
+      }
+    },
+    {
+      "repo": "vertice-moda",
+      "title": "Vértice",
+      "description": "Web demo para negocios: tienda de moda masculina con probador virtual interactivo.",
+      "chips": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/vertice-moda/",
+      "repoUrl": "https://github.com/FrankUsqAbant/vertice-moda",
+      "image": "/images/projects/vertice-moda.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/vertice-moda/main/imagenes/readme/preview-vertice.webp"
+      }
+    },
+    {
+      "repo": "simple-yoga-elite",
+      "title": "Simple Yoga Elite",
+      "description": "Web demo para negocios: estudio de yoga boutique con estética oscura y dorada.",
+      "chips": [
+        "React",
+        "JavaScript"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/simple-yoga-elite/",
+      "repoUrl": "https://github.com/FrankUsqAbant/simple-yoga-elite",
+      "image": "/images/projects/simple-yoga-elite.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/simple-yoga-elite/main/public/Pantalla.webp"
+      }
+    },
+    {
+      "repo": "PlatosYa",
+      "title": "PlatosYa",
+      "description": "App de pedidos para restaurantes con la cocina sincronizada en tiempo real en un tablero Kanban.",
+      "chips": [
+        "JavaScript",
+        "Socket.IO",
+        "MongoDB"
+      ],
+      "demoUrl": "https://platos-ya.vercel.app",
+      "repoUrl": "https://github.com/FrankUsqAbant/PlatosYa",
+      "image": "/images/projects/PlatosYa.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/PlatosYa/main/frontend/public/images/Principal.webp"
+      }
+    },
+    {
+      "repo": "extracto",
+      "title": "Extracto",
+      "description": "Extrae y clasifica facturas, recibos y contratos con visión de IA, con analítica y exportación a Excel.",
+      "chips": [
+        "TypeScript",
+        "IA",
+        "PostgreSQL"
+      ],
+      "demoUrl": "https://extracto-roan.vercel.app",
+      "repoUrl": "https://github.com/FrankUsqAbant/extracto",
+      "image": "/images/projects/extracto.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/extracto/main/public/extracto-preview.png"
+      }
+    },
+    {
+      "repo": "expense-tracker-ocr",
+      "title": "GastosApp",
+      "description": "Control de gastos personales con escaneo OCR de recibos e inteligencia artificial.",
+      "chips": [
+        "TypeScript",
+        "OCR",
+        "IA"
+      ],
+      "demoUrl": null,
+      "repoUrl": "https://github.com/FrankUsqAbant/expense-tracker-ocr",
+      "image": "/images/projects/expense-tracker-ocr.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/expense-tracker-ocr/main/public/preview.png"
+      }
+    },
+    {
+      "repo": "Aplicaci-n-React-Tareas",
+      "title": "TaskPulse",
+      "description": "Gestor de tareas con prioridades, categorías, edición en línea y progreso en vivo.",
+      "chips": [
+        "React",
+        "CSS"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/Aplicaci-n-React-Tareas/",
+      "repoUrl": "https://github.com/FrankUsqAbant/Aplicaci-n-React-Tareas",
+      "image": "/images/projects/Aplicaci-n-React-Tareas.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/Aplicaci-n-React-Tareas/master/public/imagenes/Principal.webp"
+      }
+    },
+    {
+      "repo": "Proyecto-Library",
+      "title": "Leer es Pensar",
+      "description": "Biblioteca digital de clásicos de dominio público con lector inmersivo.",
+      "chips": [
+        "TypeScript",
+        "React"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/Proyecto-Library/",
+      "repoUrl": "https://github.com/FrankUsqAbant/Proyecto-Library",
+      "image": "/images/projects/Proyecto-Library.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/Proyecto-Library/main/public/preview-zen-library.webp"
+      }
+    },
+    {
+      "repo": "NEXUS-ASCII-Generator",
+      "title": "NEXUS Studio Pro",
+      "description": "Convierte texto e imágenes en arte ASCII y lo exporta en PNG, SVG o Markdown.",
+      "chips": [
+        "TypeScript",
+        "React",
+        "Vite"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/NEXUS-ASCII-Generator/",
+      "repoUrl": "https://github.com/FrankUsqAbant/NEXUS-ASCII-Generator",
+      "image": "/images/projects/NEXUS-ASCII-Generator.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/NEXUS-ASCII-Generator/main/public/Pantalla.webp"
+      }
+    },
+    {
+      "repo": "OpenGravity",
+      "title": "OpenGravity",
+      "description": "Catálogo de proyectos en formato revista digital, con páginas que se pasan en 3D.",
+      "chips": [
+        "JavaScript",
+        "CSS"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/OpenGravity/",
+      "repoUrl": "https://github.com/FrankUsqAbant/OpenGravity",
+      "image": "/images/projects/OpenGravity.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/OpenGravity/main/docs/preview.webp"
+      }
+    },
+    {
+      "repo": "astro-sitio-web",
+      "title": "Hogwarts Legacy · Fan site",
+      "description": "Landing inmersiva inspirada en Hogwarts Legacy, rápida y con modo claro y oscuro.",
+      "chips": [
+        "Astro",
+        "React",
+        "CSS"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/astro-sitio-web/",
+      "repoUrl": "https://github.com/FrankUsqAbant/astro-sitio-web",
+      "image": "/images/projects/astro-sitio-web.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/astro-sitio-web/main/Readmee.png",
+        "position": "top"
+      }
+    },
+    {
+      "repo": "PokeAPI",
+      "title": "Pokédex Next-Gen",
+      "description": "Explora los Pokémon de Kanto con datos de la PokéAPI.",
+      "chips": [
+        "JavaScript",
+        "PokéAPI",
+        "CSS"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/PokeAPI/",
+      "repoUrl": "https://github.com/FrankUsqAbant/PokeAPI",
+      "image": "/images/projects/PokeAPI.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/PokeAPI/main/img/preview.webp"
+      }
+    },
+    {
+      "repo": "parallax",
+      "title": "Avengers Parallax",
+      "description": "Experiencia visual con efecto parallax inspirada en los Avengers.",
+      "chips": [
+        "CSS",
+        "JavaScript",
+        "Lax.js"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/parallax/",
+      "repoUrl": "https://github.com/FrankUsqAbant/parallax",
+      "image": "/images/projects/parallax.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/parallax/master/img/preview.webp"
+      }
+    },
+    {
+      "repo": "starter-project-eleventy",
+      "title": "Sitio con Eleventy",
+      "description": "Sitio estático rápido y ligero construido con Eleventy (11ty).",
+      "chips": [
+        "Eleventy",
+        "Nunjucks",
+        "CSS"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/starter-project-eleventy/",
+      "repoUrl": "https://github.com/FrankUsqAbant/starter-project-eleventy",
+      "image": "/images/projects/starter-project-eleventy.webp",
+      "source": {
+        "readme": "https://raw.githubusercontent.com/FrankUsqAbant/starter-project-eleventy/main/code/img/preview.webp"
+      }
+    },
+    {
+      "repo": "FrankUsqAbant.github.io",
+      "title": "Tarjeta digital",
+      "description": "Tarjeta digital interactiva con redes sociales, formulario de contacto y una llama animada.",
+      "chips": [
+        "JavaScript",
+        "CSS"
+      ],
+      "demoUrl": "https://frankusqabant.github.io/",
+      "repoUrl": "https://github.com/FrankUsqAbant/FrankUsqAbant.github.io",
+      "image": "/images/projects/FrankUsqAbant.github.io.webp",
+      "source": {
+        "page": "https://frankusqabant.github.io/"
+      }
+    }
+  ]
+}

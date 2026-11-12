@@ -21,19 +21,27 @@ const Media: React.FC<{ project: Project }> = ({ project }) => {
   const [attempt, setAttempt] = useState(0);
   const failed = attempt > 1;
   const src = attempt === 0 ? project.image : project.image.replace("/1/", "/2/");
+  const host = (project.demoUrl ?? project.codeUrl).replace(/^https?:\/\//, "").replace(/\/$/, "");
   return (
     <div className="gh__media">
+      <div className="gh__bar" aria-hidden="true">
+        <span className="gh__dots"><i /><i /><i /></span>
+        <span className="gh__url">{host}</span>
+      </div>
+      <div className="gh__shot">
       {failed ? (
         <Fallback project={project} />
       ) : (
         <img
           src={src}
-          alt={`Vista previa del repositorio ${project.title} en GitHub`}
+          alt={project.realShot ? `Captura de ${project.title}` : `Vista previa del repositorio ${project.title} en GitHub`}
+          loading="lazy"
           decoding="async"
           draggable={false}
-          onError={() => setAttempt((a) => a + 1)}
+          onError={() => setAttempt((a) => (project.realShot ? 2 : a + 1))}
         />
       )}
+      </div>
     </div>
   );
 };

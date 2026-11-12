@@ -428,13 +428,18 @@
 
 /* ===================== PROYECTOS (GitHub) ===================== */
 .hm .ghc{position:relative;outline:none}
-.hm .ghc__stage{position:relative;height:560px;perspective:1600px;display:grid;place-items:center;cursor:grab;user-select:none}
+.hm .ghc__stage{position:relative;height:640px;perspective:1600px;display:grid;place-items:center;cursor:grab;user-select:none}
 .hm .ghc__stage:active{cursor:grabbing}
 .hm .ghc__slot{position:absolute;width:min(520px,84vw);transform-style:preserve-3d;will-change:transform,opacity}
 .hm .ghc__slot[aria-hidden=true]{cursor:pointer}
 .hm .gh{display:flex;flex-direction:column;background:linear-gradient(160deg,#fff,#faf9f6);border:1px solid rgba(255,255,255,.95);border-radius:24px;overflow:hidden;box-shadow:0 34px 70px -40px rgba(0,0,0,.42),inset 0 0 0 1px var(--line)}
-.hm .gh__media{margin:10px 10px 0;aspect-ratio:2/1;border-radius:16px;overflow:hidden;background:linear-gradient(150deg,#f1eee9,#e4dfd7);border:1px solid var(--line);box-shadow:inset 0 1px 0 #fff}
-.hm .gh__media img{width:100%;height:100%;object-fit:cover;display:block}
+.hm .gh__media{margin:10px 10px 0;border-radius:16px;overflow:hidden;background:rgba(244,242,238,.85);border:1px solid var(--line);box-shadow:0 14px 30px -22px rgba(0,0,0,.4),inset 0 1px 0 #fff}
+.hm .gh__bar{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(244,242,238,.8))}
+.hm .gh__dots{display:flex;gap:5px}
+.hm .gh__dots i{width:8px;height:8px;border-radius:50%;background:rgba(20,20,20,.14)}
+.hm .gh__url{flex:1;min-width:0;font-family:var(--mono);font-size:9.5px;color:var(--g2);background:rgba(255,255,255,.85);border:1px solid var(--line);border-radius:6px;padding:3px 10px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hm .gh__shot{aspect-ratio:16/10;background:linear-gradient(150deg,#f1eee9,#e4dfd7);overflow:hidden}
+.hm .gh__shot img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
 .hm .gh__body{padding:18px 22px 22px;display:flex;flex-direction:column;gap:10px}
 .hm .gh__meta{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .hm .gh__status{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(20,20,20,.06);color:var(--ink-2)}
@@ -453,7 +458,7 @@
 .hm .ghc__ctrl{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:22px}
 .hm .ghc__arrow{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.75);cursor:pointer;font-size:15px;color:var(--ink);transition:background .25s,color .25s}
 .hm .ghc__arrow:hover{background:var(--ink);color:#fff}
-.hm .ghc__dots{display:flex;gap:8px}
+.hm .ghc__dots{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;max-width:min(520px,70vw)}
 .hm .ghc__dot{position:relative;width:8px;height:8px;padding:0;border:0;border-radius:999px;background:rgba(20,20,20,.18);cursor:pointer;overflow:hidden;transition:width .35s var(--ease),background .3s}
 .hm .ghc__dot.is-active{width:34px;background:rgba(20,20,20,.14)}
 .hm .ghc__dot i{position:absolute;inset:0;background:var(--ink);transform-origin:left;animation:gh-fill linear forwards}
@@ -471,5 +476,5 @@
 @keyframes gh-pulse{50%{opacity:.45}}
 @keyframes gh-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes gh-float{50%{transform:translateY(-8px)}}
-@media (max-width:720px){.hm .ghc__stage{height:540px}.hm .gh h3{font-size:26px}}
+@media (max-width:720px){.hm .ghc__stage{height:600px}.hm .gh h3{font-size:26px}}
 @media (prefers-reduced-motion:reduce){.hm .gh *{animation:none!important}}
