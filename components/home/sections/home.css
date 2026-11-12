@@ -426,6 +426,13 @@
 .hm .ck__ok{background:var(--ink);border:1px solid var(--ink);color:#f4f2ee}
 .hm.ck :focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 @media (max-width:560px){.hm.ck{flex-direction:column;align-items:stretch;gap:10px;padding:14px}.hm .ck__btns button{flex:1}}
+.hm .ck__short{display:none}
+/* Móvil pequeño: una sola fila compacta */
+@media (max-width:479px){
+.hm.ck{flex-direction:row;align-items:center;gap:8px;bottom:8px;width:calc(100vw - 16px);padding:8px 8px 8px 12px;border-radius:16px;font-size:11.5px;line-height:1.35}
+.hm .ck__long{display:none}.hm .ck__short{display:inline}
+.hm .ck__btns{gap:4px}.hm .ck__btns button{flex:none;font-size:11.5px;padding:7px 10px}
+}
 
 /* ===================== PROYECTOS (GitHub) ===================== */
 .hm .ghc{position:relative;outline:none;overflow-x:clip;overflow-y:visible}

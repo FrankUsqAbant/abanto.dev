@@ -19,8 +19,12 @@ const CookieBanner: React.FC = () => {
           transition={{ duration: 0.4, ease: [0.2, 0.7, 0.1, 1] }}
         >
           <p>
-            Uso solo lo necesario para que el sitio funcione. Si aceptas, también se carga la agenda de Cal.com, que usa
-            sus propias cookies. <Link to="/cookies">Más info</Link>
+            <span className="ck__long">
+              Uso solo lo necesario para que el sitio funcione. Si aceptas, también se carga la agenda de Cal.com, que
+              usa sus propias cookies.
+            </span>
+            <span className="ck__short">Solo lo necesario. Cal.com, solo si aceptas.</span>{" "}
+            <Link to="/cookies">Más info</Link>
           </p>
           <div className="ck__btns">
             <button type="button" className="ck__no" onClick={() => setConsent("rejected")}>Rechazar</button>
