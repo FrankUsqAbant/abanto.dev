@@ -52,10 +52,10 @@ const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
           </nav>
           <nav aria-label="Servicios">
             <h2 className="footer__h">Servicios</h2>
-            <a href="/#servicios" onClick={toHomeSection("servicios")}>Agentes de IA</a>
-            <a href="/#servicios" onClick={toHomeSection("servicios")}>Automatizaciones</a>
-            <a href="/#servicios" onClick={toHomeSection("servicios")}>Software a medida</a>
-            <a href="/#servicios" onClick={toHomeSection("servicios")}>Consultoría</a>
+            <a href="/#servicios" onClick={toHomeSection("servicios")}>Páginas web</a>
+            <a href="/#servicios" onClick={toHomeSection("servicios")}>Agentes y chatbots de IA</a>
+            <a href="/#servicios" onClick={toHomeSection("servicios")}>Automatización de procesos</a>
+            <a href="/#servicios" onClick={toHomeSection("servicios")}>Dashboards y datos</a>
           </nav>
           <nav aria-label="Redes sociales">
             <h2 className="footer__h">Sígueme</h2>

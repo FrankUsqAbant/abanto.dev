@@ -1,46 +1,77 @@
 import React from "react";
 import Reveal from "./Reveal";
-import {
-  AutomationFlow,
-  ConsultingStages,
-  CopilotChat,
-  InternalApp,
-  VoiceCall,
-  WhatsAppDemo,
-} from "./ServiceDemos";
+import CalLink from "../../shared/CalLink";
+import { ServiceIcon, type ServiceIconName } from "../heroIcons";
+import { CONTACT_ID, scrollToSection } from "./homeLinks";
 
-const Sample: React.FC = () => <span className="sample">datos de ejemplo</span>;
+/** Tipos de cliente a los que apunta cada servicio. */
+type Audience = "pequenos" | "emprendedores" | "medianas" | "independientes";
 
-/* Solo el aviso de "datos de ejemplo" (el número y nombre repetían el título). */
-const Meta: React.FC<{ label: string }> = ({ label }) => (
-  <div className="tile__meta" data-label={label}>
-    <Sample />
-  </div>
-);
+const AUDIENCES: { id: Audience; label: string; icon: React.ReactNode }[] = [
+  { id: "pequenos", label: "Pequeños negocios", icon: <path d="M4 10h16l-1.5-5h-13zM5 10v9h14v-9M10 19v-5h4v5" /> },
+  { id: "emprendedores", label: "Emprendedores", icon: <path d="M12 3c3 2 5 6 4 11l-4 3-4-3c-1-5 1-9 4-11zM9 17l-2 4M15 17l2 4M12 9.5h.01" /> },
+  { id: "medianas", label: "Empresas medianas", icon: <path d="M4 21V7l8-4v18M12 9h8v12M7 9h2M7 13h2M7 17h2M15 13h2M15 17h2M3 21h18" /> },
+  { id: "independientes", label: "Profesionales independientes", icon: <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM5 21c0-4 3-6 7-6s7 2 7 6" /> },
+];
 
-const Checks: React.FC<{ items: string[] }> = ({ items }) => (
-  <ul className="checks">
-    {items.map((it) => (
-      <li key={it}>{it}</li>
-    ))}
-  </ul>
-);
+const LABEL: Record<Audience, string> = Object.fromEntries(AUDIENCES.map((a) => [a.id, a.label])) as Record<Audience, string>;
 
-interface GroupHeadProps {
-  letter: string;
+interface Service {
   title: string;
-  text: string;
-  className?: string;
+  icon: ServiceIconName;
+  /** Problema que quita o beneficio, en palabras del cliente. */
+  pain: string;
+  examples: [string, string];
+  ideal: Audience[];
 }
 
-const GroupHead: React.FC<GroupHeadProps> = ({ letter, title, text, className = "" }) => (
-  <Reveal className={`group-head ${className}`}>
-    <span className="group-head__k" aria-hidden="true">{letter}</span>
-    <div>
-      <h3 className="h3">{title}</h3>
-    </div>
-    <p className="group-head__p">{text}</p>
-  </Reveal>
+const SERVICES: Service[] = [
+  {
+    title: "Páginas web",
+    icon: "globe",
+    pain: "Que te encuentren en Google y te escriban, sin depender solo de las redes sociales.",
+    examples: ["Web con catálogo y pedidos por WhatsApp", "Landing para una campaña o un lanzamiento"],
+    ideal: ["pequenos", "emprendedores", "independientes"],
+  },
+  {
+    title: "Agentes y chatbots de IA",
+    icon: "bot",
+    pain: "Un asistente que responde y hace tareas por ti, con la información real de tu negocio.",
+    examples: ["Chatbot que responde en WhatsApp 24/7", "Asistente interno que consulta tus precios y documentos"],
+    ideal: ["pequenos", "medianas"],
+  },
+  {
+    title: "Automatización de procesos",
+    icon: "zap",
+    pain: "Deja de copiar y pegar datos entre hojas, correos y sistemas cada semana.",
+    examples: ["Reporte de ventas automático cada lunes", "Pedido nuevo → factura, aviso y registro sin tocar nada"],
+    ideal: ["medianas", "pequenos"],
+  },
+  {
+    title: "Integraciones y APIs",
+    icon: "blend",
+    pain: "Que tus herramientas se hablen entre sí y la información viva en un solo lugar.",
+    examples: ["Formulario web conectado a tu CRM o Google Sheets", "Pagos e inventario sincronizados con tu tienda online"],
+    ideal: ["medianas", "emprendedores"],
+  },
+  {
+    title: "Dashboards y datos",
+    icon: "chart",
+    pain: "Decide con números claros en una pantalla, no con hojas sueltas ni intuición.",
+    examples: ["Panel de ventas, gastos y stock al día", "Alerta cuando un indicador se sale de lo normal"],
+    ideal: ["medianas", "pequenos"],
+  },
+  {
+    title: "Atención al cliente con IA",
+    icon: "chat",
+    pain: "Responde rápido a cada cliente, también fuera de horario, sin sumar más personal.",
+    examples: ["Respuestas automáticas a preguntas frecuentes en web y WhatsApp", "Agenda de citas y paso a una persona cuando hace falta"],
+    ideal: ["independientes", "pequenos"],
+  },
+];
+
+const AudienceIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">{children}</svg>
 );
 
 const ServicesSection: React.FC = () => (
@@ -48,110 +79,69 @@ const ServicesSection: React.FC = () => (
     <div className="wrap">
       <Reveal as="header" className="sec-head">
         <h2 className="h2" id="servicios-title">
-          Dos formas de poner <em>la IA a trabajar.</em>
+          Lo que puedo <em>construir para ti.</em>
         </h2>
         <p className="sec-head__sub">
-          Agentes listos en semanas o sistemas hechos sobre tu negocio. Tú eliges por dónde
-          empezar.
+          Seis servicios para vender más, responder mejor y dejar de hacer a mano lo que puede
+          hacerse solo.
         </p>
       </Reveal>
 
-      {/* A · Agentes de IA */}
-      <GroupHead
-        letter="A"
-        title="Agentes de IA para tu negocio"
-        text="Conversan con tus datos, tus clientes y tus llamadas. En producción en semanas."
-      />
-      <div className="bento">
-        <Reveal as="article" className="tile tile--wide">
-          <Meta label="01 · Copiloto del negocio" />
-          <div className="tile__body tile__body--split">
-            <div className="tile__text">
-              <h3>Habla con los datos de tu negocio</h3>
-              <p>
-                Pregunta por ventas, stock o clientes en lenguaje natural y recibe cifras reales.
-              </p>
-              <Checks
-                items={[
-                  "Consultas sobre tus bases y documentos",
-                  "Por WhatsApp o desde la web",
-                ]}
-              />
+      <Reveal className="svc-for" delay={60}>
+        <span className="svc-for__k">Para quién</span>
+        <ul className="svc-for__list">
+          {AUDIENCES.map((a) => (
+            <li key={a.id}>
+              <AudienceIcon>{a.icon}</AudienceIcon>
+              {a.label}
+            </li>
+          ))}
+        </ul>
+      </Reveal>
+
+      <div className="svc-grid">
+        {SERVICES.map((s, i) => (
+          <Reveal as="article" className="svc" key={s.title} delay={(i % 3) * 80}>
+            <div className="svc__top">
+              <span className="svc__ic" aria-hidden="true"><ServiceIcon name={s.icon} /></span>
+              <span className="svc__n" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
             </div>
-            <CopilotChat />
-          </div>
-        </Reveal>
-
-        <Reveal as="article" className="tile tile--half" delay={80}>
-          <Meta label="02 · Agente conversacional" />
-          <h3>Agentes conversacionales</h3>
-          <p className="tile__p">
-            Responden con tu stock real y llevan al cliente hasta la compra.
-          </p>
-          <WhatsAppDemo />
-        </Reveal>
-
-        <Reveal as="article" className="tile tile--half tile--voice tile--dark" delay={160}>
-          <Meta label="03 · Agente de voz" />
-          <h3>Voice AI</h3>
-          <p className="tile__p">
-            Atienden llamadas y agendan citas a cualquier hora.
-          </p>
-          <VoiceCall />
-        </Reveal>
-      </div>
-
-      {/* B · A medida */}
-      <GroupHead
-        letter="B"
-        title="Sistemas hechos a medida"
-        text="Automatizaciones y software propio, diseñados sobre tus procesos reales."
-        className="group-head--b"
-      />
-      <div className="bento">
-        <Reveal as="article" className="tile tile--wide">
-          <Meta label="04 · Automatizaciones end-to-end" />
-          <div className="tile__body tile__body--split tile__body--auto">
-            <div className="tile__text">
-              <h3>
-                Automatizaciones
-                <br />
-                <em>end-to-end</em>
-              </h3>
-              <p>
-                La información viaja sola: de la campaña a la venta y de la venta al reporte.
-              </p>
-              <Checks
-                items={[
-                  "ERP, CRM, marketing y e-commerce conectados",
-                  "Reportes que se arman solos",
-                ]}
-              />
-            </div>
-            <AutomationFlow />
-          </div>
-        </Reveal>
-
-        <Reveal as="article" className="tile tile--seven" delay={80}>
-          <Meta label="05 · Software con IA a medida" />
-          <div className="tile__head2">
-            <h3>Software con IA a medida</h3>
-            <p>
-              Agenda, clientes, facturas y correo en un solo sistema con IA, y es tuyo.
+            <h3>{s.title}</h3>
+            <p className="svc__pain">{s.pain}</p>
+            <p className="svc__k">Por ejemplo</p>
+            <ul className="checks">
+              {s.examples.map((e) => <li key={e}>{e}</li>)}
+            </ul>
+            <p className="svc__ideal">
+              <span>Ideal para</span> {s.ideal.map((a) => LABEL[a]).join(" · ")}
             </p>
-          </div>
-          <InternalApp />
-        </Reveal>
-
-        <Reveal as="article" className="tile tile--five" delay={160}>
-          <Meta label="06 · Consultoría y capacitación" />
-          <h3>Consultoría y capacitación</h3>
-          <p className="tile__p">
-            Roadmaps, auditorías y formación para adoptar la IA con criterio.
-          </p>
-          <ConsultingStages />
-        </Reveal>
+          </Reveal>
+        ))}
       </div>
+
+      <Reveal className="svc-trust">
+        <div>
+          <p className="svc-trust__t">
+            Cada servicio está probado en proyectos propios; <em>ahora quiero aplicarlo a tu negocio.</em>
+          </p>
+          <p className="svc-trust__s">Sin precios fijos: te envío una cotización según lo que necesitas.</p>
+        </div>
+        <div className="svc-trust__cta">
+          <CalLink className="btn btn--dark">
+            Cotización sin compromiso <span aria-hidden="true">↗</span>
+          </CalLink>
+          <a
+            className="link-arrow"
+            href={`#${CONTACT_ID}`}
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection(CONTACT_ID);
+            }}
+          >
+            o escríbeme <i aria-hidden="true">↓</i>
+          </a>
+        </div>
+      </Reveal>
     </div>
   </section>
 );
