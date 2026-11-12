@@ -116,7 +116,7 @@
 .hm .bar i{display:block;height:100%;background:var(--ink);border-radius:999px}
 .hm .band{position:relative;overflow:hidden;background:#121212;color:#f1efea;text-align:center;padding:130px 0 120px}
 .hm .band__glow{position:absolute;left:50%;top:0;width:1100px;height:700px;transform:translate(-50%,-45%);background:radial-gradient(closest-side,rgba(255,255,255,.14),transparent)}
-.hm .band::after{content:"";position:absolute;inset:0;background:url(/images/grain.png);opacity:.06;mix-blend-mode:screen;pointer-events:none}
+.hm .band::after{content:"";position:absolute;inset:0;background:url(/images/grain.webp);opacity:.06;mix-blend-mode:screen;pointer-events:none}
 .hm .band__inner{position:relative;z-index:1}
 .hm .h-band{font-family:var(--serif);font-weight:400;font-size:clamp(46px,6.4vw,96px);line-height:.98;letter-spacing:-.02em;margin:20px auto 40px;max-width:1000px}
 .hm .h-band em{color:#bdbab3}
@@ -175,7 +175,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: url(/images/grain.png);
+  background: url(/images/grain.webp);
   opacity: 0.045;
   mix-blend-mode: multiply;
   pointer-events: none;

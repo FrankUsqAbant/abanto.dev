@@ -24,10 +24,17 @@ const wait = (ms: number) =>
 const nextFrame = () =>
   new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 
+/**
+ * Espera a que una imagen esté decodificada. Acepta una URL o un selector CSS
+ * de un <img> ya montado (así se espera el recurso que el navegador eligió del
+ * srcset/<picture>, sin descargar otro formato).
+ */
 const decodeImage = (src: string): Promise<void> =>
   new Promise<void>((resolve) => {
-    const img = new Image();
-    img.src = src;
+    const mounted = /^[.#]/.test(src) ? document.querySelector<HTMLImageElement>(src) : null;
+    if (/^[.#]/.test(src) && !mounted) return resolve();
+    const img = mounted ?? new Image();
+    if (!mounted) img.src = src;
     if (typeof img.decode === "function") {
       img.decode().then(() => resolve(), () => resolve());
     } else {

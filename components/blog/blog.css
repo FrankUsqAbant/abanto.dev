@@ -6,7 +6,7 @@
   --serif:"Instrument Serif",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;--ease:cubic-bezier(.2,.7,.1,1);
   color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
 .ptp{position:relative;background:var(--cream);min-height:100vh;overflow-x:clip;margin-top:-80px}
-.ptp__grain{position:absolute;inset:0;background:url(/images/grain.png);opacity:.055;pointer-events:none;mix-blend-mode:multiply;z-index:0}
+.ptp__grain{position:absolute;inset:0;background:url(/images/grain.webp);opacity:.055;pointer-events:none;mix-blend-mode:multiply;z-index:0}
 :is(.ptp,.ptp-layer) .mono{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--g2)}
 :is(.ptp,.ptp-layer) .eyebrow{font-family:var(--sans);font-size:10.5px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--g1)}
 :is(.ptp,.ptp-layer) .dots{display:flex;gap:4px}

@@ -30,13 +30,11 @@ export const scrollToSection = (id: string) => {
 export interface HomeSectionLink {
   id: string;
   label: string;
-  /** Clave de traducción en `navbar.*`. */
-  i18nKey: string;
 }
 
 export const HOME_SECTIONS: HomeSectionLink[] = [
-  { id: "servicios", i18nKey: "navbar.services", label: "Servicios" },
-  { id: "proyectos", i18nKey: "navbar.projects", label: "Proyectos" },
+  { id: "servicios", label: "Servicios" },
+  { id: "proyectos", label: "Proyectos" },
 ];
 /* Proceso (#proceso) y Preguntas (#faq) se enlazan desde el pie. */
 

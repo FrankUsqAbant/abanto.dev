@@ -1,7 +1,6 @@
 export {
   IntroProvider,
   useIntro,
-  reached,
   INTRO_TIMING,
   type IntroPhase,
   type IntroMode,

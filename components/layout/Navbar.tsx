@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { View } from "../../types";
 import {
   CONTACT_ID,
@@ -54,7 +53,6 @@ const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   onOpenSearch,
 }) => {
-  const { t } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // En Inicio el encabezado es claro (sobre el hero crema);
@@ -67,10 +65,10 @@ const Navbar: React.FC<NavbarProps> = ({
       (sec): NavItem => ({
         kind: "section",
         id: sec.id,
-        label: t(sec.i18nKey, { defaultValue: sec.label }),
+        label: sec.label,
       }),
     ),
-    { kind: "view", view: "aprende", label: t("navbar.learn") },
+    { kind: "view", view: "aprende", label: "Aprende" },
     // Inicio = el logo; Proceso, Preguntas y Sobre mí viven en el pie.
   ];
 
@@ -140,9 +138,8 @@ const Navbar: React.FC<NavbarProps> = ({
   const itemKey = (item: NavItem) =>
     item.kind === "section" ? `s-${item.id}` : `v-${item.view}`;
 
-  // "INICIO" -> "Inicio" (las traducciones vienen en mayúsculas).
   const labelClass =
-    "inline-block lowercase first-letter:uppercase whitespace-nowrap";
+    "inline-block whitespace-nowrap";
 
   const theme = isLight
     ? {

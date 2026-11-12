@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  motion,
+  m,
   useMotionValue,
   useReducedMotion,
   useSpring,
@@ -11,8 +11,10 @@ import { ArrowDown, ArrowUpRight } from "./heroIcons";
 import ServiceOrbit, { ServiceMarquee } from "./ServiceOrbit";
 import "./Hero.css";
 
-const HERO_PHOTO = "/images/frank-hero.webp";
+/** La intro espera a que la foto real del hero (la que eligió <picture>) esté lista. */
+const HERO_PHOTO = ".hero__photo img";
 const HERO_SRCSET = "/images/frank-hero-360.webp 360w, /images/frank-hero-520.webp 520w, /images/frank-hero.webp 695w";
+const HERO_SRCSET_AVIF = "/images/frank-hero-360.avif 360w, /images/frank-hero-520.avif 520w, /images/frank-hero-695.avif 695w";
 /** Ancho real de la foto: móvil, tablet y desktop (escala --s del hero). */
 const HERO_SIZES = "(max-width: 639px) min(72vw, 380px), (max-width: 1023px) 340px, 25vw";
 
@@ -163,7 +165,7 @@ const Hero: React.FC = () => {
 
         {/* Escenario: foto + tarjetas */}
         <div className="hero__stage">
-          <motion.div
+          <m.div
             className="hero__photo"
             style={reduceMotion ? undefined : { x: photoX }}
           >
@@ -172,13 +174,11 @@ const Hero: React.FC = () => {
               style={{ "--ix-delay": `${DELAY.photo}ms` } as React.CSSProperties}
             >
             <picture>
-              <source
+              <source srcSet={HERO_SRCSET_AVIF} sizes={HERO_SIZES} type="image/avif" />
+              <img
+                src="/images/frank-hero.webp"
                 srcSet={HERO_SRCSET}
                 sizes={HERO_SIZES}
-                type="image/webp"
-              />
-              <img
-                src="/images/frank-hero.png"
                 alt="Frank Abanto con chaqueta negra y lentes de sol"
                 width={695}
                 height={1642}
@@ -188,7 +188,7 @@ const Hero: React.FC = () => {
               />
             </picture>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Servicios orbitando alrededor de la foto (tablet/desktop) */}
           <ServiceOrbit

@@ -1,10 +1,13 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { LazyMotion } from "framer-motion";
 import App from "./App";
 import AppErrorBoundary from "./components/layout/AppErrorBoundary";
-import "./i18n";
 import "./styles.css";
+
+// framer-motion: el núcleo `m` va en el bundle principal; las animaciones/layout se cargan aparte.
+const loadMotionFeatures = () => import("./lib/motionFeatures").then((mod) => mod.default);
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Root container not found");
@@ -14,9 +17,9 @@ root.render(
   <React.StrictMode>
     <AppErrorBoundary>
       <BrowserRouter>
-        <Suspense fallback={<div className="min-h-screen bg-[#f4f2ee]" />}>
+        <LazyMotion features={loadMotionFeatures}>
           <App />
-        </Suspense>
+        </LazyMotion>
       </BrowserRouter>
     </AppErrorBoundary>
   </React.StrictMode>

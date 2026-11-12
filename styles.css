@@ -1,19 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #050505;
-  --color-card-bg: #111111;
-  --color-primary: #0070f3;
-  --color-secondary: #a1a1aa;
-  --color-border: #333333;
-  --color-blue-glow: rgba(0, 112, 243, 0.3);
-
-  --font-heading: "Plus Jakarta Sans", sans-serif;
   --font-sans: "Inter", sans-serif;
   --font-signature: "La Belle Aurore", "Mrs Saint Delafield", cursive;
   --font-serif-display: "Instrument Serif", Georgia, serif;
-
-  --image-gradient-text: linear-gradient(to right, #fff, #94a3b8);
 }
 
 /* Base styles */
@@ -32,63 +22,29 @@ body {
   box-sizing: border-box;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: var(--font-heading);
-}
-
-/* Utilities */
-.text-gradient {
-  background-image: var(--image-gradient-text);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background-color: var(--color-background);
+  background-color: #f4f2ee;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1a1a1a;
+  background: rgba(22, 21, 20, 0.22);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-primary);
+  background-color: rgba(22, 21, 20, 0.45);
 }
 
 ::selection {
-  background: rgba(59, 130, 246, 0.3);
-  color: #fff;
+  background: #161514;
+  color: #f4f2ee;
 }
 
 /* Animations */
 .animate-fade-in {
   animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-delay-200 {
-  animation-delay: 200ms;
-}
-.animate-delay-400 {
-  animation-delay: 400ms;
-}
-.animate-delay-600 {
-  animation-delay: 600ms;
-}
-.animate-delay-800 {
-  animation-delay: 800ms;
 }
 
 @keyframes fadeIn {
@@ -102,73 +58,13 @@ h4 {
   }
 }
 
-@keyframes glitch {
-  0% {
-    transform: translate(0);
-  }
-  20% {
-    transform: translate(-2px, 2px);
-  }
-  40% {
-    transform: translate(-2px, -2px);
-  }
-  60% {
-    transform: translate(2px, 2px);
-  }
-  80% {
-    transform: translate(2px, -2px);
-  }
-  100% {
-    transform: translate(0);
-  }
-}
-
-@keyframes scanline {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-.animate-glitch:hover {
-  animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
-}
-
-.animate-fade-up {
-  animation: fadeUp 1s ease-out forwards;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-}
-
-.reveal-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* ---- Móviles y pantallas táctiles: vidrio sin desenfoque ----
    backdrop-filter obliga a recomponer lo que hay detrás en cada frame de scroll;
    en teléfonos usamos fondos translúcidos sólidos (se ven casi igual). */
 @media (max-width: 719px), (hover: none) and (pointer: coarse) {
   .hero-card, .hero__cue, .hm .dm, .hm .form, .hm.ck,
   :is(.ptp, .ptp-layer) :is(.search, .lang, .panel, .scrim),
-  .about-chips li, .about-card, .glass-card {
+  .about-chips li, .about-card {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }

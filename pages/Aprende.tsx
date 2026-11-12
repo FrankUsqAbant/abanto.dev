@@ -9,7 +9,7 @@ import TableIcon from "../components/blog/TableIcon";
 import { CONTACT_EMAIL } from "../components/home/sections/homeLinks";
 import { Ambient, CountUp, HintRotator } from "../components/blog/fx/HeaderFx";
 import { useGridFx } from "../components/blog/fx/useGridFx";
-import { AnimatePresence, MotionConfig, motion } from "framer-motion";
+import { AnimatePresence, MotionConfig, m } from "framer-motion";
 import "../components/blog/blog.css";
 
 const useMediaQuery = (q: string) => {
@@ -256,7 +256,7 @@ const Aprende: React.FC = () => {
                 aria-pressed={t.id === tableId}
                 onClick={() => t.id !== tableId && navigate(`/aprende/${t.id}`)}
               >
-                {t.id === tableId ? <motion.span layoutId="pt-lang-pill" className="pill" transition={PILL} aria-hidden="true" /> : null}
+                {t.id === tableId ? <m.span layoutId="pt-lang-pill" className="pill" transition={PILL} aria-hidden="true" /> : null}
                 <TableIcon icon={t.icon} />
                 <span className="lang__lb">{t.label}</span>
               </button>
@@ -271,7 +271,7 @@ const Aprende: React.FC = () => {
                 style={{ "--cc": "#141414" } as React.CSSProperties}
                 onClick={() => setCat(null)}
               >
-                {cat === null ? <motion.span layoutId="pt-cat-pill" className="pill" transition={PILL} aria-hidden="true" /> : null}
+                {cat === null ? <m.span layoutId="pt-cat-pill" className="pill" transition={PILL} aria-hidden="true" /> : null}
                 <i aria-hidden="true" />Todos <em>{items.length}</em>
               </button>
               {(data?.categories ?? []).map((c) => (
@@ -283,7 +283,7 @@ const Aprende: React.FC = () => {
                   style={{ "--cc": c.color } as React.CSSProperties}
                   onClick={() => setCat(cat === c.id ? null : c.id)}
                 >
-                  {cat === c.id ? <motion.span layoutId="pt-cat-pill" className="pill" transition={PILL} aria-hidden="true" /> : null}
+                  {cat === c.id ? <m.span layoutId="pt-cat-pill" className="pill" transition={PILL} aria-hidden="true" /> : null}
                   <i aria-hidden="true" />{c.name} <em>{c.count}</em>
                 </button>
               ))}
@@ -296,7 +296,7 @@ const Aprende: React.FC = () => {
           {!data && !loadError ? <div className="pt-loading" aria-hidden="true" /> : null}
           <AnimatePresence mode="popLayout" initial={false}>
           {data && !grouped ? (
-            <motion.div key={data.id} className="pt-anim" exit={EXIT}>
+            <m.div key={data.id} className="pt-anim" exit={EXIT}>
               <div className="ptable-g" style={{ ...gridStyle, gridTemplateRows: `repeat(${Math.min(7, data.rows)}, var(--row))` }}>
                 {keyItem ? (
                   <div className="key" style={{ gridColumn: `3 / ${data.keyEnd ?? cols - 5}` }}>
@@ -331,10 +331,10 @@ const Aprende: React.FC = () => {
                   </div>
                 </div>
               ) : null}
-            </motion.div>
+            </m.div>
           ) : null}
           {data && grouped ? (
-            <motion.div key={`g-${data.id}`} className="mgroups pt-anim" exit={EXIT}>
+            <m.div key={`g-${data.id}`} className="mgroups pt-anim" exit={EXIT}>
               {data.categories.map((c) => {
                 const list = items.filter((x) => x.c === c.id);
                 const groupDim = cat !== null && cat !== c.id;
@@ -345,7 +345,7 @@ const Aprende: React.FC = () => {
                   </section>
                 );
               })}
-            </motion.div>
+            </m.div>
           ) : null}
           </AnimatePresence>
           <p className="table-foot">

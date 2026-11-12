@@ -9,7 +9,7 @@ import sharp from "sharp";
 
 const ROOT = new URL("..", import.meta.url);
 const OUT = new URL("public/images/projects/", ROOT);
-const W = 1200, H = 750, MAX = 150 * 1024;
+const W = 960, H = 600, MAX = 60 * 1024; // se ve a ≤520px CSS: 960px cubre pantallas 2x
 
 const { projects } = JSON.parse(await readFile(new URL("data/projects.json", ROOT), "utf8"));
 const only = process.argv.slice(2);

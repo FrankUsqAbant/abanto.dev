@@ -70,3 +70,4 @@
 @media (pointer: coarse) {
   .about-socials a { padding-block: 12px; margin-block: -12px; }
 }
+.about-hero__photo picture { display: block; }

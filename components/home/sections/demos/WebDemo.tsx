@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Shell, useAuto, useLive, useTimers } from "./kit";
 
 const COLORS = [
@@ -68,37 +68,37 @@ const WebDemo: React.FC = () => {
         </div>
       </div>
       <div className="dm-web__stage">
-        <motion.div
+        <m.div
           layout
           transition={SPRING}
           className={`dm-web__frame${mobile ? " is-m" : ""}`}
           style={{ "--brand": COLORS[color].c } as React.CSSProperties}
         >
-          <motion.div layout="position" transition={SPRING} className="dm-web__bar" aria-hidden="true">
+          <m.div layout="position" transition={SPRING} className="dm-web__bar" aria-hidden="true">
             <span className="dm-dots"><i /><i /><i /></span>
             <span>tucafeteria.pe</span>
-          </motion.div>
-          <motion.div layout transition={SPRING} className="dm-web__page">
-            <motion.div layout="position" transition={SPRING} className={`dm-web__nav ${b(1)}`}>
+          </m.div>
+          <m.div layout transition={SPRING} className="dm-web__page">
+            <m.div layout="position" transition={SPRING} className={`dm-web__nav ${b(1)}`}>
               <b>Tu cafetería</b>
               <span aria-hidden="true"><i /><i /><i /></span>
-            </motion.div>
-            <motion.div layout="position" transition={SPRING} className={`dm-web__hero ${b(2)}`}>
+            </m.div>
+            <m.div layout="position" transition={SPRING} className={`dm-web__hero ${b(2)}`}>
               <h4>Café de especialidad, a un clic.</h4>
               <p>Pide por WhatsApp y recoge en minutos.</p>
               <span className="dm-web__btn">Pedir por WhatsApp</span>
-            </motion.div>
-            <motion.div layout transition={SPRING} className={`dm-web__cards ${b(3)}`}>
+            </m.div>
+            <m.div layout transition={SPRING} className={`dm-web__cards ${b(3)}`}>
               {PRODUCTS.map(([n, p], i) => (
-                <motion.div layout transition={SPRING} key={n} className={`dm-web__card ${b(3 + (i > 0 ? 1 : 0))}`}>
+                <m.div layout transition={SPRING} key={n} className={`dm-web__card ${b(3 + (i > 0 ? 1 : 0))}`}>
                   <i aria-hidden="true" />
                   <b>{n}</b>
                   <small>{p}</small>
-                </motion.div>
+                </m.div>
               ))}
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            </m.div>
+          </m.div>
+        </m.div>
       </div>
     </Shell>
   );

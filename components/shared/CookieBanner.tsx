@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { setConsent, useConsent } from "../../lib/consent";
 
 /** Aviso de cookies: barra de vidrio discreta abajo. Solo afecta a Cal.com (terceros). */
@@ -9,7 +9,7 @@ const CookieBanner: React.FC = () => {
   return (
     <AnimatePresence>
       {showBanner ? (
-        <motion.div
+        <m.div
           className="hm ck"
           role="region"
           aria-label="Aviso de cookies"
@@ -30,7 +30,7 @@ const CookieBanner: React.FC = () => {
             <button type="button" className="ck__no" onClick={() => setConsent("rejected")}>Rechazar</button>
             <button type="button" className="ck__ok" onClick={() => setConsent("accepted")}>Aceptar</button>
           </div>
-        </motion.div>
+        </m.div>
       ) : null}
     </AnimatePresence>
   );

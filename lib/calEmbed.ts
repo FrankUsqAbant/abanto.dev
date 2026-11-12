@@ -104,8 +104,6 @@ export const loadCalEmbed = (): Promise<boolean> => {
   return readyPromise;
 };
 
-export const isCalReady = () => status === "ready";
-
 /**
  * Abre el popup. Devuelve false si el embed no está disponible
  * (el llamador deja entonces que el enlace abra la pestaña nueva).

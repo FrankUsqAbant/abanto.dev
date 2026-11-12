@@ -60,9 +60,7 @@ export const INTRO_TIMING = {
 
 const STORAGE_KEY = "fa-intro-seen-v2";
 
-export const phaseIndex = (p: IntroPhase): number => INTRO_PHASES.indexOf(p);
-export const reached = (current: IntroPhase, target: IntroPhase): boolean =>
-  phaseIndex(current) >= phaseIndex(target);
+const phaseIndex = (p: IntroPhase): number => INTRO_PHASES.indexOf(p);
 
 /* ------------------------------------------------------------------ */
 /* Contexto                                                            */

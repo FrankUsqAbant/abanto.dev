@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { Shell, useAuto, useLive, useTween } from "./kit";
 
 type Period = "semana" | "mes";
@@ -52,7 +52,7 @@ const DashDemo: React.FC = () => {
       <div className="dm-chart" onMouseLeave={() => setHover(null)}>
         <AnimatePresence initial={false} mode="popLayout">
           {d.vals.map((v, i) => (
-            <motion.div
+            <m.div
               key={`${period}-${i}`}
               layout
               className={`dm-bar${i === best ? " is-best" : ""}`}
@@ -65,7 +65,7 @@ const DashDemo: React.FC = () => {
               <i style={{ transform: `scaleY(${v / max})` }} />
               {hover === i ? <em>S/ {fmt(v)}</em> : null}
               <small>{d.labels[i]}</small>
-            </motion.div>
+            </m.div>
           ))}
         </AnimatePresence>
       </div>

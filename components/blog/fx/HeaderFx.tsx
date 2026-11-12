@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 
 const reduced = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -48,7 +48,7 @@ export const HintRotator: React.FC = () => {
     <p className="pt-hint" aria-hidden="true">
       <i />
       <AnimatePresence mode="wait" initial={false}>
-        <motion.span
+        <m.span
           key={i}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -56,7 +56,7 @@ export const HintRotator: React.FC = () => {
           transition={{ duration: 0.35, ease: [0.2, 0.7, 0.1, 1] }}
         >
           {HINTS[i]}
-        </motion.span>
+        </m.span>
       </AnimatePresence>
     </p>
   );

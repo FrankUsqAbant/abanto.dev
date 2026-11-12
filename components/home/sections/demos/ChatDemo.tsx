@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m as motion } from "framer-motion";
 import { Shell, useAuto, useLive, useTimers } from "./kit";
 
 const QA = [

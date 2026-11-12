@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ interface PageTransitionProps {
 
 const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   return (
-    <motion.div
+    <m.div
       // Sin filter: blur. Un filtro en el contenedor de toda la página es caro,
       // anula el backdrop-filter de las tarjetas de vidrio y convierte los
       // elementos fixed en relativos a este div.
@@ -18,7 +18,7 @@ const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
       className="w-full"
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 };
 

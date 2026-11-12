@@ -15,7 +15,7 @@ npm run build   # build de producción en dist/
 
 ## Stack
 
-React 19 · TypeScript · Vite 6 · Tailwind CSS v4 · Framer Motion · React Router 7 · i18next
+React 19 · TypeScript · Vite 6 · Tailwind CSS v4 · Framer Motion · React Router 7
 
 ## Proyectos del inicio
 
@@ -25,7 +25,7 @@ marques en GitHub. Todo vive en estos archivos:
 - `data/projects.json`: los proyectos, **en el orden en que se muestran**: `repo`, `title` (nombre visible, con
   tildes), `description` (corta y honesta; las webs para negocios empiezan con «Web demo para negocios»), `chips`
   (máx. 3), `demoUrl` (o `null`), `repoUrl`, `image` y `source` (de dónde sale la imagen).
-- `public/images/projects/<repo>.webp`: la captura (1200×750, < 150 KB).
+- `public/images/projects/<repo>.webp`: la captura (960×600, < 60 KB).
 - `scripts/project-shots.mjs`: genera esas capturas.
 
 ### Añadir un proyecto

@@ -24,7 +24,6 @@ const read = (): Consent => {
 let current: Consent = typeof window === "undefined" ? null : read();
 const emit = () => listeners.forEach((l) => l());
 
-export const getConsent = (): Consent => current;
 export const hasConsent = (): boolean => current === "accepted";
 
 export const setConsent = (choice: Exclude<Consent, null>) => {
