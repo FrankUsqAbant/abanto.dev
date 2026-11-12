@@ -1,0 +1,163 @@
+/* =====================================================================
+   ANILLO ORBITAL DE SERVICIOS
+   La posición de cada tarjeta sale de variables que JS actualiza en cada
+   frame (--ox/--oy = cos/sin del ángulo, --k = escala, --dim = velo).
+   El tamaño del anillo vive aquí, en CSS, así se adapta solo al resize.
+   ===================================================================== */
+
+.orbit {
+  display: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  --mx: 0;
+  --my: 0;
+}
+
+.orbit__slot {
+  position: absolute;
+  left: var(--ring-cx);
+  top: var(--ring-cy);
+  width: calc(var(--cs) * 214);
+  margin-left: calc(var(--cs) * -107);
+  margin-top: calc(var(--cs) * -52);
+  transform: translate3d(
+      calc(var(--ox) * var(--rx) + var(--mx) * 18px),
+      calc(var(--oy) * var(--ry) * (1 + var(--my) * 0.35) + var(--my) * 10px),
+      0
+    )
+    scale(var(--k));
+  transform-origin: 50% 50%;
+  will-change: transform;
+  pointer-events: auto;
+  /* siempre de frente, con una ligera inclinación según el lado del anillo */
+  --card-tilt: perspective(900px)
+    rotateY(calc(var(--ox) * -14deg + var(--mx) * 10deg))
+    rotateX(calc(4deg - var(--my) * 6deg));
+}
+
+/* Vidrio algo más opaco: las tarjetas pasan por delante de la chaqueta oscura
+   y el texto tiene que seguir leyéndose */
+.orbit__slot .hero-card,
+.marquee .hero-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.86) 0%, rgba(249, 247, 244, 0.68) 100%);
+}
+
+.orbit__slot .hero-card {
+  transform: var(--card-tilt);
+  transition: box-shadow 0.4s ease;
+}
+.orbit__slot:hover .hero-card {
+  box-shadow:
+    0 calc(var(--cs) * 30) calc(var(--cs) * 46) calc(var(--cs) * -14) rgba(40, 32, 24, 0.3),
+    0 2px 6px rgba(40, 32, 24, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+/* Velo: las tarjetas del fondo se ven más tenues sin usar opacity
+   (opacity < 1 anularía el backdrop-filter del vidrio) */
+.orbit__slot .hero-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: #efece7;
+  opacity: var(--dim, 0);
+  pointer-events: none;
+}
+
+/* Desenfoque leve del contenido cuando pasan por detrás */
+.orbit__slot .hero-card__top,
+.orbit__slot .hero-card__body,
+.orbit__slot .hero-card__footer {
+  transition: filter 0.9s ease;
+}
+.orbit__slot[data-back="true"] .hero-card__top,
+.orbit__slot[data-back="true"] .hero-card__body,
+.orbit__slot[data-back="true"] .hero-card__footer {
+  filter: blur(0.7px);
+}
+
+/* Tablet */
+@media (min-width: 640px) {
+  .orbit {
+    display: block;
+    --ring-cx: 50%;
+    --ring-cy: 330px;
+    --rx: min(38vw, 330px);
+    --ry: 70px;
+    --cs: 0.8px;
+  }
+}
+
+/* Desktop: misma escala --s que el resto del hero */
+@media (min-width: 1024px) {
+  .orbit {
+    --ring-cy: calc(var(--s) * 450);
+    --rx: calc(var(--s) * 372);
+    --ry: calc(var(--s) * 72);
+    --cs: calc(var(--s) * 0.84);
+  }
+}
+
+/* ---------- Móvil: cinta automática ---------- */
+.marquee-wrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  z-index: 30;
+}
+@media (min-width: 640px) {
+  .marquee-wrap {
+    display: none;
+  }
+}
+
+.marquee {
+  --cs: 0.86px;
+  overflow: hidden;
+  padding: 18px 0 26px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+}
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.marquee:hover .marquee__track,
+.marquee:active .marquee__track {
+  animation-play-state: paused;
+}
+.marquee__group {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 0 12px 0 0;
+  list-style: none;
+}
+.marquee__item {
+  width: calc(var(--cs) * 214);
+  flex: none;
+}
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+  }
+  .marquee__track {
+    animation: none;
+  }
+  .orbit__slot .hero-card__top,
+  .orbit__slot .hero-card__body,
+  .orbit__slot .hero-card__footer {
+    transition: none;
+  }
+}

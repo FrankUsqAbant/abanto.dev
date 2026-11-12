@@ -172,7 +172,8 @@
   top: 24px;
   left: calc(50% - min(36vw, 190px));
   width: min(72vw, 380px);
-  z-index: 2;
+  /* las tarjetas del anillo usan 10–19 (detrás) y 21–30 (delante) */
+  z-index: 20;
   pointer-events: none;
   user-select: none;
 }
@@ -181,24 +182,6 @@
   width: 100%;
   height: auto;
   filter: drop-shadow(0 30px 40px rgba(30, 25, 20, 0.12));
-}
-
-.hero-card-slot {
-  position: absolute;
-  z-index: 3;
-  width: calc(var(--cs) * 214);
-  perspective: 900px;
-}
-.hero-card-slot--ventas {
-  top: 30%;
-  right: 2%;
-}
-.hero-card-slot--atencion {
-  top: 60%;
-  left: 2%;
-}
-.hero-card-slot--desktop-only {
-  display: none;
 }
 
 /* ---------- Tarjeta de vidrio ---------- */
@@ -368,26 +351,6 @@
     left: calc(50% - 170px);
     width: 340px;
   }
-  .hero-card-slot--desktop-only {
-    display: block;
-  }
-  .hero-card-slot--ventas {
-    top: 2%;
-    right: 4%;
-  }
-  .hero-card-slot--integraciones {
-    top: 12%;
-    left: 4%;
-  }
-  .hero-card-slot--atencion {
-    top: 46%;
-    left: auto;
-    right: 2%;
-  }
-  .hero-card-slot--automatizacion {
-    top: 52%;
-    left: 2%;
-  }
 }
 
 /* ---------- Desktop: composición escalada ---------- */
@@ -457,25 +420,6 @@
     top: calc(var(--s) * 306);
     left: calc(50% - var(--s) * 120);
     width: calc(var(--s) * 252);
-  }
-
-  .hero-card-slot--ventas {
-    top: calc(var(--s) * 316);
-    left: calc(var(--s) * 598);
-    right: auto;
-  }
-  .hero-card-slot--integraciones {
-    top: calc(var(--s) * 380);
-    left: calc(var(--s) * 228);
-  }
-  .hero-card-slot--atencion {
-    top: calc(var(--s) * 469);
-    left: calc(var(--s) * 724);
-    right: auto;
-  }
-  .hero-card-slot--automatizacion {
-    top: calc(var(--s) * 474);
-    left: calc(var(--s) * 85);
   }
 
   .hero__bottom {
