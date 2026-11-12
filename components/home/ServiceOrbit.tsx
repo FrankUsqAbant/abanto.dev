@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useAnimationFrame, type MotionValue } from "framer-motion";
 import { BuildReveal, useIntro } from "../intro";
-import { ArrowUpRight, ServiceIcon, type ServiceIconName } from "./heroIcons";
+import { ServiceIcon, type ServiceIconName } from "./heroIcons";
 import "./ServiceOrbit.css";
 
 /* ------------------------------------------------------------------ */
@@ -13,7 +13,6 @@ export interface Service {
   index: string;
   title: string;
   description: [string, string];
-  footer: string;
   icon: ServiceIconName;
 }
 
@@ -27,7 +26,6 @@ export const SERVICES: Service[] = [
     index: "01",
     title: "Ventas",
     description: ["Convierte conversaciones", "en nuevas oportunidades."],
-    footer: "Seguimiento inteligente",
     icon: "trend",
   },
   {
@@ -35,7 +33,6 @@ export const SERVICES: Service[] = [
     index: "02",
     title: "Integraciones",
     description: ["Tus herramientas,", "trabajando en sincronía."],
-    footer: "Todo conectado",
     icon: "blend",
   },
   {
@@ -43,7 +40,6 @@ export const SERVICES: Service[] = [
     index: "03",
     title: "Atención al cliente",
     description: ["Respuestas útiles.", "Sin tiempos de espera."],
-    footer: "Disponible 24/7",
     icon: "chat",
   },
   {
@@ -51,7 +47,6 @@ export const SERVICES: Service[] = [
     index: "04",
     title: "Automatización",
     description: ["Menos tareas repetitivas.", "Más tiempo para lo importante."],
-    footer: "Procesos en piloto automático",
     icon: "zap",
   },
   {
@@ -59,7 +54,6 @@ export const SERVICES: Service[] = [
     index: "05",
     title: "Páginas web",
     description: ["Sitios rápidos y a medida,", "pensados para vender."],
-    footer: "Diseño y desarrollo",
     icon: "globe",
   },
   {
@@ -67,7 +61,6 @@ export const SERVICES: Service[] = [
     index: "06",
     title: "Redes sociales",
     description: ["Contenido que se publica solo,", "con tu estilo y a tiempo."],
-    footer: "Publicación automática",
     icon: "share",
   },
   {
@@ -75,7 +68,6 @@ export const SERVICES: Service[] = [
     index: "07",
     title: "Agentes de IA",
     description: ["Asistentes que responden", "y ejecutan tareas por ti."],
-    footer: "Conectados a tu negocio",
     icon: "bot",
   },
   {
@@ -83,7 +75,6 @@ export const SERVICES: Service[] = [
     index: "08",
     title: "Datos y dashboards",
     description: ["Reportes en tiempo real", "para decidir con claridad."],
-    footer: "Métricas siempre al día",
     icon: "chart",
   },
 ];
@@ -124,14 +115,6 @@ export const ServiceCard: React.FC<{ service: Service; labelled?: boolean }> = (
         </p>
       </div>
     </div>
-
-    <footer className="hero-card__footer">
-      <span className="hero-card__status">
-        <i aria-hidden="true" />
-        {service.footer}
-      </span>
-      <ArrowUpRight className="hero-card__arrow" />
-    </footer>
   </article>
 );
 

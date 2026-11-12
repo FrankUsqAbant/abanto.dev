@@ -22,7 +22,6 @@ const DELAY = {
   photo: 150,
   cards: 300, // + 60 ms por tarjeta
   marquee: 500,
-  eyebrow: 560,
   headline: 620,
   lead: 820,
   primary: 930,
@@ -70,10 +69,6 @@ const Hero: React.FC = () => {
       <div className="hero__frame">
         {/* Texto central */}
         <div className="hero__content">
-          <BuildReveal delay={DELAY.eyebrow} inline>
-            <p className="hero__eyebrow">Menos tareas. Más posibilidades.</p>
-          </BuildReveal>
-
           <CreditsHeadline
             id="hero-title"
             delay={DELAY.headline}

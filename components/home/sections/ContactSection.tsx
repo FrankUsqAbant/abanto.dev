@@ -136,7 +136,6 @@ const ContactSection: React.FC = () => {
       <div className="contact__glow" aria-hidden="true" />
       <div className="wrap contact__grid">
         <Reveal className="contact__info">
-          <p className="eyebrow">05 — Contacto</p>
           <h2 className="h2" id="contacto-title">
             Construyamos
             <br />
@@ -173,7 +172,6 @@ const ContactSection: React.FC = () => {
                   aria-label={`${s.name}: ${s.handle} (se abre en otra pestaña)`}
                 >
                   <span>{s.name}</span>
-                  <em>{s.handle}</em>
                   <i aria-hidden="true">↗</i>
                 </a>
               </li>
@@ -183,10 +181,6 @@ const ContactSection: React.FC = () => {
 
         <Reveal delay={120}>
           <form className="form" noValidate onSubmit={onSubmit} aria-labelledby="contacto-title" aria-busy={sending || undefined}>
-            <div className="form__head" aria-hidden="true">
-              <span className="dots"><i /><i /><i /></span>
-              <span className="tag">Nuevo mensaje</span>
-            </div>
             <label htmlFor={ids.name}>
               <span>Nombre</span>
               <input type="text" autoComplete="name" placeholder="Tu nombre" {...fieldProps("name")} />

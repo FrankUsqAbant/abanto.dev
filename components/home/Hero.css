@@ -53,17 +53,8 @@
   padding: 40px 16px 0;
 }
 
-.hero__eyebrow {
-  margin: 0;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
 .hero__title {
-  margin: 14px 0 0;
+  margin: 0;
   font-family: var(--serif);
   font-weight: 400;
   font-size: clamp(34px, 9.6vw, 76px);
@@ -389,11 +380,9 @@
     right: 0;
     padding: 0;
   }
-  .hero__eyebrow {
-    font-size: calc(var(--s) * 7);
-  }
   .hero__title {
-    margin-top: calc(var(--s) * 12);
+    /* sin eyebrow: el titular baja un poco para mantener la composición */
+    margin-top: calc(var(--s) * 14);
     font-size: calc(var(--s) * 66);
   }
   .hero__br {

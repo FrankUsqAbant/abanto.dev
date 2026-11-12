@@ -11,9 +11,9 @@ import {
 
 const Sample: React.FC = () => <span className="sample">datos de ejemplo</span>;
 
+/* Solo el aviso de "datos de ejemplo" (el número y nombre repetían el título). */
 const Meta: React.FC<{ label: string }> = ({ label }) => (
-  <div className="tile__meta">
-    <span className="mono">{label}</span>
+  <div className="tile__meta" data-label={label}>
     <Sample />
   </div>
 );
@@ -28,17 +28,15 @@ const Checks: React.FC<{ items: string[] }> = ({ items }) => (
 
 interface GroupHeadProps {
   letter: string;
-  kicker: string;
   title: string;
   text: string;
   className?: string;
 }
 
-const GroupHead: React.FC<GroupHeadProps> = ({ letter, kicker, title, text, className = "" }) => (
+const GroupHead: React.FC<GroupHeadProps> = ({ letter, title, text, className = "" }) => (
   <Reveal className={`group-head ${className}`}>
     <span className="group-head__k" aria-hidden="true">{letter}</span>
     <div>
-      <p className="mono">{kicker}</p>
       <h3 className="h3">{title}</h3>
     </div>
     <p className="group-head__p">{text}</p>
@@ -49,22 +47,20 @@ const ServicesSection: React.FC = () => (
   <section className="section" id="servicios" aria-labelledby="servicios-title">
     <div className="wrap">
       <Reveal as="header" className="sec-head">
-        <p className="eyebrow">01 — Servicios</p>
         <h2 className="h2" id="servicios-title">
           Dos formas de poner <em>la IA a trabajar.</em>
         </h2>
         <p className="sec-head__sub">
-          Agentes listos para operar desde la primera semana, o sistemas construidos alrededor de
-          cómo funciona realmente tu negocio. Tú eliges por dónde empezar.
+          Agentes listos en semanas o sistemas hechos sobre tu negocio. Tú eliges por dónde
+          empezar.
         </p>
       </Reveal>
 
       {/* A · Agentes de IA */}
       <GroupHead
         letter="A"
-        kicker="Agentes de IA"
         title="Agentes de IA para tu negocio"
-        text="Agentes que conversan con tus datos, tus clientes y tus líneas telefónicas. En producción en semanas, no en meses."
+        text="Conversan con tus datos, tus clientes y tus llamadas. En producción en semanas."
       />
       <div className="bento">
         <Reveal as="article" className="tile tile--wide">
@@ -73,15 +69,12 @@ const ServicesSection: React.FC = () => (
             <div className="tile__text">
               <h3>Habla con los datos de tu negocio</h3>
               <p>
-                Pregunta por ventas, stock, facturas o clientes en lenguaje natural. El agente
-                traduce tu pregunta a consultas sobre tus bases y documentos, y te responde con
-                cifras reales.
+                Pregunta por ventas, stock o clientes en lenguaje natural y recibe cifras reales.
               </p>
               <Checks
                 items={[
-                  "Preguntas del día a día sobre tu operación",
-                  "Consultas text-to-SQL sobre datos conectados",
-                  "Acceso por WhatsApp o desde la web",
+                  "Consultas sobre tus bases y documentos",
+                  "Por WhatsApp o desde la web",
                 ]}
               />
             </div>
@@ -93,8 +86,7 @@ const ServicesSection: React.FC = () => (
           <Meta label="02 · Agente conversacional" />
           <h3>Agentes conversacionales</h3>
           <p className="tile__p">
-            Responden consultas de disponibilidad con tu stock conectado y acompañan al cliente
-            hasta la reserva o la compra.
+            Responden con tu stock real y llevan al cliente hasta la compra.
           </p>
           <WhatsAppDemo />
         </Reveal>
@@ -103,8 +95,7 @@ const ServicesSection: React.FC = () => (
           <Meta label="03 · Agente de voz" />
           <h3>Voice AI</h3>
           <p className="tile__p">
-            Agentes telefónicos que atienden, agendan citas, califican clientes y resuelven, a
-            cualquier hora.
+            Atienden llamadas y agendan citas a cualquier hora.
           </p>
           <VoiceCall />
         </Reveal>
@@ -113,9 +104,8 @@ const ServicesSection: React.FC = () => (
       {/* B · A medida */}
       <GroupHead
         letter="B"
-        kicker="A medida"
         title="Sistemas hechos a medida"
-        text="Automatizaciones de punta a punta y software propio, diseñados sobre tus procesos reales y no al revés."
+        text="Automatizaciones y software propio, diseñados sobre tus procesos reales."
         className="group-head--b"
       />
       <div className="bento">
@@ -129,14 +119,12 @@ const ServicesSection: React.FC = () => (
                 <em>end-to-end</em>
               </h3>
               <p>
-                Integro tu stack para que la información viaje sola: de la campaña a la venta, de
-                la venta a la factura y de la factura al reporte.
+                La información viaja sola: de la campaña a la venta y de la venta al reporte.
               </p>
               <Checks
                 items={[
-                  "Integraciones entre Marketing, ERP, CRM y e-commerce",
-                  "Reportes y dashboards que se arman solos",
-                  "Monitoreo y alertas desde el primer día",
+                  "ERP, CRM, marketing y e-commerce conectados",
+                  "Reportes que se arman solos",
                 ]}
               />
             </div>
@@ -149,8 +137,7 @@ const ServicesSection: React.FC = () => (
           <div className="tile__head2">
             <h3>Software con IA a medida</h3>
             <p>
-              Plataformas internas con IA integrada: agenda, clientes, CRM, facturas y correo en
-              un solo sistema que es tuyo.
+              Agenda, clientes, facturas y correo en un solo sistema con IA, y es tuyo.
             </p>
           </div>
           <InternalApp />
@@ -160,8 +147,7 @@ const ServicesSection: React.FC = () => (
           <Meta label="06 · Consultoría y capacitación" />
           <h3>Consultoría y capacitación</h3>
           <p className="tile__p">
-            Roadmaps, auditorías técnicas y entrenamiento para que tu equipo adopte la IA con
-            criterio.
+            Roadmaps, auditorías y formación para adoptar la IA con criterio.
           </p>
           <ConsultingStages />
         </Reveal>

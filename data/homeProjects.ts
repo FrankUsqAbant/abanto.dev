@@ -25,7 +25,7 @@ export const HOME_PROJECTS: HomeProject[] = [
     id: "clavez-originals",
     name: "Clavez Originals",
     description:
-      "Tienda web de calzado deportivo y urbano en Cajamarca: vitrina interactiva, catálogo administrable con Supabase y pedidos por WhatsApp.",
+      "Tienda de calzado en Cajamarca con catálogo administrable y pedidos por WhatsApp.",
     outcome: "Catálogo que el negocio administra solo.",
     tags: ["React", "TypeScript", "Supabase"],
     repoUrl: `${GH}/chavez-originals`,
@@ -38,7 +38,7 @@ export const HOME_PROJECTS: HomeProject[] = [
     id: "hostal-aguilar",
     name: "Hostal Aguilar",
     description:
-      "Web para un hospedaje con recepción 24 horas en Cajamarca: habitaciones, reservas por WhatsApp y panel administrable con Supabase.",
+      "Web de un hospedaje en Cajamarca con reservas por WhatsApp y panel propio.",
     outcome: "Reservas por WhatsApp y panel propio.",
     tags: ["React", "TypeScript", "Supabase"],
     repoUrl: `${GH}/hostal-aguilar`,
@@ -51,7 +51,7 @@ export const HOME_PROJECTS: HomeProject[] = [
     id: "jireh-pasteleria",
     name: "JIRÉH Pastelería",
     description:
-      "Catálogo de tortas a medida con «Arma tu torta» en vivo y pedidos por WhatsApp.",
+      "Catálogo de tortas con «Arma tu torta» en vivo y pedidos por WhatsApp.",
     outcome: "El cliente arma su torta y la pide en un mensaje.",
     tags: ["React", "Supabase", "Tailwind"],
     repoUrl: `${GH}/jireh-pasteleria`,
@@ -64,7 +64,7 @@ export const HOME_PROJECTS: HomeProject[] = [
     id: "nexus-studio-pro",
     name: "NEXUS Studio Pro",
     description:
-      "Estudio para convertir texto e imágenes en arte ASCII y exportarlo en PNG, SVG, ANSI o Markdown.",
+      "Convierte texto e imágenes en arte ASCII y expórtalo en PNG, SVG o Markdown.",
     outcome: "Arte ASCII listo para tu terminal o README.",
     tags: ["React", "TypeScript", "Vite"],
     repoUrl: `${GH}/NEXUS-ASCII-Generator`,
@@ -77,7 +77,7 @@ export const HOME_PROJECTS: HomeProject[] = [
     id: "hogwarts-legacy-astro",
     name: "Hogwarts Legacy · Fan site",
     description:
-      "Landing inmersiva inspirada en Hogwarts Legacy, con arquitectura de islas, modo claro y oscuro y carga diferida.",
+      "Landing inmersiva inspirada en Hogwarts Legacy, rápida y con modo claro y oscuro.",
     outcome: "Una experiencia cinematográfica que carga rápido.",
     tags: ["Astro", "React", "CSS"],
     repoUrl: `${GH}/astro-sitio-web`,
@@ -90,7 +90,7 @@ export const HOME_PROJECTS: HomeProject[] = [
     id: "pokedex-next-gen",
     name: "Pokédex Next-Gen",
     description:
-      "Consulta la PokéAPI para explorar los 151 Pokémon de Kanto, con portada cinematográfica y temas claro y oscuro.",
+      "Explora los 151 Pokémon de Kanto con datos de la PokéAPI.",
     outcome: "Datos de una API pública, fáciles de explorar.",
     tags: ["JavaScript", "PokéAPI", "CSS"],
     repoUrl: `${GH}/PokeAPI`,

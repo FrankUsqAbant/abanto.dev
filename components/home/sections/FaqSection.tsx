@@ -5,15 +5,15 @@ import { CONTACT_ID, scrollToSection } from "./homeLinks";
 const FAQS: { q: string; a: string }[] = [
   {
     q: "¿Con qué tipo de negocios trabajas?",
-    a: "Con empresas pequeñas y medianas que ya venden y quieren ordenar su operación: comercio, servicios, educación y salud. Si tu equipo pierde horas en tareas repetitivas, probablemente podamos ayudarte.",
+    a: "Con pymes que ya venden y quieren ordenar su operación: comercio, servicios, educación y salud.",
   },
   {
     q: "¿Cuánto cuesta un proyecto?",
-    a: "Depende del alcance. Después de la llamada de diagnóstico recibes una propuesta con precio cerrado y entregables claros.",
+    a: "Depende del alcance. Tras la llamada de diagnóstico recibes un precio cerrado.",
   },
   {
     q: "¿Puedes trabajar con las herramientas que ya uso?",
-    a: "Sí. La idea es conectar lo que ya tienes (ERP, CRM, hojas de cálculo, WhatsApp, correo) en lugar de obligarte a cambiar todo.",
+    a: "Sí. Conecto lo que ya tienes (ERP, CRM, hojas de cálculo, WhatsApp) sin obligarte a cambiar todo.",
   },
   {
     q: "¿Necesito saber de tecnología para trabajar contigo?",
@@ -21,7 +21,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "¿Qué pasa después del lanzamiento?",
-    a: "Seguimos midiendo y mejorando. Puedes quedarte con soporte mensual o llevarte el sistema con toda la documentación.",
+    a: "Seguimos mejorando con soporte mensual, o te llevas el sistema documentado.",
   },
 ];
 
@@ -34,7 +34,6 @@ const FaqSection: React.FC = () => {
     <section className="section section--alt" id="faq" aria-labelledby="faq-title">
       <div className="wrap faq">
         <Reveal as="header" className="faq__head">
-          <p className="eyebrow">04 — Preguntas</p>
           <h2 className="h2" id="faq-title">
             Lo que suelen <em>preguntarme.</em>
           </h2>

@@ -26,9 +26,8 @@ const ProjectCard: React.FC<{ project: HomeProject; index: number }> = ({ projec
     </a>
     <div className="proj__body">
       <div className="proj__top">
-        <span className="mono">{String(index + 1).padStart(2, "0")}</span>
         <ul className="tags" aria-label="Tecnologías">
-          {project.tags.map((t) => (
+          {project.tags.slice(0, 3).map((t) => (
             <li key={t}><span>{t}</span></li>
           ))}
         </ul>
@@ -36,7 +35,6 @@ const ProjectCard: React.FC<{ project: HomeProject; index: number }> = ({ projec
       <h3 id={`proj-${project.id}`}>{project.name}</h3>
       <p>{project.description}</p>
       <div className="proj__foot">
-        <span className="proj__res">{project.outcome}</span>
         <div className="proj__links">
           <a className="proj__go" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
             En vivo <span aria-hidden="true">↗</span>
@@ -57,7 +55,6 @@ const ProjectsSection: React.FC = () => (
     <div className="wrap">
       <Reveal as="header" className="sec-head sec-head--row">
         <div>
-          <p className="eyebrow">02 — Mis proyectos</p>
           <h2 className="h2" id="proyectos-title">
             Proyectos que <br />
             <em>ya están en el mundo.</em>
@@ -65,8 +62,7 @@ const ProjectsSection: React.FC = () => (
         </div>
         <div className="sec-head__side">
           <p className="sec-head__sub">
-            Una selección de lo que he construido: webs para negocios reales, herramientas y
-            experimentos. Todo el código está en GitHub.
+            Webs para negocios reales, herramientas y experimentos.
           </p>
           <a
             className="link-arrow"

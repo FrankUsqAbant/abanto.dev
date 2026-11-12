@@ -21,13 +21,11 @@ const ProcessSection: React.FC = () => (
   <section className="section" id="proceso" aria-labelledby="proceso-title">
     <div className="wrap">
       <Reveal as="header" className="sec-head">
-        <p className="eyebrow">03 — Cómo trabajamos</p>
         <h2 className="h2" id="proceso-title">
           De la idea al sistema, <em>semana a semana.</em>
         </h2>
         <p className="sec-head__sub">
-          Un solo responsable de punta a punta: diseño, construyo y acompaño la operación. Sin
-          traspasos ni intermediarios.
+          Un solo responsable de punta a punta, sin intermediarios.
         </p>
       </Reveal>
       <Reveal as="div" className="timeline-wrap">
@@ -40,11 +38,10 @@ const ProcessSection: React.FC = () => (
             >
               <span className="tl-week">{s.week}</span>
               <span className="tl-dot" aria-hidden="true" />
-              <span className="tl-n" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
               <h3 className="tl-title">{s.title}</h3>
               <p>{s.text}</p>
               <ul>
-                {s.items.map((it) => (
+                {s.items.slice(0, 2).map((it) => (
                   <li key={it}>{it}</li>
                 ))}
               </ul>
