@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion, type PanInfo } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "framer-motion";
 import Reveal from "./Reveal";
 import { GITHUB_REPOS_URL, initialProjects, refreshProjects, type Project } from "../../../lib/github";
 
-const AUTO_MS = 5000;
-const SPRING = { type: "spring", stiffness: 260, damping: 32, mass: 0.9 } as const;
 
 /* ---------- Imagen: vista previa de GitHub o visual de respaldo ---------- */
 
@@ -77,52 +75,150 @@ const Card: React.FC<{ project: Project; active: boolean }> = ({ project, active
   );
 };
 
-/* ---------- Carrusel coverflow ---------- */
+/* ---------- Carrusel coverflow continuo ---------- */
 
-const offsetOf = (i: number, active: number, n: number) => {
-  let d = (((i - active) % n) + n) % n;
-  if (d > n / 2) d -= n;
-  return d;
+/** Segundos por vuelta completa (se ajusta al número de proyectos). */
+const LOOP_S = 50;
+/** Separación entre tarjetas: fracción del ancho de una tarjeta. */
+const GAP = 0.62;
+
+const wrap = (d: number, n: number) => {
+  let r = ((d % n) + n) % n;
+  if (r >= n / 2) r -= n;
+  return r;
+};
+
+/** Coloca cada tarjeta según su distancia (continua) a la posición actual. */
+const place = (el: HTMLElement, d: number) => {
+  const ad = Math.abs(d);
+  const s = el.style;
+  s.transform = `translate3d(${(d * GAP * 100).toFixed(3)}%,0,0) scale(${(1 - Math.min(ad, 2) * 0.13).toFixed(4)}) rotateY(${(Math.max(-1, Math.min(1, d)) * -22).toFixed(2)}deg)`;
+  s.opacity = (ad <= 1 ? 1 - ad * 0.22 : ad <= 2 ? 0.78 * (2 - ad) : 0).toFixed(3);
+  s.zIndex = String(Math.round(100 - ad * 10));
+  s.pointerEvents = ad < 1.6 ? "auto" : "none";
+  s.visibility = ad > 2.05 ? "hidden" : "visible";
 };
 
 const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
   const n = projects.length;
+  const rootRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const slotRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Estado de movimiento (fuera de React: se actualiza en cada frame).
+  const pos = useRef(0); // en «tarjetas»
+  const vel = useRef(0); // tarjetas por segundo
+  const nudge = useRef(0); // desplazamiento pendiente de las flechas
+  const hold = useRef({ hover: false, focus: false, offscreen: true, paused: false });
+  const drag = useRef<{ id: number; x: number; pos: number; lastX: number; lastT: number; v: number; moved: boolean } | null>(null);
+  const suppressClick = useRef(false);
+
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
-  const rootRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef(0);
 
-  const go = useCallback((step: number) => setActive((a) => (((a + step) % n) + n) % n), [n]);
+  const base = n / LOOP_S;
 
-  useEffect(() => {
-    if (active >= n) setActive(0);
-  }, [n, active]);
-
-  // Avance automático: se pausa con hover/foco, pestaña oculta o fuera de pantalla.
-  const [inView, setInView] = useState(false);
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.3 });
+    const io = new IntersectionObserver(([e]) => {
+      hold.current.offscreen = !e.isIntersecting;
+    }, { threshold: 0.15 });
     io.observe(el);
     return () => io.disconnect();
   }, []);
-  useEffect(() => {
-    if (paused || !inView || n < 2) return;
-    const id = window.setInterval(() => {
-      if (!document.hidden) go(1);
-    }, AUTO_MS);
-    return () => window.clearInterval(id);
-  }, [paused, inView, n, go, active]);
 
-  const panned = useRef(false);
-  const onPanEnd = (_: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => {
-    // evita que el click al soltar active la tarjeta lateral
-    panned.current = true;
-    window.setTimeout(() => {
-      panned.current = false;
-    }, 0);
-    if (Math.abs(info.offset.x) < 50 && Math.abs(info.velocity.x) < 400) return;
-    go(info.offset.x < 0 ? 1 : -1);
+  useEffect(() => {
+    if (n === 0) return;
+    let raf = 0;
+    let last = performance.now();
+    const unit = () => (slotRefs.current[0]?.offsetWidth ?? 500) * GAP;
+
+    const frame = (now: number) => {
+      const dt = Math.min(now - last, 64) / 1000;
+      last = now;
+      const h = hold.current;
+      const dr = drag.current;
+
+      if (!dr) {
+        const target = n > 1 && !(h.hover || h.focus || h.offscreen || h.paused || document.hidden) ? base : 0;
+        // inercia tras arrastrar: frena más despacio que el cambio normal
+        const k = Math.abs(vel.current) > base * 1.5 ? 1.6 : 2.4;
+        vel.current += (target - vel.current) * Math.min(1, dt * k);
+        pos.current += vel.current * dt;
+        if (nudge.current !== 0) {
+          const step = nudge.current * Math.min(1, dt * 5);
+          pos.current += step;
+          nudge.current = Math.abs(nudge.current - step) < 0.001 ? 0 : nudge.current - step;
+        }
+      }
+      pos.current = ((pos.current % n) + n) % n;
+
+      slotRefs.current.forEach((el, i) => {
+        if (el) place(el, wrap(i - pos.current, n));
+      });
+      const a = Math.round(pos.current) % n;
+      if (a !== activeRef.current) {
+        activeRef.current = a;
+        setActive(a);
+      }
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+
+    // Arrastre con puntero (ratón y táctil)
+    const stage = stageRef.current;
+    const down = (e: PointerEvent) => {
+      if (e.button !== 0 || (e.target as HTMLElement).closest("a,button")) return;
+      drag.current = { id: e.pointerId, x: e.clientX, pos: pos.current, lastX: e.clientX, lastT: performance.now(), v: 0, moved: false };
+      nudge.current = 0;
+    };
+    const move = (e: PointerEvent) => {
+      const dr = drag.current;
+      if (!dr || e.pointerId !== dr.id) return;
+      const dx = e.clientX - dr.x;
+      if (!dr.moved && Math.abs(dx) > 6) {
+        dr.moved = true;
+        stage?.setPointerCapture(e.pointerId);
+      }
+      if (!dr.moved) return;
+      const t = performance.now();
+      const inst = -(e.clientX - dr.lastX) / unit() / Math.max((t - dr.lastT) / 1000, 0.008);
+      dr.v = dr.v * 0.6 + inst * 0.4;
+      dr.lastX = e.clientX;
+      dr.lastT = t;
+      pos.current = dr.pos - dx / unit();
+    };
+    const up = (e: PointerEvent) => {
+      const dr = drag.current;
+      if (!dr || e.pointerId !== dr.id) return;
+      drag.current = null;
+      if (dr.moved) {
+        vel.current = Math.max(-8, Math.min(8, dr.v)); // sigue deslizando desde donde lo soltaste
+        suppressClick.current = true;
+        window.setTimeout(() => {
+          suppressClick.current = false;
+        }, 0);
+      }
+    };
+    stage?.addEventListener("pointerdown", down);
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    return () => {
+      cancelAnimationFrame(raf);
+      stage?.removeEventListener("pointerdown", down);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+    };
+  }, [n, base]);
+
+  const go = (step: number) => {
+    // empuje suave hasta la tarjeta siguiente/anterior
+    const target = Math.round(pos.current + nudge.current) + step;
+    nudge.current = target - pos.current;
   };
 
   return (
@@ -132,69 +228,68 @@ const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
       role="region"
       aria-roledescription="carrusel"
       aria-label="Proyectos de GitHub"
-      onPointerEnter={() => setPaused(true)}
-      onPointerLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)}
+      onPointerEnter={(e) => {
+        if (e.pointerType === "mouse") hold.current.hover = true;
+      }}
+      onPointerLeave={() => {
+        hold.current.hover = false;
+      }}
+      onFocus={() => {
+        hold.current.focus = true;
+      }}
       onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false);
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) hold.current.focus = false;
       }}
       onKeyDown={(e) => {
         if (e.key === "ArrowRight") go(1);
         if (e.key === "ArrowLeft") go(-1);
       }}
     >
-      <motion.div className="ghc__stage" onPanEnd={onPanEnd} style={{ touchAction: "pan-y" }}>
+      <div ref={stageRef} className="ghc__stage" style={{ touchAction: "pan-y" }}>
         {projects.map((p, i) => {
-          const d = offsetOf(i, active, n);
-          const ad = Math.abs(d);
-          const shown = ad <= 2;
+          const isActive = i === active;
           return (
-            <motion.div
+            <div
               key={p.id}
+              ref={(el) => {
+                slotRefs.current[i] = el;
+              }}
               className="ghc__slot"
-              aria-hidden={d !== 0}
+              aria-hidden={!isActive}
               role="group"
               aria-roledescription="diapositiva"
               aria-label={`${i + 1} de ${n}`}
-              initial={false}
-              animate={{
-                x: `${d * 62}%`,
-                scale: 1 - Math.min(ad, 2) * 0.13,
-                rotateY: d === 0 ? 0 : d > 0 ? -22 : 22,
-                opacity: shown ? (ad === 0 ? 1 : ad === 1 ? 0.78 : 0) : 0,
-                filter: ad === 0 ? "saturate(1)" : "saturate(0.7)",
-              }}
-              transition={SPRING}
-              style={{ zIndex: 10 - ad, pointerEvents: shown ? "auto" : "none" }}
-              onClick={d !== 0 ? () => !panned.current && go(d) : undefined}
+              onClick={
+                isActive
+                  ? undefined
+                  : () => {
+                      if (!suppressClick.current) go(Math.round(wrap(i - pos.current, n)));
+                    }
+              }
             >
-              <Card project={p} active={d === 0} />
-            </motion.div>
+              <Card project={p} active={isActive} />
+            </div>
           );
         })}
-      </motion.div>
+      </div>
 
       {n > 1 ? (
         <div className="ghc__ctrl">
           <button type="button" className="ghc__arrow" onClick={() => go(-1)} aria-label="Proyecto anterior">←</button>
-          <div className="ghc__dots">
-            {projects.map((p, i) => (
-              <button
-                key={p.id}
-                type="button"
-                className={`ghc__dot${i === active ? " is-active" : ""}`}
-                aria-label={`Ir a ${p.title}`}
-                aria-current={i === active}
-                onClick={() => setActive(i)}
-              >
-                {i === active && !paused ? <i key={active} style={{ animationDuration: `${AUTO_MS}ms` }} /> : null}
-              </button>
-            ))}
-          </div>
+          <button
+            type="button"
+            className="ghc__toggle"
+            aria-pressed={paused}
+            onClick={() => {
+              hold.current.paused = !paused;
+              setPaused(!paused);
+            }}
+          >
+            {paused ? "Reanudar" : "Pausar"}
+          </button>
           <button type="button" className="ghc__arrow" onClick={() => go(1)} aria-label="Proyecto siguiente">→</button>
         </div>
       ) : null}
-      <p className="sr-only" aria-live="polite">{projects[active]?.title}</p>
     </div>
   );
 };

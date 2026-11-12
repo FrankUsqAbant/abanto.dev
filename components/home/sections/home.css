@@ -430,7 +430,7 @@
 .hm .ghc{position:relative;outline:none}
 .hm .ghc__stage{position:relative;height:640px;perspective:1600px;display:grid;place-items:center;cursor:grab;user-select:none}
 .hm .ghc__stage:active{cursor:grabbing}
-.hm .ghc__slot{position:absolute;width:min(520px,84vw);transform-style:preserve-3d;will-change:transform,opacity}
+.hm .ghc__slot{position:absolute;width:min(520px,84vw);will-change:transform,opacity;backface-visibility:hidden}
 .hm .ghc__slot[aria-hidden=true]{cursor:pointer}
 .hm .gh{display:flex;flex-direction:column;background:linear-gradient(160deg,#fff,#faf9f6);border:1px solid rgba(255,255,255,.95);border-radius:24px;overflow:hidden;box-shadow:0 34px 70px -40px rgba(0,0,0,.42),inset 0 0 0 1px var(--line)}
 .hm .gh__media{margin:10px 10px 0;border-radius:16px;overflow:hidden;background:rgba(244,242,238,.85);border:1px solid var(--line);box-shadow:0 14px 30px -22px rgba(0,0,0,.4),inset 0 1px 0 #fff}
@@ -458,13 +458,9 @@
 .hm .ghc__ctrl{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:22px}
 .hm .ghc__arrow{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.75);cursor:pointer;font-size:15px;color:var(--ink);transition:background .25s,color .25s}
 .hm .ghc__arrow:hover{background:var(--ink);color:#fff}
-.hm .ghc__dots{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;max-width:min(520px,70vw)}
-.hm .ghc__dot{position:relative;width:8px;height:8px;padding:0;border:0;border-radius:999px;background:rgba(20,20,20,.18);cursor:pointer;overflow:hidden;transition:width .35s var(--ease),background .3s}
-.hm .ghc__dot.is-active{width:34px;background:rgba(20,20,20,.14)}
-.hm .ghc__dot i{position:absolute;inset:0;background:var(--ink);transform-origin:left;animation:gh-fill linear forwards}
-.hm .ghc__dot.is-active:not(:has(i)){background:var(--ink)}
-.hm .ghc__arrow:focus-visible,.hm .ghc__dot:focus-visible,.hm .gh__go:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-.hm .gh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.hm .ghc__toggle{height:40px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.75);cursor:pointer;font:inherit;font-size:12px;font-weight:500;color:var(--ink);min-width:96px;transition:background .25s,color .25s}
+.hm .ghc__toggle:hover{background:var(--ink);color:#fff}
+.hm .ghc__arrow:focus-visible,.hm .gh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
 .hm .gh-empty{display:grid;justify-items:center;gap:10px;text-align:center;padding:60px 24px;border-radius:24px;background:rgba(255,255,255,.6);border:1px solid var(--line)}
 .hm .gh-empty h3{font-family:var(--serif);font-weight:400;font-size:32px;margin:0}
 .hm .gh-empty p{margin:0 0 6px;color:var(--g1)}
@@ -474,7 +470,6 @@
 .hm .ghv i{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--accent);opacity:.5;animation:gh-float 5s ease-in-out infinite}
 .hm .ghv i:nth-of-type(1){left:22%;top:30%}.hm .ghv i:nth-of-type(2){right:24%;top:24%;animation-delay:1.2s}.hm .ghv i:nth-of-type(3){right:30%;bottom:22%;animation-delay:2.4s}
 @keyframes gh-pulse{50%{opacity:.45}}
-@keyframes gh-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes gh-float{50%{transform:translateY(-8px)}}
 @media (max-width:720px){.hm .ghc__stage{height:600px}.hm .gh h3{font-size:26px}}
 @media (prefers-reduced-motion:reduce){.hm .gh *{animation:none!important}}
