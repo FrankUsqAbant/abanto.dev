@@ -47,6 +47,7 @@ const Privacidad: React.FC = () => (
       <li><a href="https://cal.com/privacy" {...ext}>Cal.com</a> (EE. UU.): gestiona las reservas de llamadas.</li>
       <li><a href="https://policies.google.com/privacy" {...ext}>Google (Gmail)</a> (EE. UU.): es el servicio de correo donde recibo y respondo los mensajes.</li>
       <li><a href="https://www.cloudflare.com/privacypolicy/" {...ext}>Cloudflare</a> (EE. UU., red global): aloja el sitio y sirve la librería de iconos desde su CDN (cdnjs).</li>
+      <li><a href="https://docs.github.com/es/site-policy/privacy-policies/github-general-privacy-statement" {...ext}>GitHub</a> (EE. UU.): tu navegador le pide la lista pública de mis proyectos y sus imágenes, por lo que recibe tu dirección IP.</li>
     </ul>
     <p>
       Las fuentes tipográficas se sirven desde este mismo sitio, sin Google Fonts. Como estos proveedores están fuera del

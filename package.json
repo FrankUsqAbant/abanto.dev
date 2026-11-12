@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/fetch-github-projects.mjs",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "github:sync": "node scripts/fetch-github-projects.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.26.1",

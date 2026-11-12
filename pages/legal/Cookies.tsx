@@ -26,6 +26,7 @@ const Cookies: React.FC = () => {
             <tr><td><code>fa-intro-seen-v2</code></td><td>sessionStorage</td><td>Recordar que ya viste la animación de entrada.</td><td>Hasta cerrar la pestaña</td></tr>
             <tr><td><code>lang</code></td><td>localStorage</td><td>Recordar el idioma (español por defecto).</td><td>Hasta que lo borres</td></tr>
             <tr><td><code>cookie-consent</code></td><td>localStorage</td><td>Recordar tu elección sobre cookies y su fecha.</td><td>Hasta que lo borres</td></tr>
+            <tr><td><code>gh-projects-cache</code></td><td>localStorage</td><td>Guardar la lista pública de proyectos de GitHub para no pedirla en cada visita.</td><td>Se renueva cada hora</td></tr>
           </tbody>
         </table>
       </div>
@@ -41,6 +42,7 @@ const Cookies: React.FC = () => {
       <h2>3. Otros servicios sin cookies</h2>
       <ul>
         <li>Las fuentes tipográficas se sirven desde este mismo sitio (no se usa Google Fonts).</li>
+        <li>La sección Proyectos pide la lista pública de repositorios y sus imágenes a GitHub (api.github.com y opengraph.githubassets.com), que no instalan cookies en este sitio.</li>
         <li>La librería de iconos se descarga del CDN cdnjs (Cloudflare), que no instala cookies.</li>
         <li>El formulario de contacto se envía a Formspree solo al pulsar «Enviar»; no deja cookies en este sitio.</li>
       </ul>

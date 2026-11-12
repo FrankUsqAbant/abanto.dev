@@ -1,173 +1,209 @@
-import React, { useState } from "react";
-import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion, type PanInfo } from "framer-motion";
 import Reveal from "./Reveal";
-import {
-  LAB_CATEGORIES,
-  LAB_PROJECTS,
-  type LabCategory,
-  type LabProject,
-  type LabStatus,
-  type LabVisual,
-} from "../../../data/homeProjects";
+import { GITHUB_REPOS_URL, initialProjects, refreshProjects, type Project } from "../../../lib/github";
 
-type Filter = LabCategory | "all";
+const AUTO_MS = 5000;
+const SPRING = { type: "spring", stiffness: 260, damping: 32, mass: 0.9 } as const;
 
-const INITIAL = 6;
-const PILL = { type: "spring", stiffness: 420, damping: 34 } as const;
-const STATUS_CLASS: Record<LabStatus, string> = {
-  "En uso": "is-live",
-  Demo: "is-demo",
-  "En desarrollo": "is-wip",
-};
+/* ---------- Imagen: vista previa de GitHub o visual de respaldo ---------- */
 
-/* ---------- Mini-visuales (sin capturas falsas) ---------- */
+const Fallback: React.FC<{ project: Project }> = ({ project }) => (
+  <div className="ghv" aria-hidden="true">
+    <span className="ghv__glyph">{"</>"}</span>
+    <span className="ghv__lang">{project.language ?? project.topics[0] ?? "código"}</span>
+    <i /><i /><i />
+  </div>
+);
 
-const Visual: React.FC<{ kind: LabVisual }> = ({ kind }) => {
-  switch (kind) {
-    case "telegram":
-      return (
-        <div className="lv lv--chat">
-          <span className="lv__b lv__b--in">/estado</span>
-          <span className="lv__b lv__b--out">Todo en orden ✓</span>
-          <span className="lv__b lv__b--in lv__b--typing"><i /><i /><i /></span>
-          <span className="lv__badge"><i />24/7</span>
-        </div>
-      );
-    case "server":
-      return (
-        <div className="lv lv--server">
-          {["n8n", "bots", "docker"].map((s) => (
-            <span key={s} className="lv__row"><i />{s}<em /></span>
-          ))}
-          <span className="lv__term">hermes › revisando servicios<b /></span>
-        </div>
-      );
-    case "social":
-      return (
-        <div className="lv lv--social">
-          <span className="lv__hub">n8n</span>
-          {["IG", "FB", "in", "YT"].map((s, i) => (
-            <span key={s} className={`lv__node lv__node--${i}`}>{s}</span>
-          ))}
-        </div>
-      );
-    case "video":
-      return (
-        <div className="lv lv--video">
-          <div className="lv__strip">
-            {[0, 1, 2, 3, 4, 5].map((i) => <span key={i} />)}
-          </div>
-          <span className="lv__prog"><i /></span>
-        </div>
-      );
-    case "dashboard":
-      return (
-        <div className="lv lv--dash">
-          <div className="lv__bars">
-            {[38, 62, 48, 80, 56, 70].map((h, i) => (
-              <span key={i} style={{ "--h": `${h}%`, "--i": i } as React.CSSProperties} />
-            ))}
-          </div>
-          <span className="lv__kpi"><i />Datos limpios</span>
-        </div>
-      );
-    case "crm":
-      return (
-        <div className="lv lv--crm">
-          {["Nuevo", "Seguimiento", "Cerrado"].map((c) => (
-            <span key={c} className="lv__col"><em>{c}</em><i /><i /></span>
-          ))}
-          <span className="lv__move" />
-        </div>
-      );
-    case "life":
-      return (
-        <div className="lv lv--life">
-          <svg viewBox="0 0 44 44" className="lv__ring" aria-hidden="true">
-            <circle cx="22" cy="22" r="18" />
-            <circle cx="22" cy="22" r="18" className="lv__arc" />
-          </svg>
-          <div className="lv__week">
-            {["L", "M", "M", "J", "V", "S", "D"].map((d, i) => (
-              <span key={i} style={{ "--i": i } as React.CSSProperties}>{d}</span>
-            ))}
-          </div>
-        </div>
-      );
-  }
+const Media: React.FC<{ project: Project }> = ({ project }) => {
+  // un reintento (otra clave de caché del servicio) antes del visual de respaldo
+  const [attempt, setAttempt] = useState(0);
+  const failed = attempt > 1;
+  const src = attempt === 0 ? project.image : project.image.replace("/1/", "/2/");
+  return (
+    <div className="gh__media">
+      {failed ? (
+        <Fallback project={project} />
+      ) : (
+        <img
+          src={src}
+          alt={`Vista previa del repositorio ${project.title} en GitHub`}
+          decoding="async"
+          draggable={false}
+          onError={() => setAttempt((a) => a + 1)}
+        />
+      )}
+    </div>
+  );
 };
 
 /* ---------- Tarjeta ---------- */
 
-const LabCard: React.FC<{ project: LabProject; reduce: boolean }> = ({ project, reduce }) => {
-  const category = LAB_CATEGORIES.find((c) => c.id === project.category)?.label;
-  const media = project.image ? (
-    <img src={project.image} alt={project.imageAlt ?? ""} loading="lazy" decoding="async" />
-  ) : project.visual ? (
-    <Visual kind={project.visual} />
-  ) : null;
-
+const Card: React.FC<{ project: Project; active: boolean }> = ({ project, active }) => {
+  const tab = active ? 0 : -1;
   return (
-    <motion.article
-      layout={!reduce}
-      initial={reduce ? false : { opacity: 0, y: 14, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.97 }}
-      transition={{ duration: 0.35, ease: [0.2, 0.7, 0.1, 1] }}
-      className="lab"
-      aria-labelledby={`lab-${project.id}`}
-    >
-      {project.liveUrl ? (
-        <a
-          className="lab__media"
-          href={project.liveUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`Abrir la demo de ${project.title} (se abre en otra pestaña)`}
-        >
-          {media}
-        </a>
-      ) : (
-        <div className="lab__media" aria-hidden="true">{media}</div>
-      )}
-      <div className="lab__body">
-        <div className="lab__meta">
-          <span className={`lab__status ${STATUS_CLASS[project.status]}`}><i />{project.status}</span>
-          <span className="lab__cat">{category}</span>
-        </div>
-        <h3 id={`lab-${project.id}`}>{project.title}</h3>
-        <dl className="lab__ps">
-          <div><dt>Problema</dt><dd>{project.problem}</dd></div>
-          <div><dt>Solución</dt><dd>{project.solution}</dd></div>
-        </dl>
-        <div className="lab__foot">
-          <ul className="lab__stack" aria-label="Herramientas">
-            {project.stack.map((t) => <li key={t}>{t}</li>)}
+    <article className="gh" aria-labelledby={`gh-${project.id}`}>
+      <Media project={project} />
+      <div className="gh__body">
+        <div className="gh__meta">
+          <span className={`gh__status${project.status === "Activo" ? " is-live" : ""}`}><i />{project.status}</span>
+          <ul className="gh__chips" aria-label="Tecnologías">
+            {project.chips.map((c) => <li key={c}>{c}</li>)}
           </ul>
-          {project.liveUrl ? (
-            <a className="lab__go" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-              Ver demo <span aria-hidden="true">↗</span>
-              <span className="sr-only"> (se abre en otra pestaña)</span>
+        </div>
+        <h3 id={`gh-${project.id}`}>{project.title}</h3>
+        <p>{project.description}</p>
+        <div className="gh__links">
+          <a className="gh__go" href={project.codeUrl} target="_blank" rel="noopener noreferrer" tabIndex={tab}>
+            Código <span aria-hidden="true">↗</span><span className="sr-only"> de {project.title} en GitHub</span>
+          </a>
+          {project.demoUrl ? (
+            <a className="gh__go gh__go--dark" href={project.demoUrl} target="_blank" rel="noopener noreferrer" tabIndex={tab}>
+              Ver demo <span aria-hidden="true">↗</span><span className="sr-only"> de {project.title} (otra pestaña)</span>
             </a>
           ) : null}
         </div>
       </div>
-    </motion.article>
+    </article>
+  );
+};
+
+/* ---------- Carrusel coverflow ---------- */
+
+const offsetOf = (i: number, active: number, n: number) => {
+  let d = (((i - active) % n) + n) % n;
+  if (d > n / 2) d -= n;
+  return d;
+};
+
+const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
+  const n = projects.length;
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  const go = useCallback((step: number) => setActive((a) => (((a + step) % n) + n) % n), [n]);
+
+  useEffect(() => {
+    if (active >= n) setActive(0);
+  }, [n, active]);
+
+  // Avance automático: se pausa con hover/foco, pestaña oculta o fuera de pantalla.
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  useEffect(() => {
+    if (paused || !inView || n < 2) return;
+    const id = window.setInterval(() => {
+      if (!document.hidden) go(1);
+    }, AUTO_MS);
+    return () => window.clearInterval(id);
+  }, [paused, inView, n, go, active]);
+
+  const panned = useRef(false);
+  const onPanEnd = (_: PointerEvent | MouseEvent | TouchEvent, info: PanInfo) => {
+    // evita que el click al soltar active la tarjeta lateral
+    panned.current = true;
+    window.setTimeout(() => {
+      panned.current = false;
+    }, 0);
+    if (Math.abs(info.offset.x) < 50 && Math.abs(info.velocity.x) < 400) return;
+    go(info.offset.x < 0 ? 1 : -1);
+  };
+
+  return (
+    <div
+      ref={rootRef}
+      className="ghc"
+      role="region"
+      aria-roledescription="carrusel"
+      aria-label="Proyectos de GitHub"
+      onPointerEnter={() => setPaused(true)}
+      onPointerLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setPaused(false);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "ArrowRight") go(1);
+        if (e.key === "ArrowLeft") go(-1);
+      }}
+    >
+      <motion.div className="ghc__stage" onPanEnd={onPanEnd} style={{ touchAction: "pan-y" }}>
+        {projects.map((p, i) => {
+          const d = offsetOf(i, active, n);
+          const ad = Math.abs(d);
+          const shown = ad <= 2;
+          return (
+            <motion.div
+              key={p.id}
+              className="ghc__slot"
+              aria-hidden={d !== 0}
+              role="group"
+              aria-roledescription="diapositiva"
+              aria-label={`${i + 1} de ${n}`}
+              initial={false}
+              animate={{
+                x: `${d * 62}%`,
+                scale: 1 - Math.min(ad, 2) * 0.13,
+                rotateY: d === 0 ? 0 : d > 0 ? -22 : 22,
+                opacity: shown ? (ad === 0 ? 1 : ad === 1 ? 0.78 : 0) : 0,
+                filter: ad === 0 ? "saturate(1)" : "saturate(0.7)",
+              }}
+              transition={SPRING}
+              style={{ zIndex: 10 - ad, pointerEvents: shown ? "auto" : "none" }}
+              onClick={d !== 0 ? () => !panned.current && go(d) : undefined}
+            >
+              <Card project={p} active={d === 0} />
+            </motion.div>
+          );
+        })}
+      </motion.div>
+
+      {n > 1 ? (
+        <div className="ghc__ctrl">
+          <button type="button" className="ghc__arrow" onClick={() => go(-1)} aria-label="Proyecto anterior">←</button>
+          <div className="ghc__dots">
+            {projects.map((p, i) => (
+              <button
+                key={p.id}
+                type="button"
+                className={`ghc__dot${i === active ? " is-active" : ""}`}
+                aria-label={`Ir a ${p.title}`}
+                aria-current={i === active}
+                onClick={() => setActive(i)}
+              >
+                {i === active && !paused ? <i key={active} style={{ animationDuration: `${AUTO_MS}ms` }} /> : null}
+              </button>
+            ))}
+          </div>
+          <button type="button" className="ghc__arrow" onClick={() => go(1)} aria-label="Proyecto siguiente">→</button>
+        </div>
+      ) : null}
+      <p className="sr-only" aria-live="polite">{projects[active]?.title}</p>
+    </div>
   );
 };
 
 /* ---------- Sección ---------- */
 
-const FILTERS: { id: Filter; label: string }[] = [{ id: "all", label: "Todos" }, ...LAB_CATEGORIES];
-
 const ProjectsSection: React.FC = () => {
   const reduce = useReducedMotion() ?? false;
-  const [filter, setFilter] = useState<Filter>("all");
-  const [expanded, setExpanded] = useState(false);
+  const [projects, setProjects] = useState<Project[]>(initialProjects);
 
-  const list = filter === "all" ? LAB_PROJECTS : LAB_PROJECTS.filter((p) => p.category === filter);
-  const visible = expanded ? list : list.slice(0, INITIAL);
-  const hidden = list.length - visible.length;
+  useEffect(() => {
+    const ctrl = new AbortController();
+    refreshProjects(ctrl.signal).then((fresh) => {
+      if (fresh) setProjects(fresh);
+    });
+    return () => ctrl.abort();
+  }, []);
 
   return (
     <section className="section section--alt" id="proyectos" aria-labelledby="proyectos-title">
@@ -183,53 +219,30 @@ const ProjectsSection: React.FC = () => {
             <p className="sec-head__sub">
               Lo que construyo y uso a diario. Cada sistema que ofrezco ya lo probé en mis propios proyectos.
             </p>
+            <a className="link-arrow" href={GITHUB_REPOS_URL} target="_blank" rel="noopener noreferrer">
+              Ver todos en GitHub <i aria-hidden="true">↗</i>
+            </a>
           </div>
         </Reveal>
 
-        <Reveal className="lab-filters" delay={60}>
-          <LayoutGroup id="lab-filters">
-            <div role="group" aria-label="Filtrar proyectos">
-              {FILTERS.map((f) => {
-                const active = filter === f.id;
-                const count = f.id === "all" ? LAB_PROJECTS.length : LAB_PROJECTS.filter((p) => p.category === f.id).length;
-                return (
-                  <button
-                    key={f.id}
-                    type="button"
-                    className={`lab-chip${active ? " is-active" : ""}`}
-                    aria-pressed={active}
-                    onClick={() => {
-                      setFilter(f.id);
-                      setExpanded(false);
-                    }}
-                  >
-                    {active ? (
-                      <motion.span layoutId="lab-pill" className="lab-chip__pill" transition={reduce ? { duration: 0 } : PILL} aria-hidden="true" />
-                    ) : null}
-                    <span className="lab-chip__label">{f.label}</span>
-                    <span className="lab-chip__n">{count}</span>
-                  </button>
-                );
-              })}
+        <Reveal delay={80}>
+          {projects.length === 0 ? (
+            <div className="gh-empty">
+              <span className="ghv__glyph" aria-hidden="true">{"</>"}</span>
+              <h3>Pronto nuevos proyectos</h3>
+              <p>Mientras tanto, puedes ver lo que estoy construyendo en GitHub.</p>
+              <a className="gh__go gh__go--dark" href={GITHUB_REPOS_URL} target="_blank" rel="noopener noreferrer">
+                Ir a GitHub <span aria-hidden="true">↗</span>
+              </a>
             </div>
-          </LayoutGroup>
+          ) : reduce ? (
+            <div className="gh-grid">
+              {projects.map((p) => <Card key={p.id} project={p} active />)}
+            </div>
+          ) : (
+            <Carousel projects={projects} />
+          )}
         </Reveal>
-
-        <motion.div layout={!reduce} className="labs" aria-live="polite">
-          <AnimatePresence mode="popLayout" initial={false}>
-            {visible.map((p) => (
-              <LabCard key={p.id} project={p} reduce={reduce} />
-            ))}
-          </AnimatePresence>
-        </motion.div>
-
-        {hidden > 0 || expanded ? (
-          <div className="lab-more">
-            <button type="button" className="lab-chip lab-more__btn" onClick={() => setExpanded((v) => !v)} aria-expanded={expanded}>
-              {expanded ? "Ver menos" : `Ver todo (${list.length})`}
-            </button>
-          </div>
-        ) : null}
       </div>
     </section>
   );
