@@ -1,4 +1,4 @@
-// Genera public/images/projects/<repo>.webp para cada proyecto de data/projects.json.
+// Genera public/images/projects/<repo>.webp para cada proyecto de src/data/projects.json.
 // Fuente: la primera captura del README (source.readme) o, si no hay, una captura
 // del sitio en vivo con Playwright (source.page, 1440×900 a 2x).
 // source.position (opcional, p. ej. "top") ajusta el recorte a 16:10.
@@ -11,7 +11,7 @@ const ROOT = new URL("..", import.meta.url);
 const OUT = new URL("public/images/projects/", ROOT);
 const W = 960, H = 600, MAX = 60 * 1024; // se ve a ≤520px CSS: 960px cubre pantallas 2x
 
-const { projects } = JSON.parse(await readFile(new URL("data/projects.json", ROOT), "utf8"));
+const { projects } = JSON.parse(await readFile(new URL("src/data/projects.json", ROOT), "utf8"));
 const only = process.argv.slice(2);
 const list = only.length ? projects.filter((p) => only.includes(p.repo)) : projects;
 await mkdir(OUT, { recursive: true });

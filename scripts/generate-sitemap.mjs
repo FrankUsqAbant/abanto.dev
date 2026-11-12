@@ -1,10 +1,10 @@
 // Prebuild: genera public/sitemap.xml con las páginas, las tablas de Aprende y
-// cada uno de sus elementos (data/periodic/<tabla>.json).
+// cada uno de sus elementos (src/data/periodic/<tabla>.json).
 import { readdir, readFile, writeFile } from "node:fs/promises";
 
 const SITE = "https://abanto.dev";
 const ROOT = new URL("..", import.meta.url);
-const dir = new URL("data/periodic/", ROOT);
+const dir = new URL("src/data/periodic/", ROOT);
 const today = new Date().toISOString().slice(0, 10);
 
 const urls = [

@@ -1,9 +1,9 @@
 // Prebuild: guarda una copia de los repos públicos de GitHub en
-// data/github-projects.json. Si la API falla, se conserva la copia anterior.
+// src/data/github-projects.json. Si la API falla, se conserva la copia anterior.
 import { writeFile } from "node:fs/promises";
 
 const USER = "FrankUsqAbant";
-const OUT = new URL("../data/github-projects.json", import.meta.url);
+const OUT = new URL("../src/data/github-projects.json", import.meta.url);
 const FIELDS = ["name", "full_name", "description", "topics", "homepage", "language", "pushed_at", "fork", "archived", "html_url"];
 
 try {
@@ -14,7 +14,7 @@ try {
   const repos = await res.json();
   const slim = repos.map((r) => Object.fromEntries(FIELDS.map((k) => [k, r[k] ?? null])));
   await writeFile(OUT, JSON.stringify({ fetchedAt: new Date().toISOString(), repos: slim }, null, 2) + "\n");
-  console.log(`[github] ${slim.length} repos guardados en data/github-projects.json`);
+  console.log(`[github] ${slim.length} repos guardados en src/data/github-projects.json`);
 } catch (err) {
   console.warn(`[github] No se pudo actualizar la copia (${err.message}); se usa la existente.`);
 }
