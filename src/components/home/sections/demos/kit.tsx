@@ -76,11 +76,10 @@ interface ShellProps {
   children: React.ReactNode;
 }
 
-/** Tarjeta de vidrio con la etiqueta "Demo interactiva". */
+/** Tarjeta de vidrio para las demos de Servicios. */
 export const Shell = React.forwardRef<HTMLElement, ShellProps>(({ label, title, className = "", children }, ref) => (
-  <figure ref={ref} className={`dm ${className}`} aria-label={`Demo interactiva: ${label}`}>
+  <figure ref={ref} className={`dm ${className}`} aria-label={label}>
     <figcaption className="dm__top">
-      <span className="dm__tag"><i aria-hidden="true" />Demo interactiva</span>
       <span className="dm__title">{title}</span>
     </figcaption>
     {children}
