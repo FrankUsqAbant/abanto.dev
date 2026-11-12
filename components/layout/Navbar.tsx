@@ -2,6 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "../../types";
 import { BuildReveal, useIntro } from "../intro";
+import {
+  CONTACT_ID,
+  HOME_SECTIONS,
+  scrollToSection,
+  scrollToSectionWhenReady,
+} from "../home/sections/homeLinks";
+import { useActiveSection } from "./useActiveSection";
 
 interface NavbarProps {
   currentView: View;
@@ -9,7 +16,12 @@ interface NavbarProps {
   onOpenSearch: () => void;
 }
 
-const CONTACT_ID = "contacto";
+type NavItem =
+  | { kind: "view"; view: View; label: string }
+  | { kind: "section"; id: string; label: string };
+
+/** Secciones observadas para el resaltado (en orden del DOM). */
+const OBSERVED_IDS = ["servicios", "agendar", "proyectos", "proceso", "faq", CONTACT_ID, "pie"];
 
 const ArrowUpRight: React.FC = () => (
   <svg
@@ -40,12 +52,21 @@ const Navbar: React.FC<NavbarProps> = ({
   // en el resto de páginas, que siguen siendo oscuras, usa la variante oscura.
   const isLight = currentView === "home";
 
-  const navItems: { id: View; label: string }[] = [
-    { id: "home", label: t("navbar.home") },
-    { id: "blog", label: t("navbar.blog") },
-    { id: "about", label: t("navbar.about") },
+  const navItems: NavItem[] = [
+    { kind: "view", view: "home", label: t("navbar.home") },
+    ...HOME_SECTIONS.map(
+      (sec): NavItem => ({
+        kind: "section",
+        id: sec.id,
+        label: t(sec.i18nKey, { defaultValue: sec.label }),
+      }),
+    ),
+    { kind: "view", view: "blog", label: t("navbar.blog") },
+    { kind: "view", view: "about", label: t("navbar.about") },
     // Cursos y Lecturas siguen en el router, pero ya no en el menú.
   ];
+
+  const activeSection = useActiveSection(OBSERVED_IDS, isLight);
 
   useEffect(() => {
     if (!mobileMenuOpen) return;
@@ -56,28 +77,51 @@ const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileMenuOpen]);
 
+  // Cierra el menú móvil si la ventana crece hasta el layout de escritorio.
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => mq.matches && setMobileMenuOpen(false);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [mobileMenuOpen]);
+
   const handleNavClick = (view: View) => {
     onNavigate(view);
     setMobileMenuOpen(false);
   };
 
-  const scrollToContact = () => {
-    document
-      .getElementById(CONTACT_ID)
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
+  /** Va a una sección del inicio; desde otra página navega a / y luego desplaza. */
+  const goToSection = (id: string) => {
     setMobileMenuOpen(false);
     if (currentView === "home") {
-      scrollToContact();
+      scrollToSection(id);
     } else {
       onNavigate("home");
-      // Espera a que la página de inicio se monte (transición de página).
-      window.setTimeout(scrollToContact, 700);
+      scrollToSectionWhenReady(id);
     }
   };
+
+  const onSectionLink =
+    (id: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      goToSection(id);
+    };
+
+  const handleContactClick = onSectionLink(CONTACT_ID);
+
+  const isItemActive = (item: NavItem) =>
+    item.kind === "section"
+      ? isLight && activeSection === item.id
+      : item.view === "home"
+        ? isLight && activeSection === null
+        : currentView === item.view;
+
+  const ariaCurrent = (item: NavItem, active: boolean) =>
+    active ? (item.kind === "section" ? "location" : "page") : undefined;
+
+  const itemKey = (item: NavItem) =>
+    item.kind === "section" ? `s-${item.id}` : `v-${item.view}`;
 
   // "INICIO" -> "Inicio" (las traducciones vienen en mayúsculas).
   const labelClass =
@@ -111,7 +155,7 @@ const Navbar: React.FC<NavbarProps> = ({
         aria-label="Principal"
         className={`fixed top-0 left-0 right-0 z-[100] backdrop-blur-xl transition-colors duration-500 ${theme.bar}`}
       >
-        <div className="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 h-20 grid grid-cols-[1fr_auto] md:grid-cols-[1fr_auto_1fr] items-center gap-4">
+        <div className="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 h-20 grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center gap-4">
           {/* Firma */}
           <a
             href="/"
@@ -129,22 +173,44 @@ const Navbar: React.FC<NavbarProps> = ({
           </a>
 
           {/* Navegación central */}
-          <ul className="hidden md:flex items-center gap-7 lg:gap-9">
+          <ul className="hidden lg:flex items-center gap-5 xl:gap-8">
             {navItems.map((item, i) => {
-              const active = currentView === item.id;
+              const active = isItemActive(item);
+              const cls = `relative inline-flex items-center py-2 leading-none text-[13px] tracking-[0.005em] transition-colors duration-300 ${
+                active ? theme.active : theme.link
+              }`;
+              const dot = (
+                <span
+                  aria-hidden="true"
+                  className={`absolute left-1/2 -bottom-0.5 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-current transition-opacity duration-300 ${
+                    active ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              );
               return (
-                <li key={item.id}>
-                  <BuildReveal order={2 + i} variant="text" inline>
-                    <button
-                      type="button"
-                      onClick={() => handleNavClick(item.id)}
-                      aria-current={active ? "page" : undefined}
-                      className={`text-[13px] tracking-[0.005em] transition-colors duration-300 ${
-                        active ? theme.active : theme.link
-                      }`}
-                    >
-                      <span className={labelClass}>{item.label}</span>
-                    </button>
+                <li key={itemKey(item)}>
+                  <BuildReveal order={2 + i * 0.5} variant="text" inline>
+                    {item.kind === "section" ? (
+                      <a
+                        href={`/#${item.id}`}
+                        onClick={onSectionLink(item.id)}
+                        aria-current={ariaCurrent(item, active)}
+                        className={cls}
+                      >
+                        <span className={labelClass}>{item.label}</span>
+                        {dot}
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => handleNavClick(item.view)}
+                        aria-current={ariaCurrent(item, active)}
+                        className={cls}
+                      >
+                        <span className={labelClass}>{item.label}</span>
+                        {dot}
+                      </button>
+                    )}
                   </BuildReveal>
                 </li>
               );
@@ -153,7 +219,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
           {/* Acciones */}
           <BuildReveal
-            order={7}
+            order={2 + navItems.length * 0.5}
             variant="pill"
             label="<Nav.Cta />"
             className="justify-self-end"
@@ -174,7 +240,7 @@ const Navbar: React.FC<NavbarProps> = ({
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"
               aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
-              className={`md:hidden w-10 h-10 flex items-center justify-center rounded-full border transition-colors ${theme.icon}`}
+              className={`lg:hidden w-10 h-10 flex items-center justify-center rounded-full border transition-colors ${theme.icon}`}
             >
               <i
                 className={`fas ${mobileMenuOpen ? "fa-times" : "fa-bars"} text-sm`}
@@ -196,28 +262,40 @@ const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div
           id="mobile-menu"
-          className={`fixed inset-0 z-[90] md:hidden flex flex-col pt-28 px-6 animate-fade-in ${theme.menu}`}
+          className={`fixed inset-0 z-[90] lg:hidden flex flex-col pt-24 pb-8 px-6 overflow-y-auto animate-fade-in ${theme.menu}`}
         >
-          <ul className="flex flex-col gap-1">
+          <ul className="flex flex-col">
             {navItems.map((item) => {
-              const active = currentView === item.id;
+              const active = isItemActive(item);
+              const cls = `w-full text-left py-2.5 font-serif-display text-[32px] leading-tight transition-colors ${
+                active ? theme.active : theme.menuItem
+              }`;
               return (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    onClick={() => handleNavClick(item.id)}
-                    aria-current={active ? "page" : undefined}
-                    className={`w-full text-left py-4 font-serif-display text-4xl transition-colors ${
-                      active ? theme.active : theme.menuItem
-                    }`}
-                  >
-                    <span className={labelClass}>{item.label}</span>
-                  </button>
+                <li key={itemKey(item)}>
+                  {item.kind === "section" ? (
+                    <a
+                      href={`/#${item.id}`}
+                      onClick={onSectionLink(item.id)}
+                      aria-current={ariaCurrent(item, active)}
+                      className={`block ${cls}`}
+                    >
+                      <span className={labelClass}>{item.label}</span>
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handleNavClick(item.view)}
+                      aria-current={ariaCurrent(item, active)}
+                      className={cls}
+                    >
+                      <span className={labelClass}>{item.label}</span>
+                    </button>
+                  )}
                 </li>
               );
             })}
           </ul>
-          <div className="mt-8 flex flex-col gap-3">
+          <div className="mt-6 flex flex-col gap-3">
             <a
               href={`/#${CONTACT_ID}`}
               onClick={handleContactClick}

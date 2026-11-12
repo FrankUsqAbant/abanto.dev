@@ -5,7 +5,11 @@
     "blog": "BLOG",
     "courses": "CURSOS",
     "about": "SOBRE MÍ",
-    "login": "INGRESAR"
+    "login": "INGRESAR",
+    "services": "Servicios",
+    "projects": "Proyectos",
+    "process": "Proceso",
+    "faq": "Preguntas"
   },
   "home": {
     "welcome_badge": "Bienvenido al Futuro",

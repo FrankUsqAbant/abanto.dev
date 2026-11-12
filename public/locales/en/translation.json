@@ -5,7 +5,11 @@
     "blog": "BLOG",
     "courses": "COURSES",
     "about": "ABOUT ME",
-    "login": "LOGIN"
+    "login": "LOGIN",
+    "services": "Services",
+    "projects": "Projects",
+    "process": "Process",
+    "faq": "FAQ"
   },
   "home": {
     "welcome_badge": "Welcome to the Future",

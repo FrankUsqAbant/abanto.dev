@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View } from "../types";
 import Hero from "../components/home/Hero";
 import ServicesSection from "../components/home/sections/ServicesSection";
@@ -7,6 +7,7 @@ import ProjectsSection from "../components/home/sections/ProjectsSection";
 import ProcessSection from "../components/home/sections/ProcessSection";
 import FaqSection from "../components/home/sections/FaqSection";
 import ContactSection from "../components/home/sections/ContactSection";
+import { scrollToSectionWhenReady } from "../components/home/sections/homeLinks";
 import "../components/home/sections/home.css";
 
 interface HomeProps {
@@ -18,7 +19,14 @@ interface HomeProps {
  * Las secciones antiguas (repos de GitHub, FAQ oscuro, formulario viejo) ya
  * no se muestran aquí; sus archivos siguen en el proyecto.
  */
-const Home: React.FC<HomeProps> = () => (
+const Home: React.FC<HomeProps> = () => {
+  // Enlace directo (p. ej. /#proyectos): desplaza a la sección al cargar.
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (id) scrollToSectionWhenReady(id);
+  }, []);
+
+  return (
   <>
     <Hero />
     <div className="hm">
@@ -30,6 +38,7 @@ const Home: React.FC<HomeProps> = () => (
       <ContactSection />
     </div>
   </>
-);
+  );
+};
 
 export default Home;

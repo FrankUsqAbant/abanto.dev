@@ -1,6 +1,6 @@
 import React from "react";
 import type { View } from "../../../types";
-import { CONTACT_ID, SOCIALS, scrollToSection } from "./homeLinks";
+import { CONTACT_ID, SOCIALS, scrollToSection, scrollToSectionWhenReady } from "./homeLinks";
 
 interface SiteFooterProps {
   onNavigate: (view: View) => void;
@@ -19,13 +19,13 @@ const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
       scrollToSection(id);
     } else {
       onNavigate("home");
-      window.setTimeout(() => scrollToSection(id), 700);
+      scrollToSectionWhenReady(id);
     }
   };
 
   return (
     <div className="hm hm-footer">
-      <footer className="footer">
+      <footer className="footer" id="pie">
         <div className="wrap footer__grid">
           <div>
             <a className="logo logo--lg" href="/" onClick={go("home")} aria-label="Frank Abanto — Inicio">
