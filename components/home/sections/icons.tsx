@@ -19,3 +19,10 @@ export const ShoeIcon: React.FC = () => (
     <path d="M4 34h56" stroke="#f4f2ee" strokeWidth="2" />
   </svg>
 );
+
+export const CalendarIcon: React.FC = () => (
+  <svg {...base}>
+    <rect x="3" y="5" width="18" height="16" rx="2" />
+    <path d="M3 10h18M8 3v4M16 3v4" />
+  </svg>
+);

@@ -1,5 +1,6 @@
 import React from "react";
 import type { View } from "../../../types";
+import CalLink from "../../shared/CalLink";
 import { CONTACT_ID, SOCIALS, scrollToSection, scrollToSectionWhenReady } from "./homeLinks";
 
 interface SiteFooterProps {
@@ -42,9 +43,10 @@ const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
             <a href="/" onClick={go("home")}>Inicio</a>
             <a href="/blog" onClick={go("blog")}>Blog</a>
             <a href="/about" onClick={go("about")}>Sobre mí</a>
-            <a href={`/#${CONTACT_ID}`} onClick={toHomeSection(CONTACT_ID)}>
+            <a href={`/#${CONTACT_ID}`} onClick={toHomeSection(CONTACT_ID)}>Contacto</a>
+            <CalLink>
               Agendar llamada <span aria-hidden="true">↗</span>
-            </a>
+            </CalLink>
           </nav>
           <nav aria-label="Servicios">
             <h2 className="footer__h">Servicios</h2>

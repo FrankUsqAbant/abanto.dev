@@ -9,6 +9,7 @@ import {
   scrollToSectionWhenReady,
 } from "../home/sections/homeLinks";
 import { useActiveSection } from "./useActiveSection";
+import CalLink from "../shared/CalLink";
 
 interface NavbarProps {
   currentView: View;
@@ -107,8 +108,6 @@ const Navbar: React.FC<NavbarProps> = ({
       e.preventDefault();
       goToSection(id);
     };
-
-  const handleContactClick = onSectionLink(CONTACT_ID);
 
   const isItemActive = (item: NavItem) =>
     item.kind === "section"
@@ -225,14 +224,14 @@ const Navbar: React.FC<NavbarProps> = ({
             className="justify-self-end"
           >
           <div className="flex items-center gap-2">
-            <a
-              href={`/#${CONTACT_ID}`}
-              onClick={handleContactClick}
+            <CalLink
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Agendar llamada de 30 minutos (Cal.com)"
               className={`group hidden sm:inline-flex items-center gap-3 h-10 pl-5 pr-4 rounded-full text-[13px] font-medium shadow-[0_8px_20px_-10px_rgba(0,0,0,0.5)] transition-colors duration-300 ${theme.cta}`}
             >
               Agendar llamada
               <ArrowUpRight />
-            </a>
+            </CalLink>
 
             <button
               type="button"
@@ -296,14 +295,14 @@ const Navbar: React.FC<NavbarProps> = ({
             })}
           </ul>
           <div className="mt-6 flex flex-col gap-3">
-            <a
-              href={`/#${CONTACT_ID}`}
-              onClick={handleContactClick}
+            <CalLink
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Agendar llamada de 30 minutos (Cal.com)"
               className={`group inline-flex items-center justify-center gap-3 h-12 rounded-full text-sm font-medium ${theme.cta}`}
             >
               Agendar llamada
               <ArrowUpRight />
-            </a>
+            </CalLink>
             <button
               type="button"
               onClick={() => {

@@ -1,6 +1,7 @@
 import React, { useId, useState } from "react";
 import Reveal from "./Reveal";
-import { MailIcon } from "./icons";
+import { CalendarIcon, MailIcon } from "./icons";
+import CalLink from "../../shared/CalLink";
 import { CONTACT_EMAIL, CONTACT_ID, SOCIALS } from "./homeLinks";
 
 type Field = "name" | "email" | "message";
@@ -16,40 +17,68 @@ const validate = (v: Record<Field, string>): Errors => {
   return e;
 };
 
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mjywvjgd";
+
 const buildMailto = (v: Record<Field, string>) => {
   const subject = `Proyecto — ${v.name.trim()}`;
   const body = `${v.message.trim()}\n\n—\n${v.name.trim()}\n${v.email.trim()}`;
   return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 };
 
+type SendState =
+  | { kind: "idle" }
+  | { kind: "sending" }
+  | { kind: "success" }
+  | { kind: "error"; message: string; mailto: string };
+
+interface FormspreeError {
+  errors?: { message?: string }[];
+  error?: string;
+}
+
+const readError = async (res: Response): Promise<string> => {
+  try {
+    const data = (await res.json()) as FormspreeError;
+    const msg = data.errors?.map((x) => x.message).filter(Boolean).join(" ") || data.error;
+    if (msg) return msg;
+  } catch {
+    /* respuesta sin JSON */
+  }
+  return `El servidor respondió con un error (${res.status}).`;
+};
+
 /**
- * Contacto. No hay backend todavía: el formulario valida y abre el correo
- * del visitante con el mensaje listo (mailto). No finge un envío.
+ * Contacto: valida en el cliente y envía a Formspree (fetch + JSON).
+ * Solo muestra éxito si la respuesta es ok; si falla, ofrece el email directo.
  */
 const ContactSection: React.FC = () => {
   const uid = useId();
   const [values, setValues] = useState<Record<Field, string>>({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState(false);
-  const [opened, setOpened] = useState(false);
+  const [send, setSend] = useState<SendState>({ kind: "idle" });
+  const [gotcha, setGotcha] = useState("");
 
   const ids = {
     name: `${uid}-name`,
     email: `${uid}-email`,
     message: `${uid}-message`,
-    note: `${uid}-note`,
+    gotcha: `${uid}-gotcha`,
     status: `${uid}-status`,
   };
+
+  const sending = send.kind === "sending";
 
   const update = (field: Field) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const next = { ...values, [field]: e.target.value };
     setValues(next);
-    setOpened(false);
+    if (send.kind === "success" || send.kind === "error") setSend({ kind: "idle" });
     if (touched) setErrors(validate(next));
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (sending) return;
     setTouched(true);
     const errs = validate(values);
     setErrors(errs);
@@ -58,8 +87,37 @@ const ContactSection: React.FC = () => {
       document.getElementById(ids[first])?.focus();
       return;
     }
-    window.location.href = buildMailto(values);
-    setOpened(true);
+
+    const payload = {
+      name: values.name.trim(),
+      email: values.email.trim(),
+      message: values.message.trim(),
+      _subject: `Nuevo mensaje desde el portfolio — ${values.name.trim()}`,
+      _gotcha: gotcha,
+    };
+    const mailto = buildMailto(values);
+    setSend({ kind: "sending" });
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        setSend({ kind: "success" });
+        setValues({ name: "", email: "", message: "" });
+        setTouched(false);
+        setErrors({});
+      } else {
+        setSend({ kind: "error", message: await readError(res), mailto });
+      }
+    } catch {
+      setSend({
+        kind: "error",
+        message: "No pude conectar con el servidor. Revisa tu conexión.",
+        mailto,
+      });
+    }
   };
 
   const errorId = (f: Field) => `${ids[f]}-error`;
@@ -96,6 +154,14 @@ const ContactSection: React.FC = () => {
               </div>
               <i aria-hidden="true">↗</i>
             </a>
+            <CalLink className="channel" aria-label="Agendar llamada de 30 minutos (Cal.com)">
+              <span className="ico"><CalendarIcon /></span>
+              <div>
+                <small>Agendar llamada</small>
+                <b>Videollamada · 30 min</b>
+              </div>
+              <i aria-hidden="true">↗</i>
+            </CalLink>
           </div>
           <ul className="socials" aria-label="Redes sociales">
             {SOCIALS.map((s) => (
@@ -116,7 +182,7 @@ const ContactSection: React.FC = () => {
         </Reveal>
 
         <Reveal delay={120}>
-          <form className="form" noValidate onSubmit={onSubmit} aria-labelledby="contacto-title" aria-describedby={ids.note}>
+          <form className="form" noValidate onSubmit={onSubmit} aria-labelledby="contacto-title" aria-busy={sending || undefined}>
             <div className="form__head" aria-hidden="true">
               <span className="dots"><i /><i /><i /></span>
               <span className="tag">Nuevo mensaje</span>
@@ -136,19 +202,39 @@ const ContactSection: React.FC = () => {
               <textarea rows={5} placeholder="Cuéntame sobre tu negocio y qué te gustaría automatizar…" {...fieldProps("message")} />
               {errors.message ? <small className="form__err" id={errorId("message")}>{errors.message}</small> : null}
             </label>
+            {/* Honeypot anti-spam (Formspree): invisible para personas */}
+            <div className="form__hp" aria-hidden="true">
+              <label htmlFor={ids.gotcha}>No completes este campo</label>
+              <input
+                id={ids.gotcha}
+                type="text"
+                name="_gotcha"
+                tabIndex={-1}
+                autoComplete="off"
+                value={gotcha}
+                onChange={(e) => setGotcha(e.target.value)}
+              />
+            </div>
             <div className="form__foot">
-              <small id={ids.note}>
-                Al enviar se abrirá tu app de correo con el mensaje listo para mandarlo a {CONTACT_EMAIL}.
-              </small>
-              <button className="btn btn--dark" type="submit">
-                Enviar mensaje <i className="arr" aria-hidden="true">↗</i>
+              <button className="btn btn--dark" type="submit" disabled={sending} aria-disabled={sending || undefined}>
+                {sending ? "Enviando…" : "Enviar mensaje"} <i className="arr" aria-hidden="true">↗</i>
               </button>
             </div>
-            <p className="form__status" id={ids.status} role="status" aria-live="polite">
-              {opened
-                ? `Abrimos tu app de correo con el mensaje listo. Si no se abrió, escríbeme directamente a ${CONTACT_EMAIL}.`
-                : ""}
-            </p>
+            <div id={ids.status} role="status" aria-live="polite" className="form__live">
+              {send.kind === "success" ? (
+                <p className="form__status form__status--ok">¡Gracias! Te respondo pronto.</p>
+              ) : null}
+              {send.kind === "sending" ? <span className="sr-only">Enviando mensaje…</span> : null}
+            </div>
+            <div role="alert" className="form__live">
+              {send.kind === "error" ? (
+                <p className="form__status form__status--err">
+                  No se pudo enviar el mensaje: {send.message.replace(/[.\s]*$/, ".")}{" "}
+                  Puedes escribirme directamente a{" "}
+                  <a href={send.mailto}>{CONTACT_EMAIL}</a>.
+                </p>
+              ) : null}
+            </div>
           </form>
         </Reveal>
       </div>

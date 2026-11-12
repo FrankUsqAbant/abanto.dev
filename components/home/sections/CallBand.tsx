@@ -1,6 +1,6 @@
 import React from "react";
 import Reveal from "./Reveal";
-import { CONTACT_ID, scrollToSection } from "./homeLinks";
+import CalLink from "../../shared/CalLink";
 
 /** Banda oscura "Agendar llamada" entre Servicios y Proyectos. */
 const CallBand: React.FC = () => (
@@ -12,16 +12,9 @@ const CallBand: React.FC = () => (
         Hablemos 30 minutos <br />
         <em>y lo vemos juntos.</em>
       </h2>
-      <a
-        className="btn btn--light btn--xl"
-        href={`#${CONTACT_ID}`}
-        onClick={(e) => {
-          e.preventDefault();
-          scrollToSection(CONTACT_ID);
-        }}
-      >
+      <CalLink className="btn btn--light btn--xl">
         Agendar llamada <i className="arr" aria-hidden="true">↗</i>
-      </a>
+      </CalLink>
       <p className="band__note">Sin compromiso · Te digo con honestidad si puedo ayudarte</p>
     </Reveal>
   </section>

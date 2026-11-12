@@ -581,3 +581,13 @@
 @media (max-width: 1100px) {
   .hm .tile__body--auto { grid-template-columns: 1fr !important; }
 }
+
+/* Formulario: estados reales de envío (Formspree) */
+.hm .form__foot { justify-content: flex-end; }
+.hm .form__hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.hm .form { position: relative; }
+.hm .form button[disabled] { opacity: .6; cursor: progress; }
+.hm .form__status--ok { color: #2f6b3a; }
+.hm .form__status--err { color: #a3362b; }
+.hm .form__status--err a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.hm .form__live:empty { display: none; }
