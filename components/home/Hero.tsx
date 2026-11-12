@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   motion,
   useMotionValue,
@@ -6,7 +6,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { BuildReveal, CreditsHeadline, IntroLoader } from "../intro";
+import { BuildReveal, CreditsHeadline, IntroLoader, useIntro } from "../intro";
 import { ArrowDown, ArrowUpRight } from "./heroIcons";
 import ServiceOrbit, { ServiceMarquee } from "./ServiceOrbit";
 import "./Hero.css";
@@ -27,6 +27,46 @@ const DELAY = {
   primary: 930,
   secondary: 1000,
 } as const;
+
+/* ------------------------------------------------------------------ */
+/* Indicador de scroll                                                 */
+/* ------------------------------------------------------------------ */
+
+/** Aparece al terminar la intro, se oculta al hacer scroll y lleva a Servicios. */
+const ScrollCue: React.FC<{ reduceMotion: boolean }> = ({ reduceMotion }) => {
+  const { phase } = useIntro();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const go = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const target = document.getElementById("servicios");
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  };
+
+  const visible = phase === "done" && !scrolled;
+  return (
+    <a
+      href="#servicios"
+      className="hero__cue"
+      data-visible={visible}
+      data-static={reduceMotion}
+      onClick={go}
+      tabIndex={visible ? 0 : -1}
+      aria-label="Desliza hasta Servicios"
+    >
+      <span className="hero__cue-text">Desliza</span>
+      <span className="hero__cue-line" aria-hidden="true" />
+    </a>
+  );
+};
 
 /* ------------------------------------------------------------------ */
 /* Hero                                                                */
@@ -146,6 +186,8 @@ const Hero: React.FC = () => {
           <ServiceMarquee buildDelay={DELAY.marquee} />
         </div>
       </div>
+
+      <ScrollCue reduceMotion={reduceMotion} />
 
       {/* Intro: cortina + firma; espera fuentes y foto antes de la toma */}
       <IntroLoader images={[HERO_PHOTO]} />

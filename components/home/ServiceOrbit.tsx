@@ -72,15 +72,6 @@ export const ServiceCard: React.FC<{ service: Service; labelled?: boolean }> = (
       labelled ? `${service.title}: ${service.description.join(" ")}` : undefined
     }
   >
-    <header className="hero-card__top">
-      <span className="hero-card__dots" aria-hidden="true">
-        <i />
-        <i />
-        <i />
-      </span>
-      <span className="hero-card__index">SISTEMA / {service.index}</span>
-    </header>
-
     <div className="hero-card__body">
       <span className="hero-card__icon">
         <ServiceIcon name={service.icon} />
@@ -127,7 +118,8 @@ const depthAt = (theta: number): Depth => {
     ox,
     oy,
     k: 0.74 + 0.26 * front,
-    dim: 0.5 * (1 - front) * (1 - front),
+    // velo máx. 0.2: las de atrás siguen legibles (~0.8); la profundidad la da la escala
+    dim: 0.2 * (1 - front) * (1 - front),
     // la foto está en z-index 20: detrás 10–19, delante 21–30
     z: oy > 0 ? 21 + Math.round(front * 9) : 10 + Math.round(front * 9),
     back: oy <= 0,
