@@ -34,6 +34,8 @@ export interface PTableData {
   id: string;
   cols: number;
   rows: number;
+  /** Línea de la cuadrícula donde termina la clave "Cómo leer la tabla" */
+  keyEnd?: number;
   categories: PCategory[];
   items: PItem[];
 }
@@ -45,6 +47,12 @@ export interface PCompat {
 
 export interface PDetail {
   what?: string;
+  /** Lenguaje del ejemplo si difiere del de la tabla */
+  lang?: "html" | "css" | "js" | "python" | "sql" | "shell" | "text";
+  /** Caso de uso de negocio en una línea */
+  biz?: string;
+  /** Mostrar vista previa en vivo (solo HTML) */
+  preview?: boolean;
   points?: string[];
   code?: string;
   syntax?: string;

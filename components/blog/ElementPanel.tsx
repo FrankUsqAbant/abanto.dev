@@ -7,7 +7,15 @@ import LivePreview from "./LivePreview";
 import RichText from "./RichText";
 
 /** Categorías HTML donde una vista previa renderizada aporta algo. */
-const PREVIEW_CATS = new Set(["group", "textual", "tables", "form", "interactive", "semantics", "ideographic", "edition"]);
+const FILE_BY_LANG: Record<NonNullable<PDetail["lang"]>, string> = {
+  html: "index.html",
+  css: "styles.css",
+  js: "app.ts",
+  python: "main.py",
+  sql: "consulta.sql",
+  shell: "terminal",
+  text: "notas.txt",
+};
 
 interface ElementPanelProps {
   table: TableMeta;
@@ -83,7 +91,9 @@ const ElementPanel: React.FC<ElementPanelProps> = ({ table, item, detail, detail
     .slice(0, 6);
 
   const code = detail?.code ?? item.syn;
-  const showPreview = table.id === "html" && !!detail?.code && PREVIEW_CATS.has(item.c);
+  const lang = detail?.lang ?? table.lang;
+  const file = lang === table.lang ? table.file : FILE_BY_LANG[lang];
+  const showPreview = lang === "html" && !!detail?.code && !!detail?.preview;
   const tileStyle: CC = { "--cc": cat?.color };
 
   return createPortal(
@@ -103,7 +113,7 @@ const ElementPanel: React.FC<ElementPanelProps> = ({ table, item, detail, detail
             </div>
             <div className="pd-meta">
               <span className="pd-cat" style={tileStyle}><i aria-hidden="true" />{cat?.name}</span>
-              <h2 id={titleId}>{table.id === "html" ? item.label : item.name}</h2>
+              <h2 id={titleId}>{item.name}</h2>
               {detail?.what ? <p className="pd-short">{item.d}</p> : null}
             </div>
           </div>
@@ -121,10 +131,17 @@ const ElementPanel: React.FC<ElementPanelProps> = ({ table, item, detail, detail
             ) : null}
           </section>
 
+          {detail?.biz ? (
+            <section className="pd-sec pd-biz" aria-label="Para tu negocio">
+              <h3 className="mono">Para tu negocio</h3>
+              <p><RichText text={detail.biz} /></p>
+            </section>
+          ) : null}
+
           {code ? (
             <section className="pd-sec" aria-label="Ejemplo">
               <h3 className="mono">{detail?.code ? "Ejemplo" : "Sintaxis"}</h3>
-              <CodeBlock code={code} lang={table.lang} file={table.file} />
+              <CodeBlock code={code} lang={lang} file={file} />
               {showPreview && detail?.code ? <LivePreview code={detail.code} title={`Vista previa de ${item.label}`} /> : null}
             </section>
           ) : null}

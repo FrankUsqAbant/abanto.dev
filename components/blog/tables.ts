@@ -23,58 +23,57 @@ export interface TableMeta {
 
 export const TABLES: TableMeta[] = [
   {
-    id: "html", label: "HTML5", icon: "</>", titleEm: "del HTML", noun: "elementos", file: "index.html", lang: "html",
+    id: "fundamentos-web", label: "Fundamentos web", icon: "</>", titleEm: "de la web", noun: "elementos", file: "index.html", lang: "html",
     source: "Descripciones basadas en MDN Web Docs · Compatibilidad: MDN browser-compat-data",
-    keyText: "El color indica la categoría. Los elementos se agrupan como en la tabla de Mendeléyev: estructura a la izquierda, texto al centro, multimedia, tablas y formularios a la derecha.",
+    keyText: "HTML para la estructura, CSS para el estilo y el layout, JavaScript para la interacción: lo esencial para empezar.",
   },
   {
-    id: "css", label: "CSS3", icon: "#", titleEm: "del CSS", noun: "propiedades", file: "styles.css", lang: "css",
-    source: "Descripciones basadas en MDN Web Docs · Compatibilidad: MDN browser-compat-data",
-    keyText: "Cada celda es una propiedad. El color indica la familia: layout, tipografía, flexbox, grid, efectos…",
+    id: "frameworks", label: "Frameworks", icon: "svg:layers", titleEm: "de los frameworks", noun: "conceptos", file: "App.tsx", lang: "js",
+    source: "Descripciones basadas en react.dev, nextjs.org, typescriptlang.org y la documentación de cada herramienta",
+    keyText: "React, sus hooks, Next.js, TypeScript y las herramientas con las que hoy se construyen las apps web.",
   },
   {
-    id: "javascript", label: "JavaScript", icon: "JS", titleEm: "de JavaScript", noun: "conceptos", file: "app.js", lang: "js",
-    source: "Descripciones basadas en MDN Web Docs · Compatibilidad: MDN browser-compat-data",
-    keyText: "Palabras clave, objetos y APIs del lenguaje, agrupados por para qué sirven.",
+    id: "backend", label: "Backend", icon: "svg:server", titleEm: "del backend", noun: "conceptos", file: "main.py", lang: "python",
+    source: "Descripciones basadas en docs.python.org, nodejs.org, MDN, FastAPI, Express y OWASP",
+    keyText: "Python y Node.js, cómo se diseña una API, la autenticación y lo que hace falta para producción.",
   },
   {
-    id: "python", label: "Python", icon: "Py", titleEm: "de Python", noun: "conceptos", file: "main.py", lang: "python",
-    source: "Descripciones basadas en la documentación oficial de Python (docs.python.org)",
-    keyText: "Tipos, palabras clave, funciones integradas y módulos esenciales de Python 3.",
+    id: "datos", label: "Datos", icon: "svg:db", titleEm: "de los datos", noun: "conceptos", file: "consulta.sql", lang: "sql",
+    source: "Descripciones basadas en la documentación de PostgreSQL, Supabase, Prisma, Drizzle, Redis y pgvector",
+    keyText: "SQL, modelado y Postgres a la izquierda; ORMs, caché y vectores para IA a la derecha.",
   },
   {
-    id: "databases", label: "Bases de datos", icon: "svg:db", titleEm: "de las bases de datos", noun: "conceptos", file: "consulta.sql", lang: "sql",
-    source: "Descripciones basadas en la documentación de PostgreSQL y MongoDB",
-    keyText: "SQL a la izquierda, NoSQL a la derecha. El color agrupa sentencias, tipos y conceptos.",
+    id: "ia-aplicada", label: "IA aplicada", icon: "svg:spark", titleEm: "de la IA aplicada", noun: "conceptos", file: "ia.py", lang: "python",
+    source: "Descripciones basadas en la documentación de OpenAI, Anthropic, Hugging Face, Ollama y los artículos originales",
+    keyText: "De los fundamentos del machine learning a los LLM, el prompting, RAG y lo necesario para llevar IA a producción.",
   },
   {
-    id: "git", label: "Git", icon: "svg:git", titleEm: "de Git", noun: "comandos", file: "terminal", lang: "shell",
-    source: "Descripciones basadas en la documentación oficial (git-scm.com)",
-    keyText: "Los comandos que más usas, de crear un repositorio a reescribir historial.",
+    id: "agentes-automatizacion", label: "Agentes y automatización", icon: "svg:bot", titleEm: "de los agentes", noun: "conceptos", file: "agente.py", lang: "python",
+    source: "Descripciones basadas en modelcontextprotocol.io, Anthropic, OpenAI, LangGraph, n8n, Make, Zapier y Meta",
+    keyText: "Agentes, protocolos, automatizaciones y canales. Cada ficha incluye un uso concreto para tu negocio.",
   },
   {
-    id: "bash", label: "Bash", icon: ">_", titleEm: "de Bash", noun: "comandos", file: "terminal", lang: "shell",
-    source: "Descripciones basadas en el manual de GNU Bash y las páginas man",
-    keyText: "Comandos de terminal agrupados por tarea: archivos, texto, procesos, red y scripting.",
-  },
-  {
-    id: "cybersecurity", label: "Ciberseguridad", icon: "svg:shield", titleEm: "de la ciberseguridad", noun: "conceptos", file: "notas.txt", lang: "text",
-    source: "Descripciones basadas en OWASP, NIST, CISA y documentación oficial de cada herramienta",
-    keyText: "Ataques, defensas, criptografía y normativas: el mapa básico de la seguridad informática.",
-  },
-  {
-    id: "ml", label: "Machine Learning", icon: "svg:ml", titleEm: "del machine learning", noun: "conceptos", file: "modelo.py", lang: "python",
-    source: "Descripciones basadas en la documentación de scikit-learn, TensorFlow y PyTorch",
-    keyText: "Algoritmos, métricas y herramientas del aprendizaje automático.",
-  },
-  {
-    id: "neuralnet", label: "Redes neuronales", icon: "svg:nn", titleEm: "de las redes neuronales", noun: "conceptos", file: "red.py", lang: "python",
-    source: "Descripciones basadas en la documentación de Keras/TensorFlow y los artículos originales",
-    keyText: "Capas, activaciones, arquitecturas y técnicas de entrenamiento de redes neuronales.",
+    id: "herramientas", label: "Herramientas", icon: "svg:tool", titleEm: "de las herramientas", noun: "herramientas", file: "terminal", lang: "shell",
+    source: "Descripciones basadas en git-scm.com, el manual de GNU Bash, Docker, GitHub, Vercel, Cloudflare y OWASP",
+    keyText: "Git, la terminal, contenedores y despliegue, y la seguridad básica que todo proyecto necesita.",
   },
 ];
 
-export const DEFAULT_TABLE = "html";
+/** Tablas antiguas → tabla nueva más cercana (las fichas que existan se conservan). */
+export const LEGACY_TABLES: Record<string, string> = {
+  html: "fundamentos-web",
+  css: "fundamentos-web",
+  javascript: "fundamentos-web",
+  python: "backend",
+  databases: "datos",
+  git: "herramientas",
+  bash: "herramientas",
+  cybersecurity: "herramientas",
+  ml: "ia-aplicada",
+  neuralnet: "ia-aplicada",
+};
+
+export const DEFAULT_TABLE = "fundamentos-web";
 export const getTable = (id: string | undefined) => TABLES.find((t) => t.id === id);
 
 // Carga diferida: cada JSON es su propio chunk (no entra en el bundle inicial).

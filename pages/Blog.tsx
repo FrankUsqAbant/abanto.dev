@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
-import { DEFAULT_TABLE, TABLES, getTable, loadDetails, loadTable } from "../components/blog/tables";
+import { DEFAULT_TABLE, LEGACY_TABLES, TABLES, getTable, loadDetails, loadTable } from "../components/blog/tables";
 import type { PCategory, PDetails, PItem, PTableData } from "../components/blog/types";
 import ElementTile from "../components/blog/ElementTile";
 import ElementPanel from "../components/blog/ElementPanel";
@@ -28,11 +28,19 @@ interface NavState {
 }
 
 /** Elemento de la clave "Cómo leer la tabla" */
-const KEY_ITEM: Record<string, string> = { html: "section" };
+const KEY_ITEM: Record<string, string> = {
+  "fundamentos-web": "section",
+  frameworks: "rsc",
+  backend: "fastapi",
+  datos: "pgvector",
+  "ia-aplicada": "rag",
+  "agentes-automatizacion": "mcp",
+  herramientas: "docker",
+};
 
 /**
- * Blog = las tablas periódicas (HTML, CSS, JS, Python, BD, Git, Bash,
- * Ciberseguridad, ML, Redes neuronales). URL: /blog/:tabla/:elemento
+ * Blog = 7 tablas periódicas, de los fundamentos web a los agentes de IA.
+ * URL: /blog/:tabla/:elemento (las tablas antiguas redirigen a la más cercana).
  */
 const Blog: React.FC = () => {
   const { table: tableParam, el } = useParams<{ table?: string; el?: string }>();
@@ -127,7 +135,12 @@ const Blog: React.FC = () => {
     [navigate, tableId, location.state],
   );
 
-  if (!meta) return <Navigate to={`/blog/${DEFAULT_TABLE}`} replace />;
+  if (!meta) {
+    const legacy = tableParam ? LEGACY_TABLES[tableParam] : undefined;
+    return <Navigate to={legacy ? `/blog/${legacy}${el ? `/${encodeURIComponent(el)}` : ""}` : `/blog/${DEFAULT_TABLE}`} replace />;
+  }
+  // Ficha inexistente (p. ej. de una tabla antigua): al índice de la tabla.
+  if (notFound) return <Navigate to={`/blog/${tableId}`} replace />;
 
   const items = data?.items ?? [];
   const main = items.filter((x) => x.r <= 7);
@@ -245,11 +258,6 @@ const Blog: React.FC = () => {
               ))}
             </div>
           </div>
-          {notFound ? (
-            <p className="pt-notice" role="status">
-              No encontramos «{el}» en la tabla {meta.titleEm.replace(/^del? (las? )?/, "de ")}. Elige un elemento de la tabla.
-            </p>
-          ) : null}
         </section>
 
         <section className="table-wrap wrap-w" aria-label={`Tabla periódica ${meta.titleEm}`} aria-busy={!data}>
@@ -259,20 +267,20 @@ const Blog: React.FC = () => {
             <div key={tableId} className="pt-anim">
               <div className="ptable-g" style={{ ...gridStyle, gridTemplateRows: `repeat(${Math.min(7, data.rows)}, var(--row))` }}>
                 {keyItem ? (
-                  <div className="key" style={{ gridColumn: `3 / ${cols - 5}` }}>
+                  <div className="key" style={{ gridColumn: `3 / ${data.keyEnd ?? cols - 5}` }}>
                     <div className="key__tile" style={{ "--cc": catMap.get(keyItem.c)?.color } as React.CSSProperties} aria-hidden="true">
                       <span className="key__n">{keyItem.n}</span>
                       <span className="key__s">{keyItem.s}</span>
                       <span className="key__t">{keyItem.label}</span>
                       <i className="key__l key__l--n">Número</i>
                       <i className="key__l key__l--s">Símbolo</i>
-                      <i className="key__l key__l--t">{tableId === "html" ? "Etiqueta" : "Nombre"}</i>
+                      <i className="key__l key__l--t">Nombre</i>
                     </div>
                     <div className="key__txt">
                       <p className="mono">Cómo leer la tabla</p>
                       <h2>
                         Cada {meta.noun === "propiedades" ? "propiedad" : meta.noun.replace(/s$/, "")},{" "}
-                        <em>{tableId === "html" ? "una pieza de la web." : "una pieza del conjunto."}</em>
+                        <em>una pieza del conjunto.</em>
                       </h2>
                       <p>{meta.keyText}</p>
                     </div>

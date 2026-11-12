@@ -23,7 +23,7 @@ import { IntroProvider } from "./components/intro";
 /** /element/:tag (ruta antigua, solo HTML) → ficha en el blog */
 const ElementRedirect: React.FC = () => {
   const { tag } = useParams<{ tag: string }>();
-  return <Navigate to={tag ? `/blog/html/${encodeURIComponent(tag.toLowerCase())}` : "/blog/html"} replace />;
+  return <Navigate to={tag ? `/blog/fundamentos-web/${encodeURIComponent(tag.toLowerCase())}` : "/blog/fundamentos-web"} replace />;
 };
 
 /** Todas las rutas del blog comparten una sola página (sin transición ni scroll al top entre tablas/fichas). */
@@ -100,7 +100,7 @@ const App: React.FC = () => {
                 </PageTransition>
               }
             />
-            <Route path="/blog" element={<Navigate to="/blog/html" replace />} />
+            <Route path="/blog" element={<Navigate to="/blog/fundamentos-web" replace />} />
             <Route
               path="/blog/:table/:el?"
               element={
@@ -117,9 +117,9 @@ const App: React.FC = () => {
                 </PageTransition>
               }
             />
-            <Route path="/html-periodic" element={<Navigate to="/blog/html" replace />} />
-            <Route path="/js-periodic" element={<Navigate to="/blog/javascript" replace />} />
-            <Route path="/python-periodic" element={<Navigate to="/blog/python" replace />} />
+            <Route path="/html-periodic" element={<Navigate to="/blog/fundamentos-web" replace />} />
+            <Route path="/js-periodic" element={<Navigate to="/blog/fundamentos-web" replace />} />
+            <Route path="/python-periodic" element={<Navigate to="/blog/backend" replace />} />
             <Route path="/element/:tag" element={<ElementRedirect />} />
             {/* Cursos, Lecturas y Ejercicios se retiraron: /courses, /theme, /exercises… caen aquí */}
             <Route path="*" element={<Navigate to="/" replace />} />
