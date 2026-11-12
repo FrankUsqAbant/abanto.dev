@@ -18,7 +18,7 @@ i18n
     supportedLngs: ["es", "en"],
     nonExplicitSupportedLngs: true,
     load: "languageOnly", // es-PE / es-419 -> /locales/es (evita pedir archivos que no existen)
-    fallbackLng: "es", // Default to Spanish as requested by context (or 'en' if preferred)
+    fallbackLng: "es", // El sitio es en español; inglés solo si se elige (?lng=en)
     debug: import.meta.env.DEV,
 
     interpolation: {
@@ -30,12 +30,13 @@ i18n
       useSuspense: true, // Set to false if you want to handle loading state manually, but true is better for simple apps
     },
 
-    // Don't redirect URL based on language
+    // Sin detección por navegador: español por defecto; ?lng=en es una elección explícita
+    // y se recuerda en localStorage ("lang", clave nueva para ignorar detecciones antiguas).
     detection: {
+      order: ["querystring", "localStorage"],
       lookupQuerystring: "lng",
-      lookupCookie: "i18next",
-      lookupSessionStorage: "i18next",
-      order: ["querystring", "cookie", "navigator"],
+      lookupLocalStorage: "lang",
+      caches: ["localStorage"],
     },
   });
 

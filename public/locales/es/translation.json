@@ -2,7 +2,7 @@
   "navbar": {
     "home": "INICIO",
     "theme": "LECTURAS",
-    "blog": "BLOG",
+    "learn": "Aprende",
     "courses": "CURSOS",
     "about": "SOBRE MÍ",
     "login": "INGRESAR",
@@ -38,7 +38,7 @@
     "read_article": "Leer Artículo",
     "default_category": "TECNOLOGÍA"
   },
-  "blog": {
+  "learn": {
     "subtitle": "Pensamientos sobre ingeniería, arquitectura de software y el futuro del desarrollo web.",
     "back_to_feed": "Volver al Feed",
     "read_time": "Lectura",

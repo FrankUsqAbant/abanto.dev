@@ -2,7 +2,7 @@
   "navbar": {
     "home": "HOME",
     "theme": "TECH READS",
-    "blog": "BLOG",
+    "learn": "Learn",
     "courses": "COURSES",
     "about": "ABOUT ME",
     "login": "LOGIN",
@@ -38,7 +38,7 @@
     "read_article": "Read Article",
     "default_category": "TECH"
   },
-  "blog": {
+  "learn": {
     "subtitle": "Thoughts on engineering, software architecture, and the future of web development.",
     "back_to_feed": "Back to Feed",
     "read_time": "Read",

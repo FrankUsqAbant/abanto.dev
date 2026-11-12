@@ -58,7 +58,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
   // En Inicio el encabezado es claro (sobre el hero crema);
   // en el resto de páginas, que siguen siendo oscuras, usa la variante oscura.
-  const isLight = currentView === "home" || currentView === "blog" || currentView === "about";
+  const isLight = currentView === "home" || currentView === "aprende" || currentView === "about";
   const onHome = currentView === "home";
 
   const navItems: NavItem[] = [
@@ -69,7 +69,7 @@ const Navbar: React.FC<NavbarProps> = ({
         label: t(sec.i18nKey, { defaultValue: sec.label }),
       }),
     ),
-    { kind: "view", view: "blog", label: t("navbar.blog") },
+    { kind: "view", view: "aprende", label: t("navbar.learn") },
     // Inicio = el logo; Proceso, Preguntas y Sobre mí viven en el pie.
   ];
 

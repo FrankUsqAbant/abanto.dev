@@ -41,7 +41,7 @@ const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
           <nav aria-label="Navegación del pie">
             <h2 className="footer__h">Navegación</h2>
             <a href="/" onClick={go("home")}>Inicio</a>
-            <a href="/blog" onClick={go("blog")}>Blog</a>
+            <a href="/aprende" onClick={go("aprende")}>Aprende</a>
             <a href="/about" onClick={go("about")}>Sobre mí</a>
             <a href="/#proceso" onClick={toHomeSection("proceso")}>Proceso</a>
             <a href="/#faq" onClick={toHomeSection("faq")}>Preguntas</a>

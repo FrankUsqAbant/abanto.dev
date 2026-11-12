@@ -23,13 +23,7 @@ const CommandCenter: React.FC<CommandCenterProps> = ({ isOpen, onClose, onNaviga
 
   const items = [
     { id: 'home', icon: 'fa-house', label: 'Inicio', cat: 'Navegación' },
-    { id: 'html-periodic', icon: 'fa-code', label: 'Tabla Periódica HTML', cat: 'Tablas Interactivas' },
-    { id: 'js-periodic', icon: 'fa-square-js', label: 'Tabla Periódica JavaScript', cat: 'Tablas Interactivas' },
-    { id: 'python-periodic', icon: 'fa-python', label: 'Tabla Periódica Python', cat: 'Tablas Interactivas' },
-    { id: 'exercises', icon: 'fa-dumbbell', label: 'Ejercicios y Desafíos', cat: 'Práctica' },
-    { id: 'courses', icon: 'fa-graduation-cap', label: 'Cursos e IA', cat: 'Formación' },
-    { id: 'blog', icon: 'fa-newspaper', label: 'Blog y Sector Analysis', cat: 'Lectura' },
-    { id: 'theme', icon: 'fa-layer-group', label: 'Tech Stack & Tema', cat: 'Tecnología' },
+    { id: 'aprende', icon: 'fa-graduation-cap', label: 'Aprende: tablas periódicas de web, IA y agentes', cat: 'Aprende' },
     { id: 'about', icon: 'fa-user', label: 'Sobre mí', cat: 'Información' }
   ].filter(i => 
     i.label.toLowerCase().includes(search.toLowerCase()) ||

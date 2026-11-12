@@ -39,10 +39,10 @@ const KEY_ITEM: Record<string, string> = {
 };
 
 /**
- * Blog = 7 tablas periódicas, de los fundamentos web a los agentes de IA.
- * URL: /blog/:tabla/:elemento (las tablas antiguas redirigen a la más cercana).
+ * Aprende = 7 tablas periódicas, de los fundamentos web a los agentes de IA.
+ * URL: /aprende/:tabla/:elemento (las tablas antiguas redirigen a la más cercana).
  */
-const Blog: React.FC = () => {
+const Aprende: React.FC = () => {
   const { table: tableParam, el } = useParams<{ table?: string; el?: string }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -79,10 +79,10 @@ const Blog: React.FC = () => {
   }, [tableId]);
 
   useEffect(() => {
-    if (meta) document.title = `La tabla periódica ${meta.titleEm} | FrankDev`;
+    if (meta) document.title = `Aprende: la tabla periódica ${meta.titleEm} | FrankDev`;
   }, [meta]);
 
-  // Ctrl/Cmd + K enfoca la búsqueda de la tabla (en el blog reemplaza al Command Center).
+  // Ctrl/Cmd + K enfoca la búsqueda de la tabla (en Aprende reemplaza al Command Center).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
@@ -111,7 +111,7 @@ const Blog: React.FC = () => {
     (item: PItem, opener?: HTMLElement) => {
       openerRef.current = opener ?? null;
       const fromGrid = (location.state as NavState | null)?.fromGrid;
-      navigate(`/blog/${tableId}/${item.k}`, { state: { fromGrid: true }, replace: !!el && !!fromGrid });
+      navigate(`/aprende/${tableId}/${item.k}`, { state: { fromGrid: true }, replace: !!el && !!fromGrid });
     },
     [navigate, tableId, el, location.state],
   );
@@ -121,7 +121,7 @@ const Blog: React.FC = () => {
   const closePanel = useCallback(() => {
     const k = el;
     if ((location.state as NavState | null)?.fromGrid) navigate(-1);
-    else navigate(`/blog/${tableId}`, { replace: true });
+    else navigate(`/aprende/${tableId}`, { replace: true });
     // Devuelve el foco a la celda.
     window.setTimeout(() => {
       const target = openerRef.current ?? (k ? document.querySelector<HTMLElement>(`.tile[data-k="${CSS.escape(k)}"]`) : null);
@@ -131,16 +131,16 @@ const Blog: React.FC = () => {
   }, [el, location.state, navigate, tableId]);
 
   const selectRelated = useCallback(
-    (k: string) => navigate(`/blog/${tableId}/${k}`, { state: location.state, replace: true }),
+    (k: string) => navigate(`/aprende/${tableId}/${k}`, { state: location.state, replace: true }),
     [navigate, tableId, location.state],
   );
 
   if (!meta) {
     const legacy = tableParam ? LEGACY_TABLES[tableParam] : undefined;
-    return <Navigate to={legacy ? `/blog/${legacy}${el ? `/${encodeURIComponent(el)}` : ""}` : `/blog/${DEFAULT_TABLE}`} replace />;
+    return <Navigate to={legacy ? `/aprende/${legacy}${el ? `/${encodeURIComponent(el)}` : ""}` : `/aprende/${DEFAULT_TABLE}`} replace />;
   }
   // Ficha inexistente (p. ej. de una tabla antigua): al índice de la tabla.
-  if (notFound) return <Navigate to={`/blog/${tableId}`} replace />;
+  if (notFound) return <Navigate to={`/aprende/${tableId}`} replace />;
 
   const items = data?.items ?? [];
   const main = items.filter((x) => x.r <= 7);
@@ -183,7 +183,7 @@ const Blog: React.FC = () => {
       <main className="pt" aria-labelledby="pt-title">
         <section className="pt-head wrap-w">
           <div className="pt-head__l">
-            <p className="eyebrow">Blog · Herramienta interactiva</p>
+            <p className="eyebrow">Aprende · Herramienta interactiva</p>
             <h1 className="pt-title" id="pt-title">
               La tabla periódica <em>{meta.titleEm}</em>
             </h1>
@@ -226,7 +226,7 @@ const Blog: React.FC = () => {
                 type="button"
                 className={`lang${t.id === tableId ? " is-on" : ""}`}
                 aria-pressed={t.id === tableId}
-                onClick={() => t.id !== tableId && navigate(`/blog/${t.id}`)}
+                onClick={() => t.id !== tableId && navigate(`/aprende/${t.id}`)}
               >
                 <TableIcon icon={t.icon} />
                 {t.label}
@@ -338,4 +338,4 @@ const Blog: React.FC = () => {
   );
 };
 
-export default Blog;
+export default Aprende;

@@ -13,21 +13,28 @@ import SiteFooter from "./components/home/sections/SiteFooter";
 import "./components/home/sections/home.css";
 import PageTransition from "./components/layout/PageTransition";
 import Home from "./pages/Home";
-import Blog from "./pages/Blog";
+import Aprende from "./pages/Aprende";
 import About from "./pages/About";
 import CommandCenter from "./components/features/CommandCenter";
 import { View } from "./types";
 import usePageTitle from "./hooks/usePageTitle";
 import { IntroProvider } from "./components/intro";
 
-/** /element/:tag (ruta antigua, solo HTML) → ficha en el blog */
+/** /element/:tag (ruta antigua, solo HTML) → ficha en Aprende */
 const ElementRedirect: React.FC = () => {
   const { tag } = useParams<{ tag: string }>();
-  return <Navigate to={tag ? `/blog/fundamentos-web/${encodeURIComponent(tag.toLowerCase())}` : "/blog/fundamentos-web"} replace />;
+  return <Navigate to={tag ? `/aprende/fundamentos-web/${encodeURIComponent(tag.toLowerCase())}` : "/aprende/fundamentos-web"} replace />;
 };
 
-/** Todas las rutas del blog comparten una sola página (sin transición ni scroll al top entre tablas/fichas). */
-const routeKeyOf = (path: string) => (path === "/blog" || path.startsWith("/blog/") ? "/blog" : path);
+/** /blog/... (nombre anterior de la sección) → /aprende/... */
+const BlogRedirect: React.FC = () => {
+  const { "*": rest } = useParams();
+  const { search, hash } = useLocation();
+  return <Navigate to={`/aprende${rest ? `/${rest}` : ""}${search}${hash}`} replace />;
+};
+
+/** Todas las rutas de Aprende comparten una sola página (sin transición ni scroll al top entre tablas/fichas). */
+const routeKeyOf = (path: string) => (path === "/aprende" || path.startsWith("/aprende/") ? "/aprende" : path);
 
 const App: React.FC = () => {
   usePageTitle(); // Dynamic title management
@@ -36,12 +43,12 @@ const App: React.FC = () => {
   const location = useLocation();
 
   const routeKey = routeKeyOf(location.pathname);
-  const onBlog = routeKey === "/blog";
-  const onBlogRef = useRef(onBlog);
-  onBlogRef.current = onBlog;
+  const onAprende = routeKey === "/aprende";
+  const onAprendeRef = useRef(onAprende);
+  onAprendeRef.current = onAprende;
 
   useEffect(() => {
-    // Scroll to top on route change (no al cambiar de tabla/ficha dentro del blog)
+    // Scroll to top on route change (no al cambiar de tabla/ficha dentro de Aprende)
     window.scrollTo(0, 0);
   }, [routeKey]);
 
@@ -53,8 +60,8 @@ const App: React.FC = () => {
     window.scrollTo(0, 0);
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      // En el blog, Ctrl/Cmd+K enfoca la búsqueda de la tabla (lo gestiona la página).
-      if ((e.metaKey || e.ctrlKey) && e.key === "k" && !onBlogRef.current) {
+      // En Aprende, Ctrl/Cmd+K enfoca la búsqueda de la tabla (lo gestiona la página).
+      if ((e.metaKey || e.ctrlKey) && e.key === "k" && !onAprendeRef.current) {
         e.preventDefault();
         setIsCommandCenterOpen((prev) => !prev);
       }
@@ -100,12 +107,12 @@ const App: React.FC = () => {
                 </PageTransition>
               }
             />
-            <Route path="/blog" element={<Navigate to="/blog/fundamentos-web" replace />} />
+            <Route path="/aprende" element={<Navigate to="/aprende/fundamentos-web" replace />} />
             <Route
-              path="/blog/:table/:el?"
+              path="/aprende/:table/:el?"
               element={
                 <PageTransition>
-                  <Blog />
+                  <Aprende />
                 </PageTransition>
               }
             />
@@ -117,9 +124,11 @@ const App: React.FC = () => {
                 </PageTransition>
               }
             />
-            <Route path="/html-periodic" element={<Navigate to="/blog/fundamentos-web" replace />} />
-            <Route path="/js-periodic" element={<Navigate to="/blog/fundamentos-web" replace />} />
-            <Route path="/python-periodic" element={<Navigate to="/blog/backend" replace />} />
+            {/* /blog/* → /aprende/* (Aprende resuelve después las tablas antiguas) */}
+            <Route path="/blog/*" element={<BlogRedirect />} />
+            <Route path="/html-periodic" element={<Navigate to="/aprende/fundamentos-web" replace />} />
+            <Route path="/js-periodic" element={<Navigate to="/aprende/fundamentos-web" replace />} />
+            <Route path="/python-periodic" element={<Navigate to="/aprende/backend" replace />} />
             <Route path="/element/:tag" element={<ElementRedirect />} />
             {/* Cursos, Lecturas y Ejercicios se retiraron: /courses, /theme, /exercises… caen aquí */}
             <Route path="*" element={<Navigate to="/" replace />} />

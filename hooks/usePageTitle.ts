@@ -8,8 +8,8 @@ const usePageTitle = () => {
 
   useEffect(() => {
     const path = location.pathname;
-    // El blog define su propio título (según la tabla).
-    if (path.startsWith("/blog/")) return;
+    // Aprende define su propio título (según la tabla).
+    if (path.startsWith("/aprende/")) return;
     let title = "FrankDev | Software Architect";
 
     switch (true) {
@@ -22,8 +22,8 @@ const usePageTitle = () => {
       case path === "/theme":
         title = `${t("navbar.theme")} | FrankDev`;
         break;
-      case path === "/blog":
-        title = `${t("navbar.blog")} | FrankDev`;
+      case path === "/aprende":
+        title = `${t("navbar.learn")} | FrankDev`;
         break;
       case path === "/courses":
         title = `${t("navbar.courses")} | FrankDev`;
