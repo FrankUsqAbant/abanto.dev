@@ -8,6 +8,8 @@ const usePageTitle = () => {
 
   useEffect(() => {
     const path = location.pathname;
+    // El blog define su propio título (según la tabla).
+    if (path.startsWith("/blog/")) return;
     let title = "FrankDev | Software Architect";
 
     switch (true) {

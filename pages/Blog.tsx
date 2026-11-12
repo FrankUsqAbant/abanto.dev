@@ -1,233 +1,331 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  UNIVERSE_DATA,
-  UniverseCategory,
-  UniverseElement,
-} from "../data/universe";
-import { View } from "../types";
-import { cn } from "../utils";
-import {
-  PERIODIC_TABLE_CONFIG,
-  hasPeriodicTable,
-} from "../components/periodic-table/config/periodicTableConfig";
-import { ElementCard } from "../components/periodic-table/core/ElementCard";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import { DEFAULT_TABLE, TABLES, getTable, loadDetails, loadTable } from "../components/blog/tables";
+import type { PCategory, PDetails, PItem, PTableData } from "../components/blog/types";
+import ElementTile from "../components/blog/ElementTile";
+import ElementPanel from "../components/blog/ElementPanel";
+import TableIcon from "../components/blog/TableIcon";
+import { CONTACT_EMAIL } from "../components/home/sections/homeLinks";
+import "../components/blog/blog.css";
 
-interface BlogProps {
-  onNavigate: (view: View) => void;
+const useMediaQuery = (q: string) => {
+  const [m, setM] = useState(() => typeof window !== "undefined" && window.matchMedia(q).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(q);
+    const on = () => setM(mq.matches);
+    on();
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, [q]);
+  return m;
+};
+
+const norm = (s: string) =>
+  s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[<>]/g, "").trim();
+
+interface NavState {
+  fromGrid?: boolean;
 }
 
-const Blog: React.FC<BlogProps> = ({ onNavigate }) => {
-  const [activeCategoryId, setActiveCategoryId] = useState<string>(
-    UNIVERSE_DATA[0].id
-  );
-  const [selectedElement, setSelectedElement] =
-    useState<UniverseElement | null>(null);
+/** Elemento de la clave "Cómo leer la tabla" */
+const KEY_ITEM: Record<string, string> = { html: "section" };
 
-  const activeCategory =
-    UNIVERSE_DATA.find((c) => c.id === activeCategoryId) ?? UNIVERSE_DATA[0];
+/**
+ * Blog = las tablas periódicas (HTML, CSS, JS, Python, BD, Git, Bash,
+ * Ciberseguridad, ML, Redes neuronales). URL: /blog/:tabla/:elemento
+ */
+const Blog: React.FC = () => {
+  const { table: tableParam, el } = useParams<{ table?: string; el?: string }>();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const meta = getTable(tableParam);
+
+  const [data, setData] = useState<PTableData | null>(null);
+  const [details, setDetails] = useState<PDetails | null>(null);
+  const [loadError, setLoadError] = useState(false);
+  const [cat, setCat] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
+  const grouped = useMediaQuery("(max-width: 1023px)");
+
+  const tableId = meta?.id ?? DEFAULT_TABLE;
+
+  // Carga diferida de la tabla y (en segundo plano) de sus fichas.
+  useEffect(() => {
+    let alive = true;
+    setData(null);
+    setDetails(null);
+    setLoadError(false);
+    setCat(null);
+    setQuery("");
+    loadTable(tableId)
+      .then((d) => alive && setData(d))
+      .catch(() => alive && setLoadError(true));
+    loadDetails(tableId)
+      .then((d) => alive && setDetails(d))
+      .catch(() => alive && setDetails({}));
+    return () => {
+      alive = false;
+    };
+  }, [tableId]);
+
+  useEffect(() => {
+    if (meta) document.title = `La tabla periódica ${meta.titleEm} | FrankDev`;
+  }, [meta]);
+
+  // Ctrl/Cmd + K enfoca la búsqueda de la tabla (en el blog reemplaza al Command Center).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        searchRef.current?.focus();
+        searchRef.current?.select();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const catMap = useMemo(() => new Map<string, PCategory>((data?.categories ?? []).map((c) => [c.id, c])), [data]);
+  const selected = useMemo(() => (el && data ? data.items.find((x) => x.k === el) ?? null : null), [el, data]);
+  const notFound = !!(el && data && !selected);
+
+  const q = norm(query);
+  const matches = useCallback(
+    (x: PItem) => !q || norm(x.name).includes(q) || norm(x.label).includes(q) || norm(x.s) === q || norm(x.d).includes(q),
+    [q],
+  );
+  const isDim = useCallback((x: PItem) => (cat !== null && x.c !== cat) || !matches(x), [cat, matches]);
+  const matchCount = data ? data.items.filter((x) => !isDim(x)).length : 0;
+
+  const openItem = useCallback(
+    (item: PItem, opener?: HTMLElement) => {
+      openerRef.current = opener ?? null;
+      const fromGrid = (location.state as NavState | null)?.fromGrid;
+      navigate(`/blog/${tableId}/${item.k}`, { state: { fromGrid: true }, replace: !!el && !!fromGrid });
+    },
+    [navigate, tableId, el, location.state],
+  );
+
+  const onTileOpen = useCallback((item: PItem, btn: HTMLButtonElement) => openItem(item, btn), [openItem]);
+
+  const closePanel = useCallback(() => {
+    const k = el;
+    if ((location.state as NavState | null)?.fromGrid) navigate(-1);
+    else navigate(`/blog/${tableId}`, { replace: true });
+    // Devuelve el foco a la celda.
+    window.setTimeout(() => {
+      const target = openerRef.current ?? (k ? document.querySelector<HTMLElement>(`.tile[data-k="${CSS.escape(k)}"]`) : null);
+      target?.focus({ preventScroll: true });
+      openerRef.current = null;
+    }, 30);
+  }, [el, location.state, navigate, tableId]);
+
+  const selectRelated = useCallback(
+    (k: string) => navigate(`/blog/${tableId}/${k}`, { state: location.state, replace: true }),
+    [navigate, tableId, location.state],
+  );
+
+  if (!meta) return <Navigate to={`/blog/${DEFAULT_TABLE}`} replace />;
+
+  const items = data?.items ?? [];
+  const main = items.filter((x) => x.r <= 7);
+  const fblock = items.filter((x) => x.r > 7);
+  const keyItem = items.find((x) => x.k === KEY_ITEM[tableId]) ?? items[0];
+  const obsolete = catMap.get("obsolete")?.count;
+  const fRowNames = [9, 10].map((r) =>
+    Array.from(new Set(fblock.filter((x) => x.r === r).map((x) => catMap.get(x.c)?.name ?? x.c))).join(" · "),
+  );
+  const cols = data?.cols ?? 18;
+  const gridStyle = { "--cols": cols } as React.CSSProperties;
+  const order = (x: PItem) => Math.round(x.col * 1.2 + x.r);
+
+  const onSearchKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      const first = items.find((x) => !isDim(x));
+      if (first) openItem(first);
+    } else if (e.key === "Escape" && query) {
+      e.stopPropagation();
+      setQuery("");
+    }
+  };
+
+  const tile = (x: PItem, style?: React.CSSProperties, ord = 0) => (
+    <ElementTile
+      key={x.k}
+      item={x}
+      cat={catMap.get(x.c)}
+      dim={isDim(x)}
+      selected={selected?.k === x.k}
+      order={ord}
+      style={style}
+      onOpen={onTileOpen}
+    />
+  );
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-mono selection:bg-green-500/30 selection:text-green-200 flex flex-col relative overflow-hidden">
-      {/* Matrix Rain / Background noise effect could go here */}
-      <div
-        className="fixed inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      ></div>
+    <div className="ptp">
+      <div className="ptp__grain" aria-hidden="true" />
+      <main className="pt" aria-labelledby="pt-title">
+        <section className="pt-head wrap-w">
+          <div className="pt-head__l">
+            <p className="eyebrow">Blog · Herramienta interactiva</p>
+            <h1 className="pt-title" id="pt-title">
+              La tabla periódica <em>{meta.titleEm}</em>
+            </h1>
+          </div>
+          <div className="pt-head__r">
+            <p className="pt-sub">
+              <b>{data ? items.length : "…"}</b> {meta.noun} organizados por categoría. Toca cualquiera para ver qué hace, cómo se usa y con qué se relaciona.
+            </p>
+            <label className="search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4 4" /></svg>
+              <span className="sr-only">Buscar en la tabla</span>
+              <input
+                ref={searchRef}
+                type="search"
+                placeholder={`Buscar en ${meta.noun}…`}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={onSearchKey}
+                aria-describedby="pt-search-status"
+                aria-keyshortcuts="Control+K Meta+K"
+              />
+              <kbd aria-hidden="true">Ctrl K</kbd>
+            </label>
+            <p id="pt-search-status" className="sr-only" aria-live="polite">
+              {q || cat ? `${matchCount} resultados` : ""}
+            </p>
+            <div className="stats">
+              <span><b>{data ? data.categories.length : "…"}</b> categorías</span>
+              {obsolete ? <span><b>{obsolete}</b> obsoletos</span> : null}
+              <span><b>{TABLES.length}</b> tecnologías</span>
+            </div>
+          </div>
+        </section>
 
-      {/* 1. COMMAND BAR (Top Navigation) */}
-      <header className="sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 h-20 flex items-center gap-6 overflow-x-auto no-scrollbar mask-gradient-x">
-          {/* Home/Back Button */}
-          <button
-            onClick={() => onNavigate("home")}
-            className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg border border-white/10 hover:bg-white/5 hover:border-white/30 transition-all active:scale-95"
-          >
-            <i className="fas fa-home text-neutral-400"></i>
-          </button>
-
-          <div className="h-8 w-px bg-white/10 flex-shrink-0"></div>
-
-          {/* Categories */}
-          <div className="flex gap-2">
-            {UNIVERSE_DATA.map((cat) => (
+        <section className="controls wrap-w" aria-label="Tablas y categorías">
+          <div className="langs" role="toolbar" aria-label="Elegir tabla">
+            {TABLES.map((t) => (
               <button
-                key={cat.id}
-                onClick={() => {
-                  setActiveCategoryId(cat.id);
-                  setSelectedElement(null);
-                }}
-                className={cn(
-                  "flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-300 uppercase tracking-wider text-xs font-bold whitespace-nowrap",
-                  activeCategoryId === cat.id
-                    ? "bg-white/5 shadow-[0_0_15px_rgba(var(--color-glow))] text-white"
-                    : "border-transparent text-neutral-500 hover:text-white hover:bg-white/5 hover:border-white/10"
-                )}
-                style={{
-                  borderColor:
-                    activeCategoryId === cat.id ? "currentColor" : undefined,
-                  color: activeCategoryId === cat.id ? undefined : undefined, // Let Tailwind handle inactive
-                }}
+                key={t.id}
+                type="button"
+                className={`lang${t.id === tableId ? " is-on" : ""}`}
+                aria-pressed={t.id === tableId}
+                onClick={() => t.id !== tableId && navigate(`/blog/${t.id}`)}
               >
-                <span className={activeCategoryId === cat.id ? cat.color : ""}>
-                  <i className={cat.icon}></i>
-                </span>
-                {cat.name}
+                <TableIcon icon={t.icon} />
+                {t.label}
               </button>
             ))}
           </div>
-        </div>
-      </header>
-
-      <main className="flex-1 max-w-7xl mx-auto w-full p-6 flex flex-col lg:flex-row gap-8 relative z-10">
-        {/* 2. THE GRID (Periodic Table) */}
-        <section className="flex-1">
-          <div className="mb-4 flex justify-between items-end">
-            <div>
-              <h2 className="text-sm text-neutral-500 uppercase tracking-[0.2em] mb-1">
-                Sector Analysis
-              </h2>
-              <h1
-                className={cn(
-                  "text-3xl font-black uppercase tracking-tight",
-                  activeCategory.color
-                )}
+          <div className="ctrl-row">
+            <div className="cats" role="group" aria-label="Filtrar por categoría">
+              <button
+                type="button"
+                className={`cat${cat === null ? " is-on" : ""}`}
+                aria-pressed={cat === null}
+                style={{ "--cc": "#141414" } as React.CSSProperties}
+                onClick={() => setCat(null)}
               >
-                {activeCategory.name}
-              </h1>
+                <i aria-hidden="true" />Todos <em>{items.length}</em>
+              </button>
+              {(data?.categories ?? []).map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  className={`cat${cat === c.id ? " is-on" : ""}`}
+                  aria-pressed={cat === c.id}
+                  style={{ "--cc": c.color } as React.CSSProperties}
+                  onClick={() => setCat(cat === c.id ? null : c.id)}
+                >
+                  <i aria-hidden="true" />{c.name} <em>{c.count}</em>
+                </button>
+              ))}
             </div>
           </div>
-
-          {/* Renderizado dinámico de tablas periódicas */}
-          {PERIODIC_TABLE_CONFIG[activeCategory.id] ? (
-            React.createElement(
-              PERIODIC_TABLE_CONFIG[activeCategory.id].component
-            )
-          ) : (
-            <motion.div
-              layout
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
-            >
-              <AnimatePresence mode="popLayout">
-                {activeCategory.elements.map((el) => (
-                  <ElementCard
-                    key={el.id}
-                    number={el.number}
-                    symbol={el.symbol}
-                    name={el.name}
-                    category={el.category}
-                    categoryColor={activeCategory.color}
-                    isSelected={selectedElement?.id === el.id}
-                    onClick={() => setSelectedElement(el)}
-                  />
-                ))}
-              </AnimatePresence>
-            </motion.div>
-          )}
+          {notFound ? (
+            <p className="pt-notice" role="status">
+              No encontramos «{el}» en la tabla {meta.titleEm.replace(/^del? (las? )?/, "de ")}. Elige un elemento de la tabla.
+            </p>
+          ) : null}
         </section>
 
-        {/* 3. DATA READER (Info Panel) - Oculto para tablas periódicas */}
-        {!hasPeriodicTable(activeCategory.id) && (
-          <aside className="lg:w-[400px] flex-shrink-0">
-            <AnimatePresence mode="wait">
-              {selectedElement ? (
-                <motion.div
-                  key={selectedElement.id}
-                  initial={{ x: 50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: 50, opacity: 0 }}
-                  className="sticky top-24 bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
-                >
-                  {/* Header */}
-                  <div className="p-6 border-b border-white/10 bg-white/5 relative overflow-hidden">
-                    <div
-                      className={cn(
-                        "absolute top-0 right-0 p-4 opacity-20 text-6xl font-black",
-                        activeCategory.color
-                      )}
-                    >
-                      {selectedElement.symbol}
+        <section className="table-wrap wrap-w" aria-label={`Tabla periódica ${meta.titleEm}`} aria-busy={!data}>
+          {loadError ? <p className="pt-notice" role="alert">No se pudo cargar la tabla. Recarga la página.</p> : null}
+          {!data && !loadError ? <div className="pt-loading" aria-hidden="true" /> : null}
+          {data && !grouped ? (
+            <div key={tableId} className="pt-anim">
+              <div className="ptable-g" style={{ ...gridStyle, gridTemplateRows: `repeat(${Math.min(7, data.rows)}, var(--row))` }}>
+                {keyItem ? (
+                  <div className="key" style={{ gridColumn: `3 / ${cols - 5}` }}>
+                    <div className="key__tile" style={{ "--cc": catMap.get(keyItem.c)?.color } as React.CSSProperties} aria-hidden="true">
+                      <span className="key__n">{keyItem.n}</span>
+                      <span className="key__s">{keyItem.s}</span>
+                      <span className="key__t">{keyItem.label}</span>
+                      <i className="key__l key__l--n">Número</i>
+                      <i className="key__l key__l--s">Símbolo</i>
+                      <i className="key__l key__l--t">{tableId === "html" ? "Etiqueta" : "Nombre"}</i>
                     </div>
-                    <div className="relative z-10">
-                      <div className="flex gap-2 mb-4">
-                        {selectedElement.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="text-[10px] font-bold px-2 py-0.5 rounded bg-black/40 border border-white/10 text-neutral-400 uppercase"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      <h2 className="text-3xl font-black text-white mb-1">
-                        {selectedElement.name}
+                    <div className="key__txt">
+                      <p className="mono">Cómo leer la tabla</p>
+                      <h2>
+                        Cada {meta.noun === "propiedades" ? "propiedad" : meta.noun.replace(/s$/, "")},{" "}
+                        <em>{tableId === "html" ? "una pieza de la web." : "una pieza del conjunto."}</em>
                       </h2>
-                      <p className="text-sm text-neutral-400 font-mono">
-                        {selectedElement.category.toUpperCase()}
-                      </p>
+                      <p>{meta.keyText}</p>
                     </div>
                   </div>
-
-                  {/* Content */}
-                  <div className="p-6 space-y-6">
-                    <div>
-                      <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-2">
-                        Definition
-                      </h4>
-                      <p className="text-sm text-neutral-300 leading-relaxed">
-                        {selectedElement.description}
-                      </p>
-                    </div>
-
-                    {selectedElement.codeSnippet && (
-                      <div>
-                        <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-2">
-                          Payload / Syntax
-                        </h4>
-                        <div className="bg-[#050505] p-4 rounded-lg border border-white/5 font-mono text-xs text-green-400 overflow-x-auto selection:bg-white/20">
-                          <pre>{selectedElement.codeSnippet}</pre>
-                        </div>
-                      </div>
-                    )}
-
-                    <div>
-                      <h4 className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-2">
-                        {activeCategoryId === "hacking"
-                          ? "Danger Level"
-                          : "Complexity"}
-                      </h4>
-                      <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{
-                            width: `${(selectedElement.difficulty ?? 1) * 10}%`,
-                          }}
-                          className={cn(
-                            "h-full rounded-full relative overflow-hidden",
-                            activeCategoryId === "hacking"
-                              ? "bg-red-500"
-                              : "bg-blue-500"
-                          )}
-                        >
-                          <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
-                        </motion.div>
-                      </div>
-                      <div className="flex justify-between text-[10px] font-mono text-neutral-500 mt-1">
-                        <span>SAFE</span>
-                        <span>CRITICAL</span>
-                      </div>
-                    </div>
+                ) : null}
+                {main.map((x) => tile(x, { gridRow: x.r, gridColumn: x.col }, order(x)))}
+              </div>
+              {fblock.length ? (
+                <div className="fblock">
+                  <div className="fblock__head">
+                    <span className="mono">Bloque inferior</span>
+                    {fRowNames.filter(Boolean).map((n) => <span key={n}>{n}</span>)}
                   </div>
-                </motion.div>
+                  <div className="ptable-f" style={gridStyle}>
+                    {fblock.map((x) => tile(x, { gridRow: x.r - 8, gridColumn: x.col }, order(x)))}
+                  </div>
+                </div>
               ) : null}
-            </AnimatePresence>
-          </aside>
-        )}
+            </div>
+          ) : null}
+          {data && grouped ? (
+            <div key={tableId} className="mgroups pt-anim">
+              {data.categories.map((c) => {
+                const list = items.filter((x) => x.c === c.id);
+                const groupDim = cat !== null && cat !== c.id;
+                return (
+                  <section key={c.id} className={`mgroup${groupDim ? " is-dim" : ""}`} style={{ "--cc": c.color } as React.CSSProperties} aria-label={c.name}>
+                    <h2 className="mgroup__h"><i aria-hidden="true" /><b>{c.name}</b><em>{c.count}</em></h2>
+                    <div className="mgroup__g">{list.map((x, i) => tile(x, undefined, i))}</div>
+                  </section>
+                );
+              })}
+            </div>
+          ) : null}
+          <p className="table-foot">
+            <span className="mono">Fuente</span> {meta.source} ·{" "}
+            <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Error en la tabla periódica ${meta.titleEm}`)}`}>¿Encontraste un error? Escríbeme ↗</a>
+          </p>
+        </section>
       </main>
+
+      {selected && data ? (
+        <ElementPanel
+          table={meta}
+          item={selected}
+          detail={details?.[selected.k]}
+          detailsLoading={details === null}
+          categories={catMap}
+          items={items}
+          onClose={closePanel}
+          onSelect={selectRelated}
+        />
+      ) : null}
     </div>
   );
 };

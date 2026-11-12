@@ -51,7 +51,8 @@ const Navbar: React.FC<NavbarProps> = ({
 
   // En Inicio el encabezado es claro (sobre el hero crema);
   // en el resto de páginas, que siguen siendo oscuras, usa la variante oscura.
-  const isLight = currentView === "home";
+  const isLight = currentView === "home" || currentView === "blog";
+  const onHome = currentView === "home";
 
   const navItems: NavItem[] = [
     { kind: "view", view: "home", label: t("navbar.home") },
@@ -67,7 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({
     // Cursos y Lecturas siguen en el router, pero ya no en el menú.
   ];
 
-  const activeSection = useActiveSection(OBSERVED_IDS, isLight);
+  const activeSection = useActiveSection(OBSERVED_IDS, onHome);
 
   useEffect(() => {
     if (!mobileMenuOpen) return;
@@ -111,9 +112,9 @@ const Navbar: React.FC<NavbarProps> = ({
 
   const isItemActive = (item: NavItem) =>
     item.kind === "section"
-      ? isLight && activeSection === item.id
+      ? onHome && activeSection === item.id
       : item.view === "home"
-        ? isLight && activeSection === null
+        ? onHome && activeSection === null
         : currentView === item.view;
 
   const ariaCurrent = (item: NavItem, active: boolean) =>

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Routes,
   Route,
   Navigate,
   useNavigate,
   useLocation,
+  useParams,
 } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "./components/layout/Navbar";
@@ -19,14 +20,19 @@ import Tech from "./pages/Tech";
 import Exercises from "./pages/Exercises";
 import ExerciseDetail from "./pages/ExerciseDetail";
 import CoursePlayer from "./pages/CoursePlayer";
-import HTMLPeriodic from "./pages/HTMLPeriodic";
-import JSPeriodic from "./pages/JSPeriodic";
-import PythonPeriodic from "./pages/PythonPeriodic";
-import ElementDetail from "./pages/ElementDetail";
 import CommandCenter from "./components/features/CommandCenter";
 import { View } from "./types";
 import usePageTitle from "./hooks/usePageTitle";
 import { IntroProvider } from "./components/intro";
+
+/** /element/:tag (ruta antigua, solo HTML) → ficha en el blog */
+const ElementRedirect: React.FC = () => {
+  const { tag } = useParams<{ tag: string }>();
+  return <Navigate to={tag ? `/blog/html/${encodeURIComponent(tag.toLowerCase())}` : "/blog/html"} replace />;
+};
+
+/** Todas las rutas del blog comparten una sola página (sin transición ni scroll al top entre tablas/fichas). */
+const routeKeyOf = (path: string) => (path === "/blog" || path.startsWith("/blog/") ? "/blog" : path);
 
 const App: React.FC = () => {
   usePageTitle(); // Dynamic title management
@@ -34,10 +40,15 @@ const App: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const routeKey = routeKeyOf(location.pathname);
+  const onBlog = routeKey === "/blog";
+  const onBlogRef = useRef(onBlog);
+  onBlogRef.current = onBlog;
+
   useEffect(() => {
-    // Scroll to top on route change
+    // Scroll to top on route change (no al cambiar de tabla/ficha dentro del blog)
     window.scrollTo(0, 0);
-  }, [location.pathname]);
+  }, [routeKey]);
 
   useEffect(() => {
     // Scroll to top on reload/mount
@@ -47,7 +58,8 @@ const App: React.FC = () => {
     window.scrollTo(0, 0);
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      // En el blog, Ctrl/Cmd+K enfoca la búsqueda de la tabla (lo gestiona la página).
+      if ((e.metaKey || e.ctrlKey) && e.key === "k" && !onBlogRef.current) {
         e.preventDefault();
         setIsCommandCenterOpen((prev) => !prev);
       }
@@ -69,7 +81,7 @@ const App: React.FC = () => {
         currentView={
           location.pathname === "/"
             ? "home"
-            : (location.pathname.substring(1) as View)
+            : (location.pathname.split("/")[1] as View)
         }
         onNavigate={(view) =>
           handleNavigate(view === "home" ? "/" : `/${view}`)
@@ -80,7 +92,7 @@ const App: React.FC = () => {
       <main className="flex-1 pt-20">
         {/* initial={false}: la primera página se ve de inmediato (sin depender de una animación) */}
         <AnimatePresence mode="wait" initial={false}>
-          <Routes location={location} key={location.pathname}>
+          <Routes location={location} key={routeKey}>
             <Route
               path="/"
               element={
@@ -93,15 +105,12 @@ const App: React.FC = () => {
                 </PageTransition>
               }
             />
+            <Route path="/blog" element={<Navigate to="/blog/html" replace />} />
             <Route
-              path="/blog"
+              path="/blog/:table/:el?"
               element={
                 <PageTransition>
-                  <Blog
-                    onNavigate={(view) =>
-                      handleNavigate(view === "home" ? "/" : `/${view}`)
-                    }
-                  />
+                  <Blog />
                 </PageTransition>
               }
             />
@@ -129,30 +138,9 @@ const App: React.FC = () => {
                 </PageTransition>
               }
             />
-            <Route
-              path="/html-periodic"
-              element={
-                <PageTransition>
-                  <HTMLPeriodic />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/js-periodic"
-              element={
-                <PageTransition>
-                  <JSPeriodic />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/python-periodic"
-              element={
-                <PageTransition>
-                  <PythonPeriodic />
-                </PageTransition>
-              }
-            />
+            <Route path="/html-periodic" element={<Navigate to="/blog/html" replace />} />
+            <Route path="/js-periodic" element={<Navigate to="/blog/javascript" replace />} />
+            <Route path="/python-periodic" element={<Navigate to="/blog/python" replace />} />
             <Route
               path="/exercises"
               element={
@@ -185,14 +173,7 @@ const App: React.FC = () => {
                 </PageTransition>
               }
             />
-            <Route
-              path="/element/:tag"
-              element={
-                <PageTransition>
-                  <ElementDetail />
-                </PageTransition>
-              }
-            />
+            <Route path="/element/:tag" element={<ElementRedirect />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AnimatePresence>
