@@ -8,7 +8,8 @@ import {
 } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "./components/layout/Navbar";
-import Footer from "./components/layout/Footer";
+import SiteFooter from "./components/home/sections/SiteFooter";
+import "./components/home/sections/home.css";
 import PageTransition from "./components/layout/PageTransition";
 import Home from "./pages/Home";
 import Blog from "./pages/Blog";
@@ -197,7 +198,7 @@ const App: React.FC = () => {
         </AnimatePresence>
       </main>
 
-      <Footer
+      <SiteFooter
         onNavigate={(view) =>
           handleNavigate(view === "home" ? "/" : `/${view}`)
         }

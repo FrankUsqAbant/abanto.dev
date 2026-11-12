@@ -42,10 +42,9 @@ const Navbar: React.FC<NavbarProps> = ({
 
   const navItems: { id: View; label: string }[] = [
     { id: "home", label: t("navbar.home") },
-    { id: "courses", label: t("navbar.courses") },
-    { id: "theme", label: t("navbar.theme") },
     { id: "blog", label: t("navbar.blog") },
     { id: "about", label: t("navbar.about") },
+    // Cursos y Lecturas siguen en el router, pero ya no en el menú.
   ];
 
   useEffect(() => {

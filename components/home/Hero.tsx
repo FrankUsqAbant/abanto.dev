@@ -124,7 +124,7 @@ const Hero: React.FC = () => {
               </a>
             </BuildReveal>
             <BuildReveal order={BUILD_ORDER.secondary} variant="pill" inline>
-              <a href="#github-ecosystem" className="hero__link">
+              <a href="#servicios" className="hero__link">
                 Explorar soluciones
                 <ArrowDown className="hero__link-icon" />
               </a>
