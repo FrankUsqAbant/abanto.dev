@@ -1,0 +1,162 @@
+/* ========================================
+   ELEMENT CELL STYLES - REFINED DESIGN
+   Estilo coherente con la web FrankDev
+   ======================================== */
+
+/* Celda Base - Diseño minimalista futurista */
+.element-cell {
+  position: relative;
+  min-width: 65px;
+  min-height: 65px;
+  aspect-ratio: 1;
+  padding: 8px;
+  border-radius: 12px; /* rounded-xl */
+  background: rgba(
+    0,
+    0,
+    0,
+    0.3
+  ); /* Fondo oscuro sutil - no interfiere con colores */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+
+  /* Centrado perfecto del contenido */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  /* Overflow para expansión */
+  overflow: visible;
+}
+
+/* Hover Effect - Expansión con glow */
+.element-cell:hover {
+  transform: scale(1.15) translateY(-4px);
+  min-height: 85px;
+  background: rgba(20, 20, 20, 0.95); /* Fondo dark en hover */
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px currentColor,
+    /* Glow con el color del símbolo */ 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  z-index: 30;
+}
+
+/* Active/Click Effect */
+.element-cell:active {
+  transform: scale(1.1) translateY(-2px);
+}
+
+/* Número del elemento (arriba-izquierda) */
+.element-cell__number {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  font-family: "Courier New", monospace;
+  color: rgba(255, 255, 255, 0.6);
+  text-shadow: none;
+}
+
+/* Símbolo del Elemento - COLOR DE CATEGORÍA */
+.element-cell__symbol {
+  font-size: 1.75rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  text-align: center;
+  /* Color viene del inline style */
+  text-shadow: 0 0 8px currentColor; /* Glow neón sutil */
+
+  /* Centrado vertical */
+  margin: auto 0;
+  flex-shrink: 0;
+}
+
+/* Nombre del Elemento - VISIBLE EN HOVER */
+.element-cell__name {
+  font-size: 0.55rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+
+  /* Oculto por defecto, aparece en hover */
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.25s ease-out;
+}
+
+.element-cell:hover .element-cell__name {
+  opacity: 1;
+  max-height: 20px;
+  margin-top: 2px;
+}
+
+/* Categoría del elemento - OCULTA POR DEFECTO */
+.element-cell__category {
+  font-size: 0.45rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+
+  /* Oculto por defecto */
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.25s ease-out;
+}
+
+.element-cell:hover .element-cell__category {
+  opacity: 0.7;
+  max-height: 15px;
+}
+
+/* Estado: Filtrado */
+.element-cell--filtered {
+  opacity: 0.25;
+  pointer-events: none;
+  filter: grayscale(0.5);
+}
+
+/* Estado: Seleccionado */
+.element-cell--selected {
+  transform: scale(1.1) translateY(-4px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3),
+    0 0 30px rgba(0, 112, 243, 0.4), 0 15px 25px rgba(0, 0, 0, 0.4);
+  z-index: 25;
+}
+
+/* Focus para accesibilidad */
+.element-cell:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.5);
+}
+
+/* Cursor de loading opcional */
+.element-cell--loading {
+  cursor: wait;
+  opacity: 0.5;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}

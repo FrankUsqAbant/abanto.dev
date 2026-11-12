@@ -1,0 +1,119 @@
+{
+  "navbar": {
+    "home": "HOME",
+    "theme": "TECH READS",
+    "blog": "BLOG",
+    "courses": "COURSES",
+    "about": "ABOUT ME",
+    "login": "LOGIN"
+  },
+  "home": {
+    "welcome_badge": "Welcome to the Future",
+    "hero_pre_title": "Become A",
+    "hero_highlight": "Developer",
+    "hero_post_title": "Full-Stack",
+    "hero_description": "Everything you need to learn as a programmer in one place",
+    "view_courses": "View Courses",
+    "open_source_badge": "Open Source Ecosystem",
+    "github_repos": "Repositories",
+    "view_full_ecosystem": "View Full Ecosystem"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "motivational_title": "Transforming ideas into code,",
+    "motivational_highlight": "one commit at a time.",
+    "motivational_desc": "Designing the future of the web with passion and precision.",
+    "system_status": "System Status: On-line",
+    "last_update": "Last update:",
+    "back_to_top": "Back to Top"
+  },
+  "tech": {
+    "subtitle": "Curated news for distraction-free reading.",
+    "back_to_feed": "Back to Feed",
+    "empty_state": "Nexus Engine is processing fresh news...",
+    "read_article": "Read Article",
+    "default_category": "TECH"
+  },
+  "blog": {
+    "subtitle": "Thoughts on engineering, software architecture, and the future of web development.",
+    "back_to_feed": "Back to Feed",
+    "read_time": "Read",
+    "all_categories": "All"
+  },
+  "courses": {
+    "title": "FRANK",
+    "title_suffix": ".ACADEMY",
+    "catalog_tab": "Catalog",
+    "ai_tutor_tab": "Nexus AI Tutor",
+    "video_label": "Video",
+    "duration_label": "Duration"
+  },
+  "about": {
+    "my_story": "My Story",
+    "hero_title": "Creating",
+    "hero_subtitle": "The Future",
+    "hero_suffix": "Line by Line",
+    "description": "I am a developer passionate about the intersection of human design and computational power. My focus is not just writing code, but building architectures that solve real problems elegantly.",
+    "core_stack": "Core Stack",
+    "bento": {
+      "profile_dev": "DEV",
+      "repos": "Repos",
+      "followers": "Followers",
+      "my_arsenal": "My Arsenal",
+      "location_title": "Based in",
+      "location_default": "Planet Earth 🌍",
+      "journey": "Journey",
+      "fun_fact_title": "Did You Know?",
+      "click_more": "(Click for more)"
+    },
+    "testimonials_title": "Trusted by",
+    "testimonials_highlight": "Developers",
+    "timeline": [
+      {
+        "year": "2026",
+        "title": "Full Stack Developer",
+        "company": "Freelance",
+        "description": "Building modern scalable web apps."
+      },
+      {
+        "year": "2025",
+        "title": "Frontend Specialist",
+        "company": "Frank Academy",
+        "description": "Mastering React, Astro and UX/UI."
+      },
+      {
+        "year": "2024",
+        "title": "Started Coding",
+        "company": "Home",
+        "description": "First 'Hello World' and deep dive into JS."
+      }
+    ],
+    "fun_facts": [
+      "I'm a night owl coder 🦉",
+      "I love cold brew coffee ☕",
+      "I prefer dark mode everywhere 🌑",
+      "I'm learning 3D web design 🧊",
+      "I listen to Lo-Fi while coding 🎧"
+    ]
+  },
+  "contact": {
+    "badge": "Contact",
+    "title_pre": "Let's Build",
+    "title_highlight": "Something Great",
+    "description": "I usually respond within 24 hours. Let's talk about your next big project!",
+    "email_me": "Email Me",
+    "form": {
+      "name": "Name",
+      "name_placeholder": "John Doe",
+      "email": "Email",
+      "email_placeholder": "john@example.com",
+      "subject": "Subject",
+      "subject_placeholder": "Project Inquiry",
+      "message": "Message",
+      "message_placeholder": "Tell me about your project...",
+      "send": "Send Message",
+      "sending": "Sending...",
+      "sent": "Message Sent"
+    }
+  }
+}

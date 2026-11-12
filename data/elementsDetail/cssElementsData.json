@@ -1,0 +1,2715 @@
+{
+  "elements": {
+    "display": {
+      "id": "display",
+      "symbol": "D",
+      "title": "Display",
+      "category": "layout",
+      "description": "La propiedad `display` es fundamental en CSS, ya que determina cómo se comporta un elemento en el flujo del documento y cómo se renderizan sus hijos. Define si un elemento se comporta como bloque, línea, o crea un nuevo contexto de formato como Flexbox o Grid.",
+      "keyPoints": [
+        "Controla el comportamiento de caja del elemento",
+        "Valores comunes: `block`, `inline`, `inline-block`, `none`",
+        "Habilita contextos modernos: `flex`, `grid`",
+        "`none` elimina el elemento del árbol de renderizado"
+      ],
+      "syntax": "display: block | inline | flex | grid | none;",
+      "codeExample": ".container {\n  display: flex;\n  justify-content: center;\n}\n\n.hidden {\n  display: none;\n}",
+      "useCases": [
+        "Crear layouts flexibles con Flexbox",
+        "Ocultar elementos temporalmente",
+        "Alinear elementos en línea o bloque"
+      ],
+      "bestPractices": [
+        "Usar `flex` o `grid` para layouts modernos",
+        "Usar `none` para ocultar, no `visibility: hidden` si quieres remover el espacio",
+        "Evitar `inline-block` para layouts complejos (usar Flexbox)"
+      ],
+      "commonMistakes": [
+        "Confundir `display: none` con `visibility: hidden`",
+        "Intentar aplicar márgenes verticales a elementos `inline`",
+        "Olvidar que `flex` afecta a los hijos directos"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué valor de display elimina el elemento del flujo del documento?",
+          "options": [
+            "visibility: hidden",
+            "opacity: 0",
+            "display: none",
+            "display: hidden"
+          ],
+          "correctAnswer": 2,
+          "explanation": "`display: none` elimina el elemento completamente del árbol de renderizado, como si no existiera."
+        },
+        {
+          "question": "¿Qué valor convierte un elemento en un contenedor flexible?",
+          "options": [
+            "display: block",
+            "display: flex",
+            "display: grid",
+            "display: inline"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`display: flex` activa el modelo Flexbox para el elemento y sus hijos directos."
+        },
+        {
+          "question": "¿Los elementos con `display: inline` aceptan width y height?",
+          "options": [
+            "Sí, siempre",
+            "No, nunca",
+            "Solo si tienen posición absoluta",
+            "Solo si son imágenes"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Los elementos `inline` puros no aceptan dimensiones (width/height) ni márgenes verticales."
+        },
+        {
+          "question": "¿Cuál es el valor por defecto de display para un <div>?",
+          "options": ["inline", "flex", "block", "grid"],
+          "correctAnswer": 2,
+          "explanation": "Los elementos `<div>` son elementos de bloque (`block`) por defecto en los navegadores."
+        },
+        {
+          "question": "¿Qué display permite dimensiones pero mantiene el flujo en línea?",
+          "options": ["block", "inline", "inline-block", "flex"],
+          "correctAnswer": 2,
+          "explanation": "`inline-block` permite establecer ancho y alto como un bloque, pero se coloca en línea con otros elementos."
+        },
+        {
+          "question": "¿Qué display se usa para crear grillas bidimensionales?",
+          "options": [
+            "display: flex",
+            "display: grid",
+            "display: table",
+            "display: matrix"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`display: grid` es el sistema más potente para crear layouts en dos dimensiones (filas y columnas)."
+        },
+        {
+          "question": "¿Si un padre tiene `display: flex`, cómo se comportan sus hijos?",
+          "options": [
+            "Como bloques",
+            "Como inline",
+            "Como flex items",
+            "Como grids"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Los hijos directos de un contenedor flex se convierten automáticamente en `flex items`."
+        },
+        {
+          "question": "¿`display: none` es animable (transition)?",
+          "options": [
+            "Sí, suavemente",
+            "No, es un cambio instantáneo",
+            "Depende del navegador",
+            "Sí, con @keyframes"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`display` no es una propiedad animable. El cambio entre `none` y otro valor es instantáneo."
+        },
+        {
+          "question": "¿Qué pasa con los eventos de click en `display: none`?",
+          "options": [
+            "Se disparan igual",
+            "No se disparan",
+            "Se disparan en el padre",
+            "Lanzan error"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Al no renderizarse el elemento, no puede recibir interacciones del usuario ni eventos de puntero."
+        },
+        {
+          "question": "¿`display: contents` qué hace?",
+          "options": [
+            "Muestra el contenido",
+            "Desaparece el contenedor pero deja los hijos",
+            "Crea un índice",
+            "Muestra metadatos"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`display: contents` hace que el contenedor desaparezca del árbol de renderizado, haciendo que sus hijos actúen como si fueran hijos directos del abuelo."
+        }
+      ]
+    },
+    "position": {
+      "id": "position",
+      "symbol": "P",
+      "title": "Position",
+      "category": "positioning",
+      "description": "La propiedad `position` especifica cómo un elemento es posicionado en el documento. Las opciones `top`, `right`, `bottom` y `left` determinan la ubicación final del elemento posicionado.",
+      "keyPoints": [
+        "Saca elementos del flujo normal (`absolute`, `fixed`)",
+        "Crea contextos de posicionamiento para hijos (`relative`)",
+        "`sticky` alterna entre relativo y fijo según el scroll"
+      ],
+      "syntax": "position: static | relative | absolute | fixed | sticky;",
+      "codeExample": ".parent {\n  position: relative;\n}\n\n.child {\n  position: absolute;\n  top: 0;\n  right: 0;\n}",
+      "useCases": [
+        "Superponer elementos (overlay, modal)",
+        "Fijar barras de navegación (`fixed` o `sticky`)",
+        "Posicionar iconos dentro de botones"
+      ],
+      "bestPractices": [
+        "Usar `relative` en el padre para contener hijos `absolute`",
+        "Evitar `z-index` excesivos",
+        "Usar `sticky` para encabezados de tablas o listas"
+      ],
+      "commonMistakes": [
+        "Usar `absolute` sin un padre `relative` (se va al body)",
+        "Esperar que `top/left` funcionen en `static`",
+        "Abusar de `fixed` en móviles (problemas de teclado virtual)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Cuál es el valor por defecto de position?",
+          "options": ["relative", "absolute", "static", "fixed"],
+          "correctAnswer": 2,
+          "explanation": "`static` es el valor predeterminado, donde el elemento sigue el flujo normal del documento."
+        },
+        {
+          "question": "¿Qué valor saca al elemento del flujo normal pero lo mantiene relativo a su ancestro posicionado más cercano?",
+          "options": ["fixed", "absolute", "sticky", "relative"],
+          "correctAnswer": 1,
+          "explanation": "`absolute` posiciona el elemento respecto al primer ancestro que tenga `position` distinto a `static`."
+        },
+        {
+          "question": "¿Qué valor fija el elemento respecto a la ventana del navegador (viewport)?",
+          "options": ["absolute", "sticky", "fixed", "static"],
+          "correctAnswer": 2,
+          "explanation": "`fixed` posiciona el elemento relativo a la ventana visible, por lo que no se mueve al hacer scroll."
+        },
+        {
+          "question": "¿Las propiedades top/left funcionan con `position: static`?",
+          "options": ["Sí", "No", "Solo top", "Solo left"],
+          "correctAnswer": 1,
+          "explanation": "`static` ignora completamente `top`, `right`, `bottom`, `left` y `z-index`."
+        },
+        {
+          "question": "¿Para qué sirve `position: relative` sin mover el elemento?",
+          "options": [
+            "Para nada",
+            "Para crear un contexto para hijos absolutos",
+            "Para cambiar el color",
+            "Para ocultarlo"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Es muy común usar `relative` solo para que los hijos con `position: absolute` se posicionen respecto a este elemento."
+        },
+        {
+          "question": "¿Cómo funciona `position: sticky`?",
+          "options": [
+            "Siempre fijo",
+            "Siempre relativo",
+            "Híbrido: relativo hasta un punto de scroll",
+            "Aleatorio"
+          ],
+          "correctAnswer": 2,
+          "explanation": "`sticky` se comporta como `relative` hasta que cruza un umbral de scroll, entonces se comporta como `fixed`."
+        },
+        {
+          "question": "¿Qué pasa si un elemento `absolute` no tiene ancestros posicionados?",
+          "options": [
+            "Desaparece",
+            "Se posiciona respecto al <html>",
+            "Error de CSS",
+            "Se vuelve static"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Si no hay padres posicionados, se posiciona relativo al bloque contenedor inicial (generalmente el `<html>`)."
+        },
+        {
+          "question": "¿El espacio original de un elemento `absolute` se mantiene?",
+          "options": [
+            "Sí",
+            "No, colapsa",
+            "Se reduce a la mitad",
+            "Depende del ancho"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Al salir del flujo normal, el espacio que ocupaba el elemento desaparece y los otros elementos ocupan su lugar."
+        },
+        {
+          "question": "¿Qué valor crea un nuevo contexto de apilamiento (Stacking Context)?",
+          "options": ["static", "relative (con z-index)", "Todos", "Ninguno"],
+          "correctAnswer": 1,
+          "explanation": "`relative` (y otros posicionamientos) crean un nuevo contexto de apilamiento si tienen un `z-index` distinto de auto."
+        },
+        {
+          "question": "¿Fixed funciona dentro de un elemento con `transform`?",
+          "options": [
+            "Normal",
+            "Se rompe (se vuelve relativo al transform)",
+            "Se vuelve invisible",
+            "No afectado"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Esta es una peculiaridad famosa: un padre con `transform` se convierte en el contenedor de referencia para los hijos `fixed`, rompiendo la referencia al viewport."
+        }
+      ]
+    },
+    "width": {
+      "id": "width",
+      "symbol": "W",
+      "title": "Width",
+      "category": "layout",
+      "description": "Establece el ancho del área de contenido de un elemento. El ancho total visible puede incluir padding y bordes dependiendo de la propiedad `box-sizing`.",
+      "keyPoints": [
+        "Acepta valores en px, %, rem, vh, auto, etc.",
+        "Por defecto es `auto`",
+        "`width: 100%` se refiere al ancho del padre contenedor"
+      ],
+      "syntax": "width: length | percentage | auto | max-content | min-content;",
+      "codeExample": ".box {\n  width: 100%;\n  max-width: 600px;\n  margin: 0 auto;\n}",
+      "useCases": [
+        "Definir tamaños de columnas",
+        "Crear imágenes responsivas",
+        "Limitar el ancho de lectura de texto"
+      ],
+      "bestPractices": [
+        "Usar unidades relativas (%) o (rem) para responsividad",
+        "Combinar con `max-width` para evitar desbordes",
+        "Usar `box-sizing: border-box` para cálculos intuitivos"
+      ],
+      "commonMistakes": [
+        "Usar anchos fijos (px) que rompen en móviles",
+        "Olvidar sumar padding y border al calcular el ancho total",
+        "No considerar el ancho del scrollbar"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué valor de width ajusta el ancho al contenido interno?",
+          "options": [
+            "width: 100%",
+            "width: auto",
+            "width: max-content",
+            "width: cover"
+          ],
+          "correctAnswer": 2,
+          "explanation": "`width: max-content` hace que el elemento sea tan ancho como su contenido necesite, sin hacer saltos de línea si es posible."
+        },
+        {
+          "question": "¿Si uso `width: 50%`, el 50% es respecto a qué?",
+          "options": [
+            "Al viewport",
+            "Al elemento mismo",
+            "Al bloque contenedor padre",
+            "Al body"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Los porcentajes en `width` son relativos al ancho del bloque contenedor (el padre)."
+        },
+        {
+          "question": "¿Cuál es el ancho por defecto de un elemento de bloque?",
+          "options": ["0", "100%", "auto", "inherit"],
+          "correctAnswer": 2,
+          "explanation": "El valor por defecto es `auto`, que en elementos de bloque significa llenar todo el ancho disponible."
+        },
+        {
+          "question": "¿`width` afecta a elementos `inline` (como <span>)?",
+          "options": ["Sí", "No", "Solo si tienen borde", "Si tienen texto"],
+          "correctAnswer": 1,
+          "explanation": "La propiedad `width` no tiene efecto en elementos `inline` no reemplazados. Debes cambiar el display."
+        },
+        {
+          "question": "¿Qué pasa si el contenido es más ancho que el `width` definido?",
+          "options": [
+            "Se corta",
+            "El width crece",
+            "Desborda (overflow)",
+            "Se oculta"
+          ],
+          "correctAnswer": 2,
+          "explanation": "Por defecto el contenido desborda (overflows) el contenedor si no cabe, a menos que controles el `overflow`."
+        },
+        {
+          "question": "¿Diferencia entre `width: auto` y `width: 100%` en un bloque con márgenes?",
+          "options": [
+            "Ninguna",
+            "100% suma márgenes y desborda, auto se ajusta",
+            "Auto desborda",
+            "100% se ajusta"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`width: auto` resta márgenes del espacio disponible. `width: 100%` fuerza el tamaño del padre + sus propios márgenes, causando desbordamiento."
+        },
+        {
+          "question": "¿Cuál es una unidad relativa al ancho de la pantalla?",
+          "options": ["px", "em", "vw", "rem"],
+          "correctAnswer": 2,
+          "explanation": "`vw` (viewport width) es una unidad relativa al 1% del ancho de la ventana del navegador."
+        },
+        {
+          "question": "¿Para qué sirve `min-width`?",
+          "options": [
+            "Ancho máximo",
+            "Ancho mínimo garantizado",
+            "Ancho exacto",
+            "Ancho promedio"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Asegura que el elemento nunca sea más estrecho que el valor especificado, incluso si `width` es menor."
+        },
+        {
+          "question": "¿En Flexbox, qué propiedad tiene prioridad sobre `width`?",
+          "options": ["height", "flex-basis", "min-height", "margin"],
+          "correctAnswer": 1,
+          "explanation": "`flex-basis` (si se establece) controla el tamaño inicial del item en el eje principal, anulando `width`."
+        },
+        {
+          "question": "¿Qué hace `width: fit-content`?",
+          "options": [
+            "Llena el padre",
+            "Se ajusta al contenido con límite del padre",
+            "Siempre tamaño mínimo",
+            "Error de sintaxis"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Usa el espacio disponible pero no crece más allá de su contenido máximo (`min(max-content, max-available)`)."
+        }
+      ]
+    },
+    "height": {
+      "id": "height",
+      "symbol": "H",
+      "title": "Height",
+      "category": "layout",
+      "description": "Establece la altura del área de contenido. Al igual que el ancho, puede verse afectada por el modelo de caja y el contenido interno.",
+      "keyPoints": [
+        "Por defecto es `auto` (altura del contenido)",
+        "Los porcentajes requieren que el padre tenga altura explícita",
+        "`vh` es útil para alturas de pantalla completa"
+      ],
+      "syntax": "height: length | percentage | auto | 100vh;",
+      "codeExample": ".hero {\n  height: 100vh;\n  display: flex;\n  align-items: center;\n}",
+      "useCases": [
+        "Secciones de pantalla completa (Hero)",
+        "Igualar altura de tarjetas",
+        "Crear cuadrados perfectos"
+      ],
+      "bestPractices": [
+        "Dejar `height: auto` para contenedores de texto (evitar desbordes)",
+        "Usar `min-height` en lugar de `height` fijo para permitir crecimiento",
+        "Usar Flexbox/Grid para igualar alturas"
+      ],
+      "commonMistakes": [
+        "Usar `height: 100%` cuando el padre no tiene altura definida (colapsa)",
+        "Fijar altura en pixeles y que el texto se salga al hacer zoom",
+        "No considerar el header en `100vh` (causa scroll)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Por qué `height: 100%` a veces no funciona?",
+          "options": [
+            "Es un bug",
+            "El padre necesita altura definida",
+            "Requiere display block",
+            "Solo funciona en body"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Para que un porcentaje funcione en `height`, el bloque contenedor debe tener una altura explícita establecida."
+        },
+        {
+          "question": "¿Qué unidad usaría para ocupar toda la altura visible de la pantalla?",
+          "options": ["100%", "100px", "100vh", "auto"],
+          "correctAnswer": 2,
+          "explanation": "`100vh` (100 viewport height units) equivale al 100% de la altura de la ventana del navegador."
+        },
+        {
+          "question": "¿Qué sucede si fijo `height: 200px` y el contenido ocupa 300px?",
+          "options": [
+            "El contenedor crece",
+            "El contenido desborda (overflow)",
+            "El texto se achica",
+            "El contenido se corta"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Si la altura es fija, el contenido excedente se desborda visualmente del contenedor."
+        },
+        {
+          "question": "¿Es buena práctica fijar alturas en contenedores de texto?",
+          "options": [
+            "Sí, para diseño preciso",
+            "No, el texto puede variar",
+            "Solo en títulos",
+            "Siempre"
+          ],
+          "correctAnswer": 1,
+          "explanation": "No se recomienda fijar alturas (`height`) en contenedores de texto porque el contenido puede cambiar, traducirse o el usuario puede hacer zoom."
+        },
+        {
+          "question": "¿Qué propiedad asegura una altura mínima pero permite crecer?",
+          "options": ["height", "max-height", "min-height", "fixed-height"],
+          "correctAnswer": 2,
+          "explanation": "`min-height` establece un suelo: el elemento será al menos de ese tamaño, pero crecerá si el contenido lo requiere."
+        },
+        {
+          "question": "¿Cómo centrar verticalmente sin usar height fijo?",
+          "options": [
+            "Padding vertical igual",
+            "Margin auto",
+            "Float",
+            "Position static"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Una forma clásica y robusta es usar `padding-top` y `padding-bottom` iguales."
+        },
+        {
+          "question": "¿height: auto qué significa?",
+          "options": [
+            "0px",
+            "Altura de la pantalla",
+            "Altura ajustada al contenido",
+            "100px"
+          ],
+          "correctAnswer": 2,
+          "explanation": "`auto` permite que el navegador calcule la altura basándose en el contenido interno del elemento."
+        },
+        {
+          "question": "¿La propiedad line-height afecta al height final?",
+          "options": [
+            "Sí, siempre",
+            "No, nunca",
+            "Solo en imágenes",
+            "Solo en inputs"
+          ],
+          "correctAnswer": 0,
+          "explanation": "En elementos de texto con `height: auto`, la altura total es el producto del número de líneas por el `line-height`."
+        },
+        {
+          "question": "¿max-height sirve para animaciones?",
+          "options": [
+            "No",
+            "Sí, es un truco común para acordeones",
+            "Solo con JS",
+            "Rompe el layout"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Animar `max-height` de 0 a un valor grande es una técnica común para crear efectos de despliegue (acordeones) con CSS puro."
+        },
+        {
+          "question": "¿Qué es el 'fold' en diseño web?",
+          "options": [
+            "Una etiqueta",
+            "El borde inferior visible al cargar",
+            "Un error",
+            "Una carpeta"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Es la parte inferior de la pantalla visible sin hacer scroll (`100vh`). Importante para el diseño de la 'hero section'."
+        }
+      ]
+    },
+    "margin": {
+      "id": "margin",
+      "symbol": "M",
+      "title": "Margin",
+      "category": "layout",
+      "description": "Define el espacio exterior alrededor de un elemento. Es transparente y se utiliza para separar elementos hermanos.",
+      "keyPoints": [
+        "Acepta sintaxis shorthand (1, 2, 3 o 4 valores)",
+        "Los márgenes verticales adyacentes pueden colapsar",
+        "`margin: 0 auto` centra bloques horizontalmente"
+      ],
+      "syntax": "margin: top right bottom left;",
+      "codeExample": "/* Todas direcciones */\nmargin: 20px;\n/* Vertical | Horizontal */\nmargin: 10px 20px;\n/* Centrado */\nmargin: 0 auto;",
+      "useCases": [
+        "Separar tarjetas o secciones",
+        "Centrar contenedores",
+        "Empujar elementos (ej: margin-left: auto en flex)"
+      ],
+      "bestPractices": [
+        "Usar una dirección consistente (ej: solo `margin-bottom`) para evitar colapsos confusos",
+        "Usar `gap` en Flex/Grid en lugar de márgenes entre hijos",
+        "Evitar márgenes negativos a menos que sea intencional (superposición)"
+      ],
+      "commonMistakes": [
+        "Confundir margin (fuera) con padding (dentro)",
+        "No entender el colapso de márgenes",
+        "Intentar usar `margin: auto` vertical sin altura definida"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué hace `margin: 10px 20px`?",
+          "options": [
+            "10px arriba/abajo, 20px lados",
+            "10px lados, 20px arriba/abajo",
+            "10px arriba, 20px derecha",
+            "Error"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Cuando hay dos valores, el primero es vertical (Top/Bottom) y el segundo horizontal (Left/Right)."
+        },
+        {
+          "question": "¿Qué es el colapso de márgenes?",
+          "options": [
+            "Márgenes se suman",
+            "El mayor margen prevalece y se solapan",
+            "Márgenes desaparecen",
+            "Error de renderizado"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Cuando dos márgenes verticales se tocan, no se suman; se combinan en uno solo igual al mayor de los dos."
+        },
+        {
+          "question": "¿Cómo centrar un div horizontalmente?",
+          "options": [
+            "text-align: center",
+            "margin: 0 auto",
+            "align: center",
+            "float: center"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`margin: 0 auto` asigna márgenes automáticos a izquierda y derecha, centrando el bloque dentro de su padre."
+        },
+        {
+          "question": "¿Los elementos `inline` aceptan margin-top?",
+          "options": [
+            "Sí, y empujan contenido",
+            "Sí, pero no empujan verticalmente",
+            "No, es ignorado",
+            "Solo en Chrome"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Se puede aplicar, pero visualmente no afecta la posición de las líneas de texto circundantes (no empuja verticalmente)."
+        },
+        {
+          "question": "¿Los márgenes son parte del click-area (hitbox)?",
+          "options": [
+            "Sí",
+            "No",
+            "Depende del navegador",
+            "Solo si tienen color"
+          ],
+          "correctAnswer": 1,
+          "explanation": "No. Los márgenes son espacio 'muerto' externo. El padding sí es parte del área interactiva, el margen no."
+        },
+        {
+          "question": "¿Qué hace `margin-left: auto` en un contenedor Flex?",
+          "options": [
+            "Centra el elemento",
+            "Lo empuja todo lo posible a la derecha",
+            "Lo empuja a la izquierda",
+            "Nada"
+          ],
+          "correctAnswer": 1,
+          "explanation": "En flexbox, un margen automático absorbe todo el espacio libre disponible en esa dirección, empujando el elemento al final."
+        },
+        {
+          "question": "¿Se permiten márgenes negativos?",
+          "options": [
+            "No, es ilegal",
+            "Sí, mueven el elemento en dirección opuesta",
+            "Solo en bottom",
+            "Sí pero rompen el DOM"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Sí, son válidos y útiles. Por ejemplo, `margin-top: -10px` 'sube' el elemento, pudiendo causar superposición."
+        },
+        {
+          "question": "¿El background cubre el margen?",
+          "options": [
+            "No",
+            "Sí",
+            "Solo si es imagen",
+            "Depende de background-clip"
+          ],
+          "correctAnswer": 0,
+          "explanation": "El fondo se extiende hasta el borde (border), pero no invade el margen. El margen es siempre transparente."
+        },
+        {
+          "question": "¿margin: 0 auto requiere width?",
+          "options": [
+            "Sí (o max-width)",
+            "No",
+            "Depende del color",
+            "Solo en flex"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Para centrar un bloque con `auto`, necesita un ancho definido (menor al del padre), de lo contrario ocupa el 100% y no hay espacio para márgenes."
+        },
+        {
+          "question": "¿Qué valor quita todos los márgenes?",
+          "options": ["margin: none", "margin: 0", "margin: null", "no-margin"],
+          "correctAnswer": 1,
+          "explanation": "`margin: 0` resetea los márgenes en los 4 lados."
+        }
+      ]
+    },
+    "padding": {
+      "id": "padding",
+      "symbol": "P",
+      "title": "Padding",
+      "category": "layout",
+      "description": "Espacio interior entre el borde del elemento y su contenido. A diferencia del margen, el padding toma el color de fondo del elemento.",
+      "keyPoints": [
+        "Aumenta el tamaño total del elemento (si no usas border-box)",
+        "No colapsa verticalmente como los márgenes",
+        "Es parte del área clicable"
+      ],
+      "syntax": "padding: top right bottom left;",
+      "codeExample": ".btn {\n  padding: 10px 20px;\n  background-color: blue;\n  color: white;\n}",
+      "useCases": [
+        "Dar aire al texto dentro de un botón",
+        "Separar contenido del borde de una tarjeta",
+        "Crear espacio interno en inputs"
+      ],
+      "bestPractices": [
+        "Usar padding para aumentar el área táctil de botones pequeños",
+        "Usar `box-sizing: border-box` para que el padding no rompa el ancho",
+        "Mantener consistencia vertical/horizontal"
+      ],
+      "commonMistakes": [
+        "Usar padding para separar elementos (mejor margin o gap)",
+        "No considerar que suma al width/height",
+        "Usar unidades absolutas grandes en móviles"
+      ],
+      "quizPool": [
+        {
+          "question": "¿El padding tiene color de fondo?",
+          "options": [
+            "Es transparente",
+            "Sí, toma el background del elemento",
+            "Es blanco",
+            "Es negro"
+          ],
+          "correctAnswer": 1,
+          "explanation": "El `background-color` o `background-image` de un elemento se extiende por debajo de su borde y su padding."
+        },
+        {
+          "question": "¿El padding cuenta para el tamaño total del elemento?",
+          "options": [
+            "No",
+            "Sí, se suma al ancho/alto (en content-box)",
+            "Solo visualmente",
+            "Depende del zoom"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Por defecto (content-box), `width` + `padding` + `border` = Ancho Total. Esto cambia con `border-box`."
+        },
+        {
+          "question": "¿Los márgenes colapsan, y los paddings?",
+          "options": [
+            "También",
+            "No colapsan",
+            "Solo los horizontales",
+            "Solo en body"
+          ],
+          "correctAnswer": 1,
+          "explanation": "El padding nunca colapsa. Siempre preserva su espacio exacto."
+        },
+        {
+          "question": "Sintaxis `padding: 10px 20px 30px`. ¿Qué significa?",
+          "options": [
+            "Top, Right/Left, Bottom",
+            "Top/Bottom, Right, Left",
+            "Top, Right, Bottom (Left repite Right)",
+            "Error"
+          ],
+          "correctAnswer": 2,
+          "explanation": "3 valores: 1º Top, 2º Horizontal (Der/Izq), 3º Bottom."
+        },
+        {
+          "question": "¿Se permiten valores negativos en padding?",
+          "options": ["Sí", "No", "Solo en top", "Solo porcentajes"],
+          "correctAnswer": 1,
+          "explanation": "No, el padding negativo no es válido en CSS. Debe ser 0 o positivo."
+        },
+        {
+          "question": "¿Padding en elementos `inline` afecta a las líneas vecinas?",
+          "options": [
+            "Sí",
+            "No empuja verticalmente líneas vecinas",
+            "Rompe el layout",
+            "Solo horizontalmente"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Visualmente el fondo se expande, pero el padding vertical no empuja el texto de las líneas superiores o inferiores."
+        },
+        {
+          "question": "¿Para qué sirve el padding en un botón?",
+          "options": [
+            "Solo estética",
+            "Hacerlo más grande y legible",
+            "Centrarlo",
+            "Moverlo"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Separa el texto de los bordes y hace el botón más fácil de clicar sin deformar el texto."
+        },
+        {
+          "question": "¿Padding porcentual (%) se basa en...?",
+          "options": [
+            "Alto del padre",
+            "Ancho del padre",
+            "Ancho del elemento",
+            "Viewport"
+          ],
+          "correctAnswer": 1,
+          "explanation": "¡Curioso pero cierto! Tanto el padding vertical como horizontal en % se calculan basándose en el ANCHO (width) del bloque contenedor."
+        },
+        {
+          "question": "¿Cómo reseteas el padding?",
+          "options": [
+            "padding: 0",
+            "padding: none",
+            "padding: auto",
+            "no-padding"
+          ],
+          "correctAnswer": 0,
+          "explanation": "`padding: 0` elimina el espacio interior."
+        },
+        {
+          "question": "¿Box-sizing por defecto es...?",
+          "options": ["border-box", "content-box", "padding-box", "margin-box"],
+          "correctAnswer": 1,
+          "explanation": "El valor por defecto es `content-box`, donde el padding suma al tamaño."
+        }
+      ]
+    },
+    "box-sizing": {
+      "id": "box-sizing",
+      "symbol": "Ba",
+      "title": "Box Sizing",
+      "category": "layout",
+      "description": "Cambia cómo se calcula el ancho y alto total de un elemento. Es esencial para layouts predecibles.",
+      "keyPoints": [
+        "`content-box` (default): width = contenido (padding suma)",
+        "`border-box`: width = contenido + padding + borde (todo incluido)",
+        "El estándar moderno es usar `border-box` globalmente"
+      ],
+      "syntax": "box-sizing: content-box | border-box;",
+      "codeExample": "/* Reset universal */\n*, *::before, *::after {\n  box-sizing: border-box;\n}",
+      "useCases": [
+        "Facilitar cálculos de grillas",
+        "Evitar scroll horizontal accidental",
+        "Mantener inputs y botones del mismo tamaño"
+      ],
+      "bestPractices": [
+        "Aplicar el reset universal en la base del CSS",
+        "No mezclar modelos de caja en el mismo proyecto"
+      ],
+      "commonMistakes": [
+        "No usar el reset y volverse loco calculando pixeles",
+        "Olvidar incluir pseudoelementos (`::before`, `::after`) en el reset"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Cuál es el valor por defecto del navegador?",
+          "options": ["border-box", "content-box", "flex-box", "grid-box"],
+          "correctAnswer": 1,
+          "explanation": "Históricamente es `content-box`, aunque es contraintuitivo para diseño moderno."
+        },
+        {
+          "question": "En `border-box`, si width: 100px y padding: 10px, ¿cuál es el ancho total?",
+          "options": ["120px", "100px", "80px", "110px"],
+          "correctAnswer": 1,
+          "explanation": "El ancho total se mantiene en 100px. El contenido interno se reduce a 80px para acomodar el padding."
+        },
+        {
+          "question": "¿Qué selector se usa para aplicar box-sizing globalmente?",
+          "options": ["body", "html", "*", "div"],
+          "correctAnswer": 2,
+          "explanation": "`*` (selector universal) asegura que todos los elementos usen el modelo especificado."
+        },
+        {
+          "question": "¿El margen (margin) entra dentro de border-box?",
+          "options": ["Sí", "No", "Solo vertical", "A veces"],
+          "correctAnswer": 1,
+          "explanation": "No. El margen siempre es externo. `border-box` incluye Contenido + Padding + Borde."
+        },
+        {
+          "question": "¿Por qué frameworks como Bootstrap usan border-box?",
+          "options": [
+            "Es más rápido",
+            "Facilita crear grillas y columnas %",
+            "Es estándar W3C",
+            "Gusta más"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Permite decir 'columna: 50%' y añadir padding interno sin que la columna crezca y rompa la fila."
+        },
+        {
+          "question": "¿Existe padding-box?",
+          "options": [
+            "Sí, es lo mismo que border-box",
+            "No existe en el estándar actual",
+            "Solo en Firefox",
+            "Para tablas"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Existió en borradores pero fue eliminado. Solo usamos `content-box` y `border-box`."
+        },
+        {
+          "question": "¿Afecta box-sizing a la altura (height)?",
+          "options": [
+            "Sí, igual que al width",
+            "No, solo width",
+            "Solo si es fijo",
+            "No"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Sí, aplica la misma lógica para el cálculo de la altura."
+        },
+        {
+          "question": "¿El borde suma ancho en content-box?",
+          "options": ["Sí", "No", "Depende del estilo", "Solo si es grueso"],
+          "correctAnswer": 0,
+          "explanation": "Sí. `width` + `padding` + `border` = Ancho Real en pantalla."
+        },
+        {
+          "question": "¿Es mala práctica usar border-box?",
+          "options": [
+            "Sí, rompe estándares",
+            "No, es la mejor práctica actual",
+            "Solo para expertos",
+            "Es lento"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Es considerado una 'Best Practice' casi obligatoria en desarrollo web moderno."
+        },
+        {
+          "question": "Si tengo un input width 100% y padding, ¿qué pasa sin border-box?",
+          "options": [
+            "Se ve bien",
+            "Se sale del contenedor",
+            "Se achica",
+            "Nada"
+          ],
+          "correctAnswer": 1,
+          "explanation": "El input medirá 100% + el padding, desbordando su contenedor padre y causando scroll horizontal o cortes."
+        }
+      ]
+    },
+    "overflow": {
+      "id": "overflow",
+      "symbol": "Ov",
+      "title": "Overflow",
+      "category": "layout",
+      "description": "Controla qué sucede cuando el contenido es demasiado grande para caber en su contenedor.",
+      "keyPoints": [
+        "`visible` (default): el contenido se sale",
+        "`hidden`: recorta el exceso",
+        "`scroll`: agrega barras de desplazamiento siempre",
+        "`auto`: agrega barras solo si es necesario"
+      ],
+      "syntax": "overflow: visible | hidden | scroll | auto;",
+      "codeExample": ".modal-content {\n  max-height: 80vh;\n  overflow-y: auto;\n}",
+      "useCases": [
+        "Crear áreas con scroll interno",
+        "Recortar imágenes que se salen (border-radius)",
+        "Manejar textos largos (ellipsis)"
+      ],
+      "bestPractices": [
+        "Usar `auto` en lugar de `scroll` para evitar barras vacías",
+        "Controlar overflow-x y overflow-y por separado si es necesario",
+        "Tener cuidado con `hidden` cortando sombras o tooltips"
+      ],
+      "commonMistakes": [
+        "Usar `overflow: hidden` para limpiar flotados y cortar contenido accidentalmente",
+        "Olvidar definir una altura (height) antes de poner scroll"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Valor por defecto de overflow?",
+          "options": ["hidden", "auto", "visible", "scroll"],
+          "correctAnswer": 2,
+          "explanation": "Por defecto es `visible`, el contenido 'flota' fuera de la caja si no cabe."
+        },
+        {
+          "question": "¿Qué hace `overflow: hidden`?",
+          "options": [
+            "Oculta el elemento",
+            "Oculta el exceso y impide scroll",
+            "Pone fondo negro",
+            "Mueve el contenido"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Recorta todo lo que se salga de los límites del borde y elimina la capacidad de hacer scroll en ese contenedor."
+        },
+        {
+          "question": "¿`overflow: scroll` muestra barras de scroll si no hacen falta?",
+          "options": [
+            "Sí, siempre visibles (aunque grises)",
+            "No, inteligente",
+            "Solo en Mac",
+            "Depende del contenido"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Sí, fuerza la aparición de las barras (horizontal y vertical) aunque el contenido quepa."
+        },
+        {
+          "question": "¿Para tener scroll solo vertical qué propiedad uso?",
+          "options": [
+            "overflow: vertical",
+            "overflow-y",
+            "overflow-x",
+            "scroll-y"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`overflow-y` controla el desbordamiento en el eje vertical."
+        },
+        {
+          "question": "¿Crear un nuevo contexto de formato de bloque (BFC) con overflow?",
+          "options": [
+            "Imposible",
+            "Usando overflow distinto de visible",
+            "Solo con hidden",
+            "Es un bug"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Aplicar un overflow (excepto visible) crea un BFC, útil para contener floats o evitar colapso de márgenes."
+        },
+        {
+          "question": "¿Qué pasa con `position: sticky` dentro de un padre con `overflow: hidden`?",
+          "options": [
+            "Funciona perfecto",
+            "Deja de funcionar",
+            "Se vuelve fixed",
+            "Se rompe"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`sticky` necesita que sus ancestros permitan el scroll. Un ancestro con overflow restringido suele romper el efecto sticky."
+        },
+        {
+          "question": "¿text-overflow funciona solo?",
+          "options": [
+            "Sí",
+            "No, requiere white-space y overflow",
+            "Solo en inputs",
+            "Depende la fuente"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Para puntos suspensivos (...) necesitas: `white-space: nowrap`, `overflow: hidden` y `text-overflow: ellipsis`."
+        },
+        {
+          "question": "¿`overflow: auto` vs `scroll`?",
+          "options": [
+            "Son iguales",
+            "Auto es inteligente, Scroll es forzado",
+            "Scroll es más rápido",
+            "Auto no funciona en móvil"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`auto` solo muestra la barra si el contenido realmente se desborda. `scroll` la muestra siempre."
+        },
+        {
+          "question": "¿Overflow clip?",
+          "options": ["Nuevo estándar", "No existe", "Es default", "Para SVG"],
+          "correctAnswer": 0,
+          "explanation": "Es similar a hidden pero prohíbe cualquier tipo de scroll (incluso programático). Es más moderno."
+        },
+        {
+          "question": "¿Scroll smooth?",
+          "options": [
+            "overflow: smooth",
+            "scroll-behavior: smooth",
+            "transition: scroll",
+            "js only"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Se controla con la propiedad `scroll-behavior: smooth`."
+        }
+      ]
+    },
+    "z-index": {
+      "id": "z-index",
+      "symbol": "Z",
+      "title": "Z-Index",
+      "category": "positioning",
+      "description": "Controla el orden de apilamiento (eje Z) de elementos posicionados. Mayor número significa 'más arriba' o 'más cerca' del usuario.",
+      "keyPoints": [
+        "Solo funciona en elementos posicionados (p.ej: relative, absolute, fixed, sticky) o flex items",
+        "Crea contextos de apilamiento",
+        "Acepta valores negativos"
+      ],
+      "syntax": "z-index: auto | integer;",
+      "codeExample": ".modal {\n  position: fixed;\n  z-index: 1000;\n}\n\n.background {\n  z-index: -1;\n}",
+      "useCases": [
+        "Poner un modal encima de todo",
+        "Poner una imagen decorativa detrás del texto",
+        "Controlar capas en un dropdown"
+      ],
+      "bestPractices": [
+        "Usar escalas pequeñas (1, 10, 100) en lugar de (999999)",
+        "Entender el 'Stacking Context' para evitar sorpresas",
+        "Usar variables CSS para gestionar capas globalmente (--index-modal, --index-tooltip)"
+      ],
+      "commonMistakes": [
+        "Poner z-index en `position: static` (no hace nada)",
+        "Guerra de z-index (z-index: 99999999)",
+        "No entender por qué un hijo con z-index 1000 queda debajo de un tío con z-index 2"
+      ],
+      "quizPool": [
+        {
+          "question": "¿z-index funciona en elementos static?",
+          "options": ["Sí", "No", "A veces", "Solo imágenes"],
+          "correctAnswer": 1,
+          "explanation": "La propiedad `z-index` no tiene efecto en elementos con `position: static` (el valor por defecto)."
+        },
+        {
+          "question": "¿Qué gana: z-index 100 o z-index 10?",
+          "options": ["10", "100", "El último en el HTML", "Depende del color"],
+          "correctAnswer": 1,
+          "explanation": "El valor más alto se muestra por encima del más bajo (en el mismo contexto de apilamiento)."
+        },
+        {
+          "question": "¿Se permiten valores negativos?",
+          "options": [
+            "No",
+            "Sí, pone el elemento detrás",
+            "Error",
+            "Mueve a la izquierda"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Sí, `z-index: -1` puede colocar un elemento detrás de su padre (si el padre no crea un nuevo contexto estricto)."
+        },
+        {
+          "question": "¿Qué es un Stacking Context?",
+          "options": [
+            "Un bug",
+            "Una capa de lógica de renderizado",
+            "Una librería",
+            "Un borde"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Es un entorno tridimensional local. Los z-indices de hijos se comparan dentro de su contexto padre, no globalmente."
+        },
+        {
+          "question": "¿Flex items admiten z-index sin position?",
+          "options": ["No", "Sí", "Solo si son block", "Jamás"],
+          "correctAnswer": 1,
+          "explanation": "Excepción importante: Los hijos directos de un contenedor Flex/Grid soportan `z-index` aunque sean `position: static`."
+        },
+        {
+          "question": "¿Opacity < 1 crea un Stacking Context?",
+          "options": ["No", "Sí", "Solo en Safari", "Depende"],
+          "correctAnswer": 1,
+          "explanation": "Sí, aplicar opacidad (ej: 0.99) crea un nuevo contexto de apilamiento, afectando el orden z de los hijos."
+        },
+        {
+          "question": "¿Valor por defecto de z-index?",
+          "options": ["0", "1", "auto", "none"],
+          "correctAnswer": 2,
+          "explanation": "`auto`, que significa que hereda el nivel de apilamiento de su padre (nivel 0)."
+        },
+        {
+          "question": "Hijo (z:100) dentro de Padre (z:1). Tío (z:2). ¿Quién está encima?",
+          "options": ["Hijo", "Tío", "Padre", "Iguales"],
+          "correctAnswer": 1,
+          "explanation": "El Tío gana. El Padre tiene nivel 1, el Tío nivel 2. El Hijo 'vive' dentro del nivel 1, así que nunca superará al Tío (nivel 2) por mucho z-index que tenga."
+        },
+        {
+          "question": "¿Transform crea stacking context?",
+          "options": ["Sí", "No", "Solo scale", "A veces"],
+          "correctAnswer": 0,
+          "explanation": "Cualquier propiedad `transform` distinta de `none` crea un nuevo contexto de apilamiento."
+        },
+        {
+          "question": "¿Cómo debuggear z-index fácil?",
+          "options": [
+            "Rotar la pantalla 3D en DevTools",
+            "Adivinar",
+            "Poner bordes rojos",
+            "Borrar elementos"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Las herramientas de desarrollo (como 'Layers' en Chrome) permiten visualizar y rotar las capas 3D de la página."
+        }
+      ]
+    },
+    "font-family": {
+      "id": "font-family",
+      "symbol": "Ff",
+      "title": "Font Family",
+      "category": "typography",
+      "description": "Define la tipografía del elemento. Permite especificar una lista priorizada de fuentes (stack) para asegurar que el contenido sea legible aunque una fuente no cargue.",
+      "keyPoints": [
+        "Acepta nombres de familia ('Arial') y familias genéricas ('sans-serif')",
+        "Siempre terminar con una familia genérica como fallback",
+        "Si el nombre tiene espacios, debe ir entre comillas"
+      ],
+      "syntax": "font-family: 'Open Sans', Helvetica, Arial, sans-serif;",
+      "codeExample": "body {\n  font-family: 'Inter', system-ui, -apple-system, sans-serif;\n}",
+      "useCases": [
+        "Definir la identidad visual del sitio",
+        "Mejorar la legibilidad de textos largos"
+      ],
+      "bestPractices": [
+        "Usar 'System UI fonts' para mejorar rendimiento",
+        "Importar solo los pesos necesarios de fuentes web (Google Fonts)",
+        "Siempre declarar una familia genérica al final"
+      ],
+      "commonMistakes": [
+        "Olvidar las comillas en nombres compuestos ('Times New Roman')",
+        "Depender de fuentes locales que el usuario no tiene instalada"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Por qué se usa una lista de fuentes?",
+          "options": [
+            "Por estilo",
+            "Como sistema de fallback (respaldo)",
+            "Para mezclar letras",
+            "Para animaciones"
+          ],
+          "correctAnswer": 1,
+          "explanation": "El navegador intenta usar la primera. Si no la tiene, intenta con la segunda, y así sucesivamente (fallback)."
+        },
+        {
+          "question": "¿Qué es 'sans-serif'?",
+          "options": [
+            "Una fuente específica",
+            "Una familia genérica",
+            "Un error",
+            "Una marca"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Es una familia genérica que le dice al navegador: 'usa cualquier fuente sin serifas que tengas disponbile por defecto'."
+        },
+        {
+          "question": "¿Cómo se escribe una fuente con espacios?",
+          "options": [
+            "Con guiones",
+            "Con comillas",
+            "Todo junto",
+            "Con barras"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Si el nombre contiene espacios, como 'Times New Roman', debe encerrarse entre comillas simples o dobles."
+        },
+        {
+          "question": "¿Qué es una Web Font?",
+          "options": [
+            "Una fuente instalada",
+            "Una fuente descargada por el navegador",
+            "Una imagen de texto",
+            "Un SVG"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Son fuentes alojadas en un servidor (como Google Fonts) que el navegador descarga para mostrar la página."
+        },
+        {
+          "question": "¿Cuál es la fuente por defecto más común?",
+          "options": ["Arial", "Times New Roman", "Comic Sans", "Roboto"],
+          "correctAnswer": 1,
+          "explanation": "En la mayoría de navegadores windows/mac, la fuente serif por defecto suele ser Times New Roman."
+        }
+      ]
+    },
+    "font-size": {
+      "id": "font-size",
+      "symbol": "Fs",
+      "title": "Font Size",
+      "category": "typography",
+      "description": "Establece el tamaño de la letra. Puede definirse con valores absolutos (px) o relativos (em, rem, %).",
+      "keyPoints": [
+        "`rem` es relativo a la raíz (html), `em` al padre",
+        "Por accesibilidad, evita unidades fijas (px) en cuerpo de texto",
+        "16px es el tamaño base estándar en navegadores"
+      ],
+      "syntax": "font-size: 16px | 1.5rem | 120% | large;",
+      "codeExample": "html {\n  font-size: 16px;\n}\nh1 {\n  font-size: 2.5rem; /* 40px */\n}",
+      "useCases": [
+        "Jerarquizar títulos y subtítulos",
+        "Ajustar legibilidad en móviles",
+        "Escalar iconos basados en fuentes"
+      ],
+      "bestPractices": [
+        "Usar `rem` para mantener consistencia global",
+        "Usar `em` para componentes que deben escalar internamente (botones)",
+        "No bajar de 12px para texto legible"
+      ],
+      "commonMistakes": [
+        "Usar px para todo (mala accesibilidad)",
+        "No resetear el font-size en elementos anidados con `em`"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué unidad respeta mejor la configuración de usuario?",
+          "options": ["px", "rem/em", "cm", "pt"],
+          "correctAnswer": 1,
+          "explanation": "Las unidades relativas permiten que si el usuario aumenta el tamaño de fuente en su navegador, el sitio se adapte."
+        },
+        {
+          "question": "¿A qué equivale 1rem por defecto?",
+          "options": ["10px", "12px", "16px", "20px"],
+          "correctAnswer": 2,
+          "explanation": "El tamaño base por defecto en la mayoría de los navegadores es 16px."
+        },
+        {
+          "question": "¿Diferencia entre em y rem?",
+          "options": [
+            "Ninguna",
+            "em es relativo al padre, rem al root",
+            "rem es para móviles",
+            "em es obsoleto"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`rem` (root em) se basa en el tamaño del <html>. `em` se basa en el tamaño de fuente del propio elemento (heredado del padre)."
+        },
+        {
+          "question": "¿Qué pasa si uso `font-size: 0`?",
+          "options": [
+            "Texto invisible",
+            "Texto muy pequeño",
+            "Error",
+            "Mínimo 1px"
+          ],
+          "correctAnswer": 0,
+          "explanation": "El texto desaparece visualmente, aunque sigue en el DOM (¡ojo con la accesibilidad!)."
+        },
+        {
+          "question": "¿Para qué sirve `font-size-adjust`?",
+          "options": [
+            "Ajustar brillo",
+            "Igualar altura x de fuentes",
+            "Cambiar color",
+            "Ajustar ancho"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Es una propiedad avanzada para mantener la legibilidad (altura x) cuando la fuente principal falla y carga el fallback."
+        }
+      ]
+    },
+    "font-weight": {
+      "id": "font-weight",
+      "symbol": "Fw",
+      "title": "Font Weight",
+      "category": "typography",
+      "description": "Especifica el grosor o 'peso' de la tipografía.",
+      "keyPoints": [
+        "Valores numéricos: 100 a 900",
+        "Keywords: `normal` (400), `bold` (700)",
+        "No todas las fuentes tienen todos los pesos"
+      ],
+      "syntax": "font-weight: normal | bold | 100 | 900;",
+      "codeExample": ".title {\n  font-weight: 700;\n}\n.thin-text {\n  font-weight: 100;\n}",
+      "useCases": [
+        "Destacar palabras clave (negrita)",
+        "Crear jerarquía visual en títulos",
+        "Diseños ligeros y minimalistas (light)"
+      ],
+      "bestPractices": [
+        "Cargar solo los pesos que vas a usar (performance)",
+        "No usar `bolder` o `lighter` a menos que entiendas la herencia",
+        "Verificar que la fuente soporte el peso elegido"
+      ],
+      "commonMistakes": [
+        "Pedir `font-weight: 900` a una fuente que solo tiene regular y bold (el navegador fingirá el grosor)",
+        "Usar etiquetas <b> o <strong> solo por estilo visual"
+      ],
+      "quizPool": [
+        {
+          "question": "¿A qué número equivale `bold`?",
+          "options": ["300", "400", "700", "900"],
+          "correctAnswer": 2,
+          "explanation": "`bold` es un alias para el peso 700."
+        },
+        {
+          "question": "¿Qué pasa si la fuente no tiene el peso solicitado?",
+          "options": [
+            "Error",
+            "Se ve transparente",
+            "El navegador simula el grosor (faux bold)",
+            "Carga Times New Roman"
+          ],
+          "correctAnswer": 2,
+          "explanation": "El navegador intenta simular la negrita aumentando artificialmente el trazo, lo cual suele verse mal."
+        },
+        {
+          "question": "¿A qué número equivale `normal`?",
+          "options": ["100", "400", "500", "0"],
+          "correctAnswer": 1,
+          "explanation": "`normal` corresponde al peso estándar de 400."
+        },
+        {
+          "question": "¿Para qué sirve el peso 100?",
+          "options": ["Extra Bold", "Thin (muy fino)", "Italic", "Normal"],
+          "correctAnswer": 1,
+          "explanation": "El valor 100 corresponde usualmente a 'Thin' o 'Hairline', el trazo más fino posible."
+        },
+        {
+          "question": "¿Fuente variable (Variable Font) y peso?",
+          "options": [
+            "Solo acepta 400 y 700",
+            "Acepta cualquier número (ej: 450)",
+            "No soporta peso",
+            "Es automática"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Las fuentes variables permiten un control granular, pudiendo usar valores intermedios como 450, 523, etc."
+        }
+      ]
+    },
+    "color": {
+      "id": "color",
+      "symbol": "C",
+      "title": "Color",
+      "category": "typography",
+      "description": "Define el valor de color del contenido de primer plano (generalmente texto y decoraciones de texto).",
+      "keyPoints": [
+        "Acepta Hex, RGB, HSL, nombres (red), etc.",
+        "Heredable por defecto",
+        "`currentcolor` es una palabra clave poderosa"
+      ],
+      "syntax": "color: #ff0000 | rgb(255,0,0) | hsl(0, 100%, 50%);",
+      "codeExample": "p {\n  color: #333;\n}\n.error {\n  color: rgb(255, 0, 0);\n}",
+      "useCases": [
+        "Cambiar color de texto",
+        "Cambiar color de bordes (si border-color no se define)",
+        "Iconos SVG (fill: currentColor)"
+      ],
+      "bestPractices": [
+        "Usar HSL para manipulaciones de color intuitivas",
+        "Definir colores en variables CSS (--primary-color)",
+        "Asegurar contraste suficiente (AA/AAA)"
+      ],
+      "commonMistakes": [
+        "Usar nombres de colores (red, blue) en producción",
+        "Olvidar contrastar con el fondo"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué propiedad cambia el color del texto?",
+          "options": ["text-color", "font-color", "color", "foreground"],
+          "correctAnswer": 2,
+          "explanation": "En CSS, la propiedad `color` se refiere exclusivamente al color del primer plano (texto)."
+        },
+        {
+          "question": "¿Qué es `currentColor`?",
+          "options": [
+            "El color actual del elemento",
+            "El color del sistema",
+            "El color negro",
+            "Un error"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Es una variable dinámica que contiene el valor computado de la propiedad `color` del elemento."
+        },
+        {
+          "question": "¿Qué formato incluye transparencia?",
+          "options": ["#FFF", "rgb()", "rgba() / #RRGGBBAA", "hsl"],
+          "correctAnswer": 2,
+          "explanation": "`rgba()` y la notación hexadecimal de 8 dígitos permiten definir el canal Alfa (transparencia)."
+        },
+        {
+          "question": "¿La propiedad color se hereda?",
+          "options": [
+            "Sí, por defecto",
+            "No",
+            "Solo en inputs",
+            "Solo si es bold"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Sí, si defines `color` en el body, todos los textos hijos lo heredarán salvo que se especifique lo contrario."
+        },
+        {
+          "question": "¿Cuál es la ventaja de HSL?",
+          "options": [
+            "Es más corto",
+            "Intuitivo para ajustar tono/luz",
+            "Más rápido",
+            "Más colores"
+          ],
+          "correctAnswer": 1,
+          "explanation": "HSL (Hue, Saturation, Lightness) hace muy fácil crear variaciones de un color (más claro, más oscuro) matemáticamente."
+        }
+      ]
+    },
+    "text-align": {
+      "id": "text-align",
+      "symbol": "Ta",
+      "title": "Text Align",
+      "category": "typography",
+      "description": "Controla la alineación horizontal del contenido en línea (texto, imágenes inline) dentro de un bloque.",
+      "keyPoints": [
+        "Afecta al contenido interno, no al bloque mismo",
+        "Valores: left, right, center, justify",
+        "Se hereda a los hijos"
+      ],
+      "syntax": "text-align: left | center | right | justify;",
+      "codeExample": ".header {\n  text-align: center;\n}\n.article {\n  text-align: justify;\n}",
+      "useCases": [
+        "Centrar títulos",
+        "Alinear datos numéricos a la derecha en tablas",
+        "Justificar texto editorial"
+      ],
+      "bestPractices": [
+        "Usar `start` y `end` para soporte RTL (idiomas derecha a izquierda)",
+        "Evitar `justify` en web si no hay corte de palabras (guiones), crea 'ríos' de espacio"
+      ],
+      "commonMistakes": [
+        "Intentar centrar un `div` con text-align (se usa margin auto o flex)",
+        "Usar justify en textos cortos o angostos"
+      ],
+      "quizPool": [
+        {
+          "question": "¿`text-align: center` centra un bloque div?",
+          "options": ["Sí", "No", "Solo si tiene ancho", "A veces"],
+          "correctAnswer": 1,
+          "explanation": "No. Centra el *contenido inline* (texto, spans, imágenes) dentro del bloque, pero no al bloque en sí."
+        },
+        {
+          "question": "¿Qué valor justifica el texto a ambos lados?",
+          "options": ["center", "justify", "spread", "distribute"],
+          "correctAnswer": 1,
+          "explanation": "`justify` estira los espacios entre palabras para que cada línea toque ambos bordes del contenedor."
+        },
+        {
+          "question": "¿Cuál es el valor por defecto en español?",
+          "options": ["center", "right", "left (o start)", "justify"],
+          "correctAnswer": 2,
+          "explanation": "En lenguajes LTR (Left to Right), el defecto es `left` (o `start` en CSS moderno)."
+        },
+        {
+          "question": "¿text-align afecta a imágenes?",
+          "options": ["No", "Sí, si son inline", "Nunca", "Solo SVG"],
+          "correctAnswer": 1,
+          "explanation": "Sí, las imágenes son elementos inline por defecto, así que `text-align` en el padre las alineará."
+        },
+        {
+          "question": "¿Qué es `text-align-last`?",
+          "options": [
+            "No existe",
+            "Alinea la última línea de un párrafo",
+            "Alinea la primera línea",
+            "Alinea al final del body"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Controla específicamente cómo se alinea la última línea de un bloque (muy útil con `justify`)."
+        }
+      ]
+    },
+    "background": {
+      "id": "background",
+      "symbol": "Bg",
+      "title": "Background",
+      "category": "visual",
+      "description": "Propiedad shorthand para definir todas las propiedades de fondo (color, imagen, posición, tamaño, rpt) en una sola línea.",
+      "keyPoints": [
+        "Shorthand versátil: color, image, position, size, repeat, origin, clip, attachment",
+        "El orden suele ser: color image position/size repeat origin clip attachment",
+        "Se pueden definir múltiples fondos separándolos por comas"
+      ],
+      "syntax": "background: #fff url('img.png') no-repeat center/cover;",
+      "codeExample": ".hero {\n  background: linear-gradient(to right, #333, #000), url('hero.jpg');\n  background-size: cover;\n}",
+      "useCases": [
+        "Establecer fondos complejos en una línea",
+        "Crear gradientes",
+        "Añadir texturas sobre colores sólidos"
+      ],
+      "bestPractices": [
+        "Usar el shorthand 'background' si vas a resetear o definir todo",
+        "Usar propiedades individuales (e.g., `background-color`) si solo quieres cambiar un aspecto",
+        "Optimizar imágenes de fondo (WebP, AVIF)"
+      ],
+      "commonMistakes": [
+        "Sobrescribir un `background-image` previo al usar `background: red` (resetea todo)",
+        "Olvidar la barra `/` entre position y size (e.g. `center/cover`)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué propiedad resetea `background: red`?",
+          "options": [
+            "Solo el color",
+            "Todas las propiedades de fondo",
+            "Ninguna",
+            "La imagen"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Al ser una propiedad shorthand, `background` restablece a sus valores iniciales todas las sub-propiedades que no especifiques."
+        },
+        {
+          "question": "¿Cómo se separan múltiples fondos?",
+          "options": ["Espacios", "Puntos", "Comas", "Guiones"],
+          "correctAnswer": 2,
+          "explanation": "Se usa una coma para separar capas de fondo. La primera capa es la más superior (cercana al usuario)."
+        },
+        {
+          "question": "¿Cuál es el orden correcto para size?",
+          "options": [
+            "Después de position con /",
+            "Al principio",
+            "Al final",
+            "No importa"
+          ],
+          "correctAnswer": 0,
+          "explanation": "La sintaxis estándar exige que `background-size` vaya inmediatamente después de `background-position` separado por una barra (`center/cover`)."
+        },
+        {
+          "question": "¿Se pueden animar gradientes con background?",
+          "options": [
+            "Sí, directamente",
+            "No, solo el position o size",
+            "Solo en Firefox",
+            "Sí con JS"
+          ],
+          "correctAnswer": 1,
+          "explanation": "El contenido del gradiente no es interpolable directamente, pero se pueden animar `background-position` o `background-size` para crear efectos."
+        },
+        {
+          "question": "background-attachment: fixed sirve para...",
+          "options": [
+            "Fijar el fondo al viewport",
+            "Fijar el div",
+            "Evitar scroll",
+            "Nada"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Crea un efecto de 'parallax' simple donde la imagen de fondo no se mueve al hacer scroll en la página."
+        }
+      ]
+    },
+    "border": {
+      "id": "border",
+      "symbol": "Bdr",
+      "title": "Border",
+      "category": "visual",
+      "description": "Propiedad shorthand para establecer el ancho, estilo y color del borde de un elemento.",
+      "keyPoints": [
+        "Requiere al menos el `style` (e.g., `solid`) para ser visible",
+        "Suma al tamaño total si `box-sizing` es `content-box`",
+        "Orden típico: width style color"
+      ],
+      "syntax": "border: 1px solid #000;",
+      "codeExample": ".card {\n  border: 1px solid #e5e7eb;\n  border-bottom: 2px solid blue;\n}",
+      "useCases": [
+        "Delimitar cajas o secciones",
+        "Debugging (border: 1px solid red)",
+        "Crear formas geométricas (triángulos con bordes)"
+      ],
+      "bestPractices": [
+        "Usar variables para colores de borde consistentes",
+        "Considerar el uso de `outline` si no quieres que ocupe espacio",
+        "Evitar bordes muy gruesos que alteren el layout en hover"
+      ],
+      "commonMistakes": [
+        "Olvidar el estilo (`solid`, `dashed`), sin él el borde no aparece",
+        "Creer que `border: 0` y `border: none` son diferentes (ambos eliminan el borde)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué valor es obligatorio para que se vea el borde?",
+          "options": ["Color", "Ancho", "Style (estilo)", "Radius"],
+          "correctAnswer": 2,
+          "explanation": "Si no defines `border-style` (como `solid`, `dashed`), el valor por defecto es `none` y no se dibujará nada."
+        },
+        {
+          "question": "¿Border cuenta en el ancho del elemento?",
+          "options": [
+            "En border-box sí (interno), en content-box suma",
+            "Nunca",
+            "Siempre suma",
+            "Solo en inputs"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Depende del `box-sizing`. En `border-box` el borde 'come' espacio interior; en `content-box` se agrega por fuera."
+        },
+        {
+          "question": "¿Cómo hacer un triángulo con CSS?",
+          "options": [
+            "Clip-path",
+            "Bordes transparentes",
+            "SVG",
+            "Transform rotate"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Una técnica clásica es usar un elemento de ancho/alto 0 y bordes gruesos, poniendo algunos transparentes y uno con color."
+        },
+        {
+          "question": "¿Diferencia entre border y outline?",
+          "options": [
+            "Ninguna",
+            "Outline no ocupa espacio",
+            "Outline es redondo",
+            "Border es animable"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`outline` se dibuja fuera del borde y no ocupa espacio en el layout (no mueve otros elementos)."
+        },
+        {
+          "question": "¿Qué orden tiene la sintaxis shorthand?",
+          "options": [
+            "style color width",
+            "width style color",
+            "color width style",
+            "Cualquiera"
+          ],
+          "correctAnswer": 3,
+          "explanation": "El orden no es estricto en `border`, pero `width style color` es la convención más común."
+        }
+      ]
+    },
+    "border-radius": {
+      "id": "border-radius",
+      "symbol": "Bdrs",
+      "title": "Border Radius",
+      "category": "visual",
+      "description": "Define qué tan redondeadas son las esquinas de un elemento.",
+      "keyPoints": [
+        "Acepta px, % y otras unidades",
+        "`50%` crea un círculo perfecto si el elemento es cuadrado",
+        "Puede tener hasta 4 valores (esquina sup-izq sentido horario) o barra `/` para radios elípticos"
+      ],
+      "syntax": "border-radius: 4px | 50% | 10px 20px;",
+      "codeExample": ".circle {\n  width: 100px;\n  height: 100px;\n  border-radius: 50%;\n}\n.card {\n  border-radius: 8px;\n}",
+      "useCases": [
+        "Botones redondeados (Pill buttons)",
+        "Imágenes circulares (Avatar)",
+        "Suavizar tarjetas y contenedores"
+      ],
+      "bestPractices": [
+        "Usar valores consistentes en todo el sitio",
+        "Para 'pill shapes' usar un valor muy alto en px (e.g. `9999px`) en lugar de `50%` en rectángulos",
+        "Combinar con `overflow: hidden` si el contenido interno debe recortarse"
+      ],
+      "commonMistakes": [
+        "Usar `%` en rectángulos no cuadrados esperando extremos semicirculares (se deforma a elipse)",
+        "Olvidar `overflow: hidden` y ver la imagen cuadrada salir de la esquina redonda"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué valor crea un círculo perfecto en un cuadrado?",
+          "options": ["100px", "10%", "50%", "360deg"],
+          "correctAnswer": 2,
+          "explanation": "`50%` establece el radio como la mitad del ancho/alto, curvando totalmente las esquinas hasta formar un círculo."
+        },
+        {
+          "question": "¿Cómo recortar una imagen dentro de un borde redondeado?",
+          "options": [
+            "border-clip: true",
+            "overflow: hidden",
+            "z-index: 1",
+            "clip-path"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`overflow: hidden` en el contenedor obliga a que los hijos (como la imagen) se recorten a la forma del borde redondeado."
+        },
+        {
+          "question": "¿Qué hace border-radius: 9999px en un botón rectangular?",
+          "options": [
+            "Lo hace un círculo",
+            "Lo hace una píldora (lados redondos)",
+            "Error",
+            "Lo desaparece"
+          ],
+          "correctAnswer": 1,
+          "explanation": "El navegador usa el máximo radio posible, creando extremos perfectamente semicirculares (forma de píldora) sin deformarse."
+        },
+        {
+          "question": "¿Se pueden definir diferentes radios por esquina?",
+          "options": [
+            "Sí, hasta 4 valores",
+            "No",
+            "Solo 2",
+            "Solo arriba/abajo"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Sí, puedes controlar cada una de las 4 esquinas individualmente."
+        },
+        {
+          "question": "¿Qué pasa si los radios suman más que el alto del elemento?",
+          "options": [
+            "Se rompe",
+            "Se solapan",
+            "El navegador los escala proporcionalmente",
+            "Cuadrados"
+          ],
+          "correctAnswer": 2,
+          "explanation": "El estándar CSS dice que si los radios se superponen, el navegador debe reducirlos proporcionalmente hasta que quepan."
+        }
+      ]
+    },
+    "flex": {
+      "id": "flex",
+      "symbol": "Fx",
+      "title": "Flex",
+      "category": "flexbox",
+      "description": "Shorthand para `flex-grow`, `flex-shrink` y `flex-basis`. Es la forma recomendada de controlar el tamaño de los flex items.",
+      "keyPoints": [
+        "Valores comunes: `1` (crece igual), `auto` (basa en contenido), `none` (fijo)",
+        "Default: `0 1 auto` (no crece, encoge, base automática)",
+        "`flex: 1` es habitual para ocupar espacio restante"
+      ],
+      "syntax": "flex: flex-grow flex-shrink flex-basis;",
+      "codeExample": ".item {\n  flex: 1; /* Ocupa todo el espacio posible */\n}\n.fixed {\n  flex: 0 0 200px; /* Ancho fijo de 200px */\n}",
+      "useCases": [
+        "Columnas de ancho fluido",
+        "Sidebar fijo y contenido fluido",
+        "Distribuir espacio equitativamente"
+      ],
+      "bestPractices": [
+        "Usar siempre el shorthand `flex` en lugar de las propiedades individuales",
+        "Entender que `flex: 1` significa `1 1 0%` en muchos navegadores (basis 0)"
+      ],
+      "commonMistakes": [
+        "Confundir `flex-basis` con `width`",
+        "No considerar que `flex-shrink` está activo por defecto"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué significa `flex: 1`?",
+          "options": [
+            "Width 100%",
+            "Crece para ocupar espacio disponible",
+            "Margen 1",
+            "Orden 1"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Es un shorthand común para hacer que el item sea flexible y absorba el espacio libre del contenedor."
+        },
+        {
+          "question": "¿Cuáles son los 3 componentes de flex?",
+          "options": [
+            "grow, shrink, basis",
+            "width, height, margin",
+            "direction, wrap, flow",
+            "start, center, end"
+          ],
+          "correctAnswer": 0,
+          "explanation": "El orden es `flex-grow` (cuánto crece), `flex-shrink` (cuánto encoge) y `flex-basis` (tamaño inicial)."
+        },
+        {
+          "question": "¿Qué hace `flex-basis`?",
+          "options": [
+            "Define el tamaño mínimo final",
+            "Define el tamaño ideal inicial antes de distribuir espacio",
+            "Define el margen",
+            "Nada"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Establece el tamaño base del elemento 'antes' de que Flexbox calcule crecimientos o encogimientos."
+        },
+        {
+          "question": "¿Valor por defecto de flex?",
+          "options": ["0 1 auto", "1 1 auto", "0 0 auto", "1 1 0%"],
+          "correctAnswer": 0,
+          "explanation": "Initial: no crece (0), sí encoge (1), tamaño automático basado en contenido (auto)."
+        },
+        {
+          "question": "¿Para un sidebar fijo que no debe cambiar de tamaño, qué flex uso?",
+          "options": ["flex: 1", "flex: 0 0 250px", "flex: auto", "flex: none"],
+          "correctAnswer": 1,
+          "explanation": "`0` grow (no crece), `0` shrink (no encoge), `250px` basis (tamaño fijo)."
+        }
+      ]
+    },
+    "justify-content": {
+      "id": "justify-content",
+      "symbol": "Jc",
+      "title": "Justify Content",
+      "category": "flexbox",
+      "description": "Define cómo el navegador distribuye el espacio entre y alrededor de los items a lo largo del eje principal (main axis).",
+      "keyPoints": [
+        "En `flex-direction: row`, controla el eje horizontal",
+        "En `flex-direction: column`, controla el eje vertical",
+        "Valores clave: flex-start, center, space-between"
+      ],
+      "syntax": "justify-content: flex-start | center | space-between | space-around | space-evenly;",
+      "codeExample": ".navbar {\n  display: flex;\n  justify-content: space-between;\n}",
+      "useCases": [
+        "Separar logo y menú (space-between)",
+        "Centrar items (center)",
+        "Distribuir tarjetas uniformemente"
+      ],
+      "bestPractices": [
+        "Usar `space-between` para layouts de cabeceras comunes",
+        "Usar `center` junto con `align-items: center` para el centrado perfecto"
+      ],
+      "commonMistakes": [
+        "Intentar usarlo para alinear verticalmente en un row (eso es align-items)",
+        "Usarlo en un bloque que no es flex"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Eje principal en `flex-direction: row`?",
+          "options": ["Vertical", "Horizontal", "Diagonal", "Z"],
+          "correctAnswer": 1,
+          "explanation": "En modo fila (row), el eje principal corre de izquierda a derecha (horizontal)."
+        },
+        {
+          "question": "¿Qué valor pone el máximo espacio posible entre items?",
+          "options": ["space-around", "center", "space-between", "flex-end"],
+          "correctAnswer": 2,
+          "explanation": "`space-between` pega el primer item al inicio, el último al final, y reparte el espacio restante entre los del medio."
+        },
+        {
+          "question": "¿Qué valor pone espacio igual a los lados de cada item?",
+          "options": ["space-evenly", "space-around", "space-between", "gap"],
+          "correctAnswer": 1,
+          "explanation": "`space-around` da a cada item un margen igual a cada lado. (Nota visual: el espacio entre dos items es el doble que el del borde)."
+        },
+        {
+          "question": "¿Cómo centrar horizontalmente en flex row?",
+          "options": [
+            "align-items: center",
+            "justify-content: center",
+            "text-align: center",
+            "margin: center"
+          ],
+          "correctAnswer": 1,
+          "explanation": "En una fila flex, `justify-content` controla la distribución horizontal."
+        },
+        {
+          "question": "¿Funciona justify-content si solo hay un item?",
+          "options": [
+            "Sí, lo posiciona",
+            "No, necesita dos",
+            "Solo center",
+            "Da error"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Sí, determina dónde se coloca ese único item dentro del espacio libre del contenedor/padre."
+        }
+      ]
+    },
+    "align-items": {
+      "id": "align-items",
+      "symbol": "Ai",
+      "title": "Align Items",
+      "category": "flexbox",
+      "description": "Establece el valor `align-self` predeterminado para todos los hijos del contenedor flex. Controla la alineación en el eje cruzado (cross axis).",
+      "keyPoints": [
+        "En `row`, alinea verticalmente",
+        "Default es `stretch` (estira los hijos para llenar el alto)",
+        "Para centrar verticalmente: `center`"
+      ],
+      "syntax": "align-items: stretch | flex-start | flex-end | center | baseline;",
+      "codeExample": ".container {\n  display: flex;\n  align-items: center; /* Centrado vertical */\n  height: 100vh;\n}",
+      "useCases": [
+        "Centrado vertical de texto o iconos",
+        "Estirar columnas para que tengan la misma altura (stretch)",
+        "Alinear textos por su línea base (baseline)"
+      ],
+      "bestPractices": [
+        "Recordar que `stretch` es el defecto; si tus imágenes se deforman, usa `flex-start` o `center`",
+        "Usar `gap` para separar, no márgenes extraños"
+      ],
+      "commonMistakes": [
+        "Confundir con `justify-content`",
+        "Olvidar dar altura al contenedor padre (si no tiene altura, no hay nada que centrar)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Cuál es el valor por defecto?",
+          "options": ["center", "flex-start", "stretch", "auto"],
+          "correctAnswer": 2,
+          "explanation": "`stretch` hace que los elementos hijos se estiren para cubrir todo el eje cruzado del contenedor (ej: toda la altura)."
+        },
+        {
+          "question": "¿Qué valor alinea el texto 'baseline' de los elementos?",
+          "options": ["center", "text-bottom", "baseline", "flex-end"],
+          "correctAnswer": 2,
+          "explanation": "`baseline` alinea los elementos de modo que sus líneas base de tipografía coincidan, útil cuando tienen tamaños de fuente distintos."
+        },
+        {
+          "question": "En `flex-direction: column`, ¿qué hace align-items?",
+          "options": [
+            "Alinea verticalmente",
+            "Alinea horizontalmente",
+            "Nada",
+            "Ordena"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Al rotar el eje principal a vertical (column), el eje cruzado pasa a ser horizontal. `align-items` controla el ancho/posición horizontal."
+        },
+        {
+          "question": "¿Cómo centrar TOTALMENTE (horiz + vert)?",
+          "options": [
+            "justify: center",
+            "align: center",
+            "justify-content: center y align-items: center",
+            "float: center"
+          ],
+          "correctAnswer": 2,
+          "explanation": "La combinación sagrada de Flexbox para centrar en ambos ejes."
+        },
+        {
+          "question": "¿`align-content` es lo mismo?",
+          "options": [
+            "Sí",
+            "No, es para multilínea (flex-wrap)",
+            "Es para grid",
+            "Es obsoleto"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`align-items` alinea items en una línea. `align-content` alinea las líneas en sí mismas cuando hay wrapping."
+        }
+      ]
+    },
+    "grid": {
+      "id": "grid",
+      "symbol": "Gr",
+      "title": "Grid",
+      "category": "grid",
+      "description": "Sistema de layout bidimensional (filas y columnas) más potente de CSS. Permite dividir una página en áreas principales y definir la relación en términos de tamaño, posición y capas.",
+      "keyPoints": [
+        "Opera en dos ejes a la vez (filas y columnas)",
+        "Usa una unidad fraccional `fr` para espacio flexible",
+        "Permite layouts complejos sin hacks de floats o positioning"
+      ],
+      "syntax": "display: grid;\ngrid-template-columns: 1fr 2fr;",
+      "codeExample": ".container {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 1rem;\n}",
+      "useCases": [
+        "Layouts de página completos (Header, Sidebar, Main, Footer)",
+        "Galerías de imágenes",
+        "Tableros de control (Dashboards)"
+      ],
+      "bestPractices": [
+        "Usar `fr` en lugar de `%` para distribución fluida",
+        "Usar `repeat()` para patrones repetitivos",
+        "Nombrar áreas con `grid-template-areas` para legibilidad"
+      ],
+      "commonMistakes": [
+        "Usar Grid para alineaciones lineales simples (mejor Flexbox)",
+        "Complicarse con sintaxis de líneas (grid-row: 1/3) en lugar de áreas"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Diferencia principal entre Flex y Grid?",
+          "options": [
+            "Flex es 1D (fila O columna), Grid es 2D (ambos)",
+            "Flex es viejo",
+            "Grid es para datos",
+            "Ninguna"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Flexbox está diseñado para layouts unidimensionales. Grid está diseñado para layouts bidimensionales."
+        },
+        {
+          "question": "¿Qué unidad representa una fracción del espacio libre?",
+          "options": ["%", "px", "fr", "em"],
+          "correctAnswer": 2,
+          "explanation": "La unidad `fr` (fraction) distribuye el espacio disponible en el contenedor grid proporcionalmente."
+        },
+        {
+          "question": "¿Qué hace `repeat(3, 1fr)`?",
+          "options": [
+            "Crea 3 columnas iguales",
+            "Repite 3 veces el CSS",
+            "Crea 1 columna de 3fr",
+            "Error"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Es una forma corta de escribir `1fr 1fr 1fr`. Crea tres pistas (columnas/filas) de igual tamaño."
+        },
+        {
+          "question": "¿Cómo se define el espacio entre celdas?",
+          "options": ["margin", "padding", "gap (o grid-gap)", "spacing"],
+          "correctAnswer": 2,
+          "explanation": "`gap` define el canal o espacio vacío entre filas y columnas del grid."
+        },
+        {
+          "question": "¿Qué función ajusta columnas automáticamente?",
+          "options": [
+            "auto-fill / auto-fit",
+            "flex-wrap",
+            "grid-auto",
+            "responsive()"
+          ],
+          "correctAnswer": 0,
+          "explanation": "En combinación con `minmax()`, permiten crear grids responsivos sin media queries: `repeat(auto-fit, minmax(200px, 1fr))`."
+        }
+      ]
+    },
+    "gap": {
+      "id": "gap",
+      "symbol": "Gap",
+      "title": "Gap",
+      "category": "flexbox",
+      "description": "Define el espacio entre filas y columnas en layouts Grid, Flexbox y Multi-column. Reemplaza la necesidad de usar márgenes en los hijos.",
+      "keyPoints": [
+        "Funciona en Flexbox y Grid",
+        "No agrega espacio en los bordes exteriores del contenedor",
+        "Sintaxis: `gap: fila columna` o un solo valor"
+      ],
+      "syntax": "gap: 20px | 1rem 2rem;",
+      "codeExample": ".flex-container {\n  display: flex;\n  gap: 1rem;\n}",
+      "useCases": [
+        "Separar tarjetas en una galería",
+        "Espaciar botones en una barra de herramientas",
+        "Reemplazar selectores tipo `child + child { margin-left }`"
+      ],
+      "bestPractices": [
+        "Preferir `gap` sobre márgenes para espaciado interno de layouts",
+        "Usarlo para mantener un ritmo vertical y horizontal consistente"
+      ],
+      "commonMistakes": [
+        "Creer que solo funciona en Grid (ahora funciona en Flex en todos los navegadores modernos)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Gap agrega espacio exterior?",
+          "options": [
+            "Sí",
+            "No, solo entre elementos",
+            "Depende del padding",
+            "Solo si es grid"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`gap` solo aplica espacio entre los items hijos, no entre los items y el borde del contenedor padre."
+        },
+        {
+          "question": "¿Funciona en Flexbox?",
+          "options": [
+            "Sí",
+            "No, es de Grid",
+            "Solo en Safari",
+            "Solo en columnas"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Sí, es parte del estándar moderno de Flexbox y tiene amplio soporte."
+        },
+        {
+          "question": "gap: 10px 20px. ¿Cuál es cuál?",
+          "options": [
+            "Row (vert), Column (horiz)",
+            "Column, Row",
+            "Top, Left",
+            "X, Y"
+          ],
+          "correctAnswer": 0,
+          "explanation": "El primer valor es para el eje de fila (espacio vertical), el segundo para el eje de columna (espacio horizontal)."
+        },
+        {
+          "question": "¿Es animable gap?",
+          "options": ["Sí", "No", "Solo en Grid", "Depende"],
+          "correctAnswer": 0,
+          "explanation": "Sí, `gap` es una propiedad animable, permitiendo transiciones suaves de espaciado."
+        },
+        {
+          "question": "¿Cómo se llamaba antes en Grid?",
+          "options": ["grid-gap", "gutter", "spacing", "cell-spacing"],
+          "correctAnswer": 0,
+          "explanation": "Originalmente era `grid-gap`. Ahora `gap` es el estándar universal, pero `grid-gap` sigue funcionando como alias."
+        }
+      ]
+    },
+    "flex-direction": {
+      "id": "flex-direction",
+      "symbol": "Fxd",
+      "title": "Flex Direction",
+      "category": "flexbox",
+      "description": "Establece el eje principal (main-axis) defininedo la dirección en la que se colocan los items.",
+      "keyPoints": [
+        "Defecto: row (izquierda a derecha)",
+        "Cambia el comportamiento de justify-content y align-items",
+        "column: apila verticalmente"
+      ],
+      "syntax": "flex-direction: row | row-reverse | column | column-reverse;",
+      "codeExample": ".sidebar {\n  display: flex;\n  flex-direction: column;\n}",
+      "useCases": [
+        "Cambiar de fila a columna en móviles (Responsive design)",
+        "Crear listas verticales",
+        "Reordenar items visualmente (reverse)"
+      ],
+      "bestPractices": [
+        "Usar `column-reverse` o `row-reverse` con precaución, ya que altera el orden de lectura para lectores de pantalla"
+      ],
+      "commonMistakes": [
+        "Olvidar que al cambiar a columna, `justify-content` ahora controla la vertical y `align-items` la horizontal"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Cuál es el valor por defecto?",
+          "options": ["column", "row", "auto", "inline"],
+          "correctAnswer": 1,
+          "explanation": "Por defecto, los flex items se alinean en una fila horizontal (row) de izquierda a derecha."
+        },
+        {
+          "question": "En `column`, ¿quién controla el eje vertical?",
+          "options": ["align-items", "justify-content", "text-align", "float"],
+          "correctAnswer": 1,
+          "explanation": "`justify-content` siempre controla el eje principal. En `column`, el eje principal es vertical."
+        },
+        {
+          "question": "row-reverse afecta a...",
+          "options": [
+            "Solo el orden visual",
+            "El orden del DOM",
+            "El color",
+            "El ancho"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Cambia el orden en que se pintan los items, pero en el HTML siguen igual (ojo con la accesibilidad)."
+        }
+      ]
+    },
+    "flex-wrap": {
+      "id": "flex-wrap",
+      "symbol": "Fxw",
+      "title": "Flex Wrap",
+      "category": "flexbox",
+      "description": "Controla si los flex items deben forzarse en una sola línea o si pueden envolverse en múltiples líneas.",
+      "keyPoints": [
+        "Defecto: nowrap (intenta meter todo en una línea, encogiendo items si es necesario)",
+        "wrap: permite saltar a la siguiente línea si no hay espacio",
+        "Habilita el uso de `align-content`"
+      ],
+      "syntax": "flex-wrap: nowrap | wrap | wrap-reverse;",
+      "codeExample": ".gallery {\n  display: flex;\n  flex-wrap: wrap;\n}",
+      "useCases": [
+        "Galerías de imágenes responsive",
+        "Etiquetas o tags que fluyen",
+        "Menús que colapsan"
+      ],
+      "bestPractices": [
+        "Combinar con `gap` para espaciado uniforme",
+        "Usar `flex-flow` como shorthand de dirección + wrap"
+      ],
+      "commonMistakes": [
+        "Usar `width: 100%` en hijos sin wrap esperando que bajen (en nowrap se apretujarán)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué pasa por defecto si los items no caben?",
+          "options": [
+            "Se salen del div",
+            "Se encogen (shrink)",
+            "Bajan de línea",
+            "Se ocultan"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Como por defecto es `nowrap`, Flexbox activará `flex-shrink` para intentar que quepan a toda costa."
+        },
+        {
+          "question": "¿Qué valor permite múltiples líneas?",
+          "options": ["multiline", "wrap", "scroll", "block"],
+          "correctAnswer": 1,
+          "explanation": "`wrap` indica que si un item no cabe, debe pasar a la línea (o columna) siguiente."
+        },
+        {
+          "question": "¿Qué propiedad alinea las líneas creadas por wrap?",
+          "options": [
+            "align-items",
+            "align-content",
+            "justify-lines",
+            "text-align"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`align-content` distribuye el espacio entre las múltiples filas/columnas creadas (similar a justify-content pero para líneas)."
+        }
+      ]
+    },
+    "box-shadow": {
+      "id": "box-shadow",
+      "symbol": "Bxsh",
+      "title": "Box Shadow",
+      "category": "visual",
+      "description": "Añade efectos de sombra alrededor del marco de un elemento.",
+      "keyPoints": [
+        "Valores: offset-x offset-y blur-radius spread-radius color",
+        "Palabra clave `inset` crea sombra interior",
+        "Se pueden apilar múltiples sombras con comas"
+      ],
+      "syntax": "box-shadow: 10px 5px 5px black;",
+      "codeExample": ".card {\n  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);\n}",
+      "useCases": [
+        "Dar profundidad (Material Design)",
+        "Resaltar elementos en hover",
+        "Crear bordes múltiples sin afectar layout"
+      ],
+      "bestPractices": [
+        "Usar sombras sutiles y semitransparentes (rgba) para realismo",
+        "Evitar sombras negras al 100% de opacidad (se ven sucias)",
+        "Usar `spread` negativo para sombras 'elevadas'"
+      ],
+      "commonMistakes": [
+        "Usar sombras pesadas que ralentizan el renderizado en móviles",
+        "Olvidar que la sombra no ocupa espacio en el layout (puede tapar otros elementos)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué hace la palabra clave `inset`?",
+          "options": [
+            "Sombra interior",
+            "Sombra doble",
+            "Sombra difusa",
+            "Quita la sombra"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Cambia la sombra de ser una sombra arrojada (drop shadow) a una sombra interior dentro del borde."
+        },
+        {
+          "question": "¿El cuarto valor numérico es...?",
+          "options": ["Blur", "Spread (expansión)", "Color", "Opacidad"],
+          "correctAnswer": 1,
+          "explanation": "El orden normal es: X, Y, Blur, Spread. El spread agranda o achica la sombra antes de difuminarla."
+        },
+        {
+          "question": "¿Cuántas sombras puede tener un elemento?",
+          "options": ["1", "2", "Infinitas (separadas por coma)", "Ninguna"],
+          "correctAnswer": 2,
+          "explanation": "Puedes definir tantas sombras como quieras, separándolas por comas. Se pintan de la primera (arriba) a la última (abajo)."
+        }
+      ]
+    },
+    "opacity": {
+      "id": "opacity",
+      "symbol": "Op",
+      "title": "Opacity",
+      "category": "visual",
+      "description": "Establece la opacidad de un elemento. Afecta al elemento y a todos sus hijos.",
+      "keyPoints": [
+        "Va de 0.0 (transparente) a 1.0 (opaco)",
+        "El elemento sigue ocupando espacio y recibiendo clicks aunque sea 0",
+        "Crea un nuevo contexto de apilamiento (stacking context)"
+      ],
+      "syntax": "opacity: 0.5;",
+      "codeExample": "button:disabled {\n  opacity: 0.6;\n  cursor: not-allowed;\n}",
+      "useCases": [
+        "Deshabilitar visualmente elementos",
+        "Efectos de fade-in / fade-out",
+        "Imágenes fantasma"
+      ],
+      "bestPractices": [
+        "Si solo quieres fondo transparente pero texto opaco, usa `background-color: rgba(...)` en lugar de opacity",
+        "Usar `will-change: opacity` para animaciones de alto rendimiento"
+      ],
+      "commonMistakes": [
+        "Usar opacity para ocultar algo y olvidar que el usuario aún puede clicarlo (usar visibility: hidden para eso)",
+        "Intentar que el texto sea opaco dentro de un div con opacity 0.5 (no se puede desheredar)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Un botón con opacity: 0 recibe clics?",
+          "options": ["Sí", "No", "Solo si tiene z-index", "A veces"],
+          "correctAnswer": 0,
+          "explanation": "Sí. Es invisible pero sigue ahí. Para que no reciba clics usa `pointer-events: none` o `visibility: hidden`."
+        },
+        {
+          "question": "Diferencia con `rgba` de fondo",
+          "options": [
+            "Ninguna",
+            "Opacity afecta a hijos, rgba solo al fondo",
+            "rgba es más lento",
+            "opacity es deprecated"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`opacity` hace transparente TODO el elemento y sus hijos. `rgba` solo aplica transparencia al color específico."
+        },
+        {
+          "question": "¿Valor para ser semi-transparente?",
+          "options": ["0.5", "50", "half", "semitransparent"],
+          "correctAnswer": 0,
+          "explanation": "Acepta un número entre 0 y 1."
+        }
+      ]
+    },
+    "grid-template-columns": {
+      "id": "grid-template-columns",
+      "symbol": "Gtc",
+      "title": "Grid Template Cols",
+      "category": "grid",
+      "description": "Define los nombres de las líneas y las funciones de tamaño de las columnas del grid.",
+      "keyPoints": [
+        "Acepta longitudes, porcentajes, fr, auto, min-content, max-content",
+        "Esencial para definir la estructura horizontal",
+        "`repeat()` simplifica la sintaxis"
+      ],
+      "syntax": "grid-template-columns: 200px 1fr auto;",
+      "codeExample": ".layout {\n  display: grid;\n  grid-template-columns: 250px 1fr;\n}",
+      "useCases": [
+        "Sidebar fijo + contenido fluido",
+        "Galería de 12 columnas",
+        "Tablas complejas"
+      ],
+      "bestPractices": [
+        "Usar `minmax()` para evitar desbordamientos",
+        "Usar nombres de líneas `[main-start]` para layouts complejos"
+      ],
+      "commonMistakes": [
+        "Olvidar que 'auto' puede crecer más de lo deseado si hay contenido largo"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Cómo hacer 3 columnas iguales?",
+          "options": [
+            "grid-cols: 3",
+            "repeat(3, 1fr)",
+            "width: 33%",
+            "flex: 3"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`repeat(3, 1fr)` crea tres columnas, cada una ocupando una fracción igual del espacio."
+        },
+        {
+          "question": "¿Qué hace `minmax(100px, 1fr)`?",
+          "options": [
+            "Mínimo 100px, máximo lo que sobre",
+            "Siempre 100px",
+            "Error",
+            "Mínimo 1fr"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Asegura que la columna nunca sea menor a 100px, pero si hay espacio, crece para ocupar 1fr."
+        },
+        {
+          "question": "¿Qué significa `auto` en grid?",
+          "options": [
+            "Ancho 0",
+            "Tamaño basado en contenido/espacio",
+            "Ancho infinito",
+            "50%"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`auto` se ajusta generalmente al tamaño del contenido máixmo o al espacio disponible mínimo."
+        }
+      ]
+    },
+    "visibility": {
+      "id": "visibility",
+      "symbol": "Vis",
+      "title": "Visibility",
+      "category": "visual",
+      "description": "Controla si un elemento es visible o no, pero sin afectar el layout (a diferencia de display: none).",
+      "keyPoints": [
+        "Hidden: el elemento no se ve pero OCUPA ESPACIO",
+        "Visible: valor por defecto",
+        "Collapse: usado principalmente en tablas"
+      ],
+      "syntax": "visibility: visible | hidden | collapse;",
+      "codeExample": ".ghost {\n  visibility: hidden;\n  /* Ocupa espacio en blanco */\n}",
+      "useCases": [
+        "Ocultar elementos temporalmente manteniendo la estructura",
+        "Animaciones complejas donde display:none rompe la transición",
+        "Accesibilidad (screen readers a veces lo ignoran, ojo)"
+      ],
+      "bestPractices": [
+        "Usar `display: none` si quieres que desaparezca el espacio",
+        "Usar `visibility: hidden` si quieres mantener el flujo del documento intacto"
+      ],
+      "commonMistakes": [
+        "Confundir con opacity: 0 (visibility: hidden saca al elemento de la accesibilidad y clicks, opacity no)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Diferencia con display: none?",
+          "options": [
+            "Ninguna",
+            "visibility ocupa espacio",
+            "display ocupa espacio",
+            "visibility borra el DOM"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`display: none` elimina el elemento del render tree. `visibility: hidden` lo deja ahí, ocupando espacio, pero invisible."
+        },
+        {
+          "question": "¿Recibe clics un elemento hidden?",
+          "options": ["Sí", "No", "A veces", "Solo hover"],
+          "correctAnswer": 1,
+          "explanation": "No, un elemento con `visibility: hidden` no recibe eventos de puntero (clicks, hover)."
+        },
+        {
+          "question": "¿Afecta a los descendientes?",
+          "options": ["Sí, se ocultan", "No", "Solo directos", "Depende"],
+          "correctAnswer": 0,
+          "explanation": "Sí, se hereda. *Pero* si un hijo tiene `visibility: visible`, ¡ese hijo se verá aunque el padre esté oculto!"
+        }
+      ]
+    },
+    "flex-grow": {
+      "id": "flex-grow",
+      "symbol": "Fxg",
+      "title": "Flex Grow",
+      "category": "flexbox",
+      "description": "Define la capacidad de un flex item para crecer si hay espacio disponible.",
+      "keyPoints": [
+        "Admite números (enteros o decimales)",
+        "0 (default): No crece",
+        "Si todos tienen 1, comparten espacio igual"
+      ],
+      "syntax": "flex-grow: 1;",
+      "codeExample": ".main {\n  flex-grow: 2;\n}\n.side {\n  flex-grow: 1;\n}",
+      "useCases": [
+        "Hacer que un footer se pegue abajo (margin-top: auto o flex-grow en contenido)",
+        "Columnas proporcionales (2 vs 1)"
+      ],
+      "bestPractices": [
+        "Usar el shorthand `flex` en lugar de `flex-grow` aislado"
+      ],
+      "commonMistakes": [
+        "Pensar que flex-grow: 1 hace que el elemento mida 100% (solo reparte el espacio *sobrante*)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué pasa si pongo flex-grow: 0 (default)?",
+          "options": [
+            "El item desaparece",
+            "El item no crece más de su base",
+            "El item llena todo",
+            "Error"
+          ],
+          "correctAnswer": 1,
+          "explanation": "El item mantendrá su tamaño base (`flex-basis` o contenido) y no absorberá espacio extra."
+        },
+        {
+          "question": "Si Item A tiene grow: 2 y Item B tiene grow: 1...",
+          "options": [
+            "A es doble de ancho que B",
+            "A recibe el doble de espacio *sobrante* que B",
+            "A mide 200px",
+            "B desaparece"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`flex-grow` distribuye el espacio *libre* disponible. Si el contenido base es muy grande, la proporción final no será exactamente 2:1."
+        },
+        {
+          "question": "¿Acepta valores negativos?",
+          "options": ["Sí", "No", "Solo en Firefox", "Convierte a 0"],
+          "correctAnswer": 1,
+          "explanation": "Los valores negativos no son válidos."
+        }
+      ]
+    },
+    "flex-shrink": {
+      "id": "flex-shrink",
+      "symbol": "Fxs",
+      "title": "Flex Shrink",
+      "category": "flexbox",
+      "description": "Define la capacidad de un flex item para encogerse si falta espacio.",
+      "keyPoints": [
+        "1 (default): Se encoge si es necesario",
+        "0: No se encoge (mantiene su tamaño base y puede desbordar)",
+        "Números mayores encogen más agresivamente"
+      ],
+      "syntax": "flex-shrink: 0;",
+      "codeExample": ".logo {\n  flex-shrink: 0; /* No aplastar logo */\n  width: 50px;\n}",
+      "useCases": [
+        "Evitar que iconos o avatares se deformen",
+        "Mantener anchos fijos en sidebars dentro de flex"
+      ],
+      "bestPractices": [
+        "Casi siempre querrás `flex-shrink: 0` en imágenes o iconos dentro de flexbars"
+      ],
+      "commonMistakes": [
+        "Dejar el default (1) y ver cómo el layout se rompe en pantallas pequeñas"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Cuál es el valor por defecto?",
+          "options": ["0", "1", "auto", "none"],
+          "correctAnswer": 1,
+          "explanation": "Por defecto, los items flex se encogen para evitar desbordar el contenedor."
+        },
+        {
+          "question": "¿Cómo evito que mi imagen se aplaste?",
+          "options": [
+            "width: 100%",
+            "flex-shrink: 0",
+            "flex-grow: 1",
+            "overflow: hidden"
+          ],
+          "correctAnswer": 1,
+          "explanation": "`flex-shrink: 0` prohíbe al item reducir su tamaño por debajo de su `flex-basis` o ancho definido."
+        },
+        {
+          "question": "¿Funciona si hay wrap?",
+          "options": [
+            "Sí, siempre",
+            "Normalmente no es necesario",
+            "Solo en column",
+            "No hace nada"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Si hay `flex-wrap: wrap`, los items saltan de línea antes de necesitar encogerse, aunque `shrink` sigue activo si una sola línea no basta."
+        }
+      ]
+    },
+    "grid-template-rows": {
+      "id": "grid-template-rows",
+      "symbol": "Gtr",
+      "title": "Grid Template Rows",
+      "category": "grid",
+      "description": "Define las filas explícitas del grid.",
+      "keyPoints": [
+        "Similar a template-columns pero en vertical",
+        "Puede usarse `min-content`, `max-content`",
+        "A menudo se omite si se usa `grid-auto-rows`"
+      ],
+      "syntax": "grid-template-rows: auto 1fr auto;",
+      "codeExample": ".page {\n  display: grid;\n  grid-template-rows: 60px 1fr 40px; /* Header Main Footer */\n  height: 100vh;\n}",
+      "useCases": [
+        "Layout clásico 'Holy Grail'",
+        "Filas de altura fija y contenido flexible"
+      ],
+      "bestPractices": [
+        "Usar `fr` para que el contenido principal ocupe 'lo que sobra' verticalmente"
+      ],
+      "commonMistakes": [
+        "Definir filas fijas (px) y que el contenido se desborde si el texto es largo (mejor `minmax` o `auto`)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Qué valor ajusta la fila al contenido?",
+          "options": ["1fr", "auto", "fixed", "100%"],
+          "correctAnswer": 1,
+          "explanation": "`auto` (o `min-content`) ajusta la altura de la fila al tamaño de su contenido."
+        },
+        {
+          "question": "¿Se pueden nombrar las líneas?",
+          "options": ["Sí, con []", "No", "Solo en columnas", "Con IDs"],
+          "correctAnswer": 0,
+          "explanation": "Puedes dar nombres como `[header-start] auto [header-end]` para luego posicionar items fácilmente."
+        },
+        {
+          "question": "¿Qué pasa si pongo más contenido que filas definidas?",
+          "options": [
+            "Se oculta",
+            "Se crean filas implícitas",
+            "Error",
+            "Se van a la última"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Grid creará filas 'implícitas' controladas por `grid-auto-rows` para acomodar el contenido extra."
+        }
+      ]
+    },
+    "grid-column": {
+      "id": "grid-column",
+      "symbol": "Gc",
+      "title": "Grid Column",
+      "category": "grid",
+      "description": "Shorthand para `grid-column-start` y `grid-column-end`. Determina cuánto abarca un item o dónde empieza/termina.",
+      "keyPoints": [
+        "Sintaxis: `start / end`",
+        "Puede usar números de línea o `span N`",
+        "-1 refiere a la última línea"
+      ],
+      "syntax": "grid-column: 1 / 3; | grid-column: span 2;",
+      "codeExample": ".header {\n  grid-column: 1 / -1; /* Todo el ancho */\n}",
+      "useCases": [
+        "Hacer que un elemento ocupe varias columnas",
+        "Superponer elementos en el grid"
+      ],
+      "bestPractices": [
+        "Usar `1 / -1` para ocupar todo el ancho explícito",
+        "Usar `span` para flexibilidad (no importa dónde empiece, ocupa N)"
+      ],
+      "commonMistakes": [
+        "Confundirse con los índices (empiezan en 1, no 0)",
+        "Olvidar la barra /"
+      ],
+      "quizPool": [
+        {
+          "question": "¿grid-column: 1 / 3 ocupa...?",
+          "options": ["3 columnas", "2 columnas", "Columna 1 y 3", "Nada"],
+          "correctAnswer": 1,
+          "explanation": "Empieza en la línea 1 y termina en la línea 3. Ocupa columnas 1 y 2."
+        },
+        {
+          "question": "¿Qué hace `span 2`?",
+          "options": [
+            "Empieza en 2",
+            "Ocupa 2 celdas de ancho",
+            "Termina en 2",
+            "Margin 2"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Le dice al item que se extienda o atraviese 2 pistas (tracks) desde su posición de inicio."
+        },
+        {
+          "question": "¿Cómo selecciono la última línea?",
+          "options": ["last", "999", "-1", "end"],
+          "correctAnswer": 2,
+          "explanation": "El índice -1 siempre refiere a la última línea explícita del grid en ese eje."
+        }
+      ]
+    },
+    "grid-row": {
+      "id": "grid-row",
+      "symbol": "Grw",
+      "title": "Grid Row",
+      "category": "grid",
+      "description": "Shorthand para `grid-row-start` y `grid-row-end`.",
+      "keyPoints": [
+        "Igual que grid-column pero vertical",
+        "Permite expandir items verticalmente"
+      ],
+      "syntax": "grid-row: 1 / span 2;",
+      "codeExample": ".sidebar {\n  grid-row: 1 / 3;\n}",
+      "useCases": [
+        "Sidebars altos",
+        "Mosaicos irregulares (Masonry layouts manuales)"
+      ],
+      "bestPractices": [
+        "Combinar con `grid-auto-flow: dense` para rellenar huecos"
+      ],
+      "commonMistakes": ["Solapar contenido accidentalmente sin z-index"],
+      "quizPool": [
+        {
+          "question": "¿Para qué sirve grid-row?",
+          "options": ["Ancho", "Alto/Posición vertical", "Color", "Margen"],
+          "correctAnswer": 1,
+          "explanation": "Controla la ubicación y extensión vertical del elemento en el grid."
+        },
+        {
+          "question": "¿Sintaxis Start / End?",
+          "options": ["Sí", "No", "Solo End", "Solo Start"],
+          "correctAnswer": 0,
+          "explanation": "Admite la misma sintaxis de barra: `inicio / fin`."
+        },
+        {
+          "question": "¿Puedo superponer items?",
+          "options": ["Sí", "No, choca", "Grid explota", "Solo en Flex"],
+          "correctAnswer": 0,
+          "explanation": "Sí, Grid permite explícitamente colocar varios items en las mismas celdas/filas, superponiéndolos."
+        }
+      ]
+    },
+    "grid-area": {
+      "id": "grid-area",
+      "symbol": "Ga",
+      "title": "Grid Area",
+      "category": "grid",
+      "description": "Shorthand ultra-poderoso. Puede definir start/end de row y col A LA VEZ, o referenciar un nombre de `grid-template-areas`.",
+      "keyPoints": [
+        "Sintaxis numérica: row-start / col-start / row-end / col-end",
+        "Sintaxis nominal: el nombre del área (e.g. `header`)"
+      ],
+      "syntax": "grid-area: header | 1 / 1 / 3 / 4;",
+      "codeExample": ".item {\n  grid-area: header;\n}",
+      "useCases": [
+        "Asignar elementos a áreas nombradas (semántico y limpio)",
+        "Posicionar rápidamente en coordenadas numéricas"
+      ],
+      "bestPractices": [
+        "Usar `grid-template-areas` en el padre y `grid-area: nombre` en los hijos para layouts muy legibles"
+      ],
+      "commonMistakes": [
+        "Confundir el orden de los números (es Row-Start, Col-Start, Row-End, Col-End)"
+      ],
+      "quizPool": [
+        {
+          "question": "¿Cuál es el orden numérico?",
+          "options": [
+            "X / Y / X2 / Y2",
+            "RowS / ColS / RowE / ColE",
+            "Col / Row",
+            "W / H"
+          ],
+          "correctAnswer": 1,
+          "explanation": "Primero fila inicio, luego columna inicio, luego fila fin, luego columna fin."
+        },
+        {
+          "question": "¿Qué hace `grid-template-areas`?",
+          "options": [
+            "Define el mapa del grid con nombres",
+            "Crea áreas vacías",
+            "Define colores",
+            "Nada"
+          ],
+          "correctAnswer": 0,
+          "explanation": "Permite dibujar el layout con strings: `'header header' 'nav main'`."
+        },
+        {
+          "question": "¿grid-area sirve para ambos ejes?",
+          "options": ["Sí", "No", "Solo X", "Solo Y"],
+          "correctAnswer": 0,
+          "explanation": "Sí, controla posición y tamaño en ambas dimensiones simultáneamente."
+        }
+      ]
+    }
+  }
+}

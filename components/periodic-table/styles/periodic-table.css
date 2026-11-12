@@ -1,0 +1,105 @@
+/* ========================================
+   PERIODIC TABLE - BASE STYLES
+   ======================================== */
+
+/* Variables CSS Globales */
+:root {
+  /* Colores de categorías */
+  --pt-document: #7eff00;
+  --pt-metadata: #7eff00;
+  --pt-group: #f3f700;
+  --pt-textual: #d4c4b0;
+  --pt-multimedia: #ffb3ba;
+  --pt-tables: #b3ffda;
+  --pt-form: #b3ffda;
+  --pt-scripting: #ffb3ba;
+  --pt-interactive: #b3f5ff;
+  --pt-semantics: #b3f5ff;
+  --pt-ideographic: #85d4ff;
+  --pt-edition: #85d4ff;
+  --pt-obsolete: #9a9a9a;
+
+  /* Espaciado mejorado (aumentado) */
+  --pt-cell-size: 65px; /* Celda optimizada para fit */
+  --pt-cell-gap: 6px; /* Gap entre celdas */
+  --pt-grid-padding: 20px; /* Padding del contenedor */
+  --pt-border-radius: 8px; /* Radio de bordes */
+
+  /* Tipografía mejorada */
+  --pt-symbol-size: 1.2rem; /* Símbolo */
+  --pt-name-size: 0.5rem; /* Más pequeño para nombres largos CSS */
+  --pt-symbol-weight: 800;
+  --pt-name-weight: 600;
+
+  /* Colores base */
+  --pt-bg-dark: #0a0a0a;
+  --pt-bg-darker: #050505;
+  --pt-text-primary: #ffffff;
+  --pt-text-secondary: #888888;
+  --pt-border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Container Principal */
+.periodic-table-container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: var(--pt-grid-padding);
+}
+
+/* Header */
+.periodic-table-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.periodic-table-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #7eff00, #00d4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.periodic-table-subtitle {
+  font-size: 1.1rem;
+  color: var(--pt-text-secondary);
+}
+
+/* Wrapper del Grid */
+.periodic-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  padding: 1rem 0;
+}
+
+/* Grid Principal */
+.periodic-table-grid {
+  display: grid;
+  grid-template-columns: repeat(18, var(--pt-cell-size));
+  grid-auto-rows: var(--pt-cell-size);
+  gap: var(--pt-cell-gap);
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* Scrollbar personalizado */
+.periodic-table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.periodic-table-wrapper::-webkit-scrollbar-track {
+  background: var(--pt-bg-darker);
+  border-radius: 4px;
+}
+
+.periodic-table-wrapper::-webkit-scrollbar-thumb {
+  background: var(--pt-border-color);
+  border-radius: 4px;
+}
+
+.periodic-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}

@@ -1,0 +1,17 @@
+{
+  "name": "FrankDev | Software Architect Portfolio",
+  "description": "Portafolio profesional de Frank Abanto. Full-Stack Developer especializado en React, Node.js e Inteligencia Artificial.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "keywords": [
+    "React",
+    "Astro",
+    "FrankDev",
+    "FullStack",
+    "Software Engineer",
+    "Gemini AI"
+  ],
+  "author": "Frank Abanto"
+}

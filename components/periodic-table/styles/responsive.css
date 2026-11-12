@@ -1,0 +1,156 @@
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Desktop Grande (>1600px) - Celdas más grandes */
+@media (min-width: 1600px) {
+  :root {
+    --pt-cell-size: 68px;
+    --pt-cell-gap: 7px;
+    --pt-grid-padding: 32px;
+    --pt-symbol-size: 2rem;
+    --pt-name-size: 0.9rem;
+  }
+
+  .periodic-table-title {
+    font-size: 3rem;
+  }
+}
+
+/* Desktop (1200-1600px) */
+@media (min-width: 1200px) and (max-width: 1599px) {
+  :root {
+    --pt-cell-size: 65px;
+    --pt-cell-gap: 6px;
+  }
+}
+
+/* Laptop (992-1199px) - Reducción ligera */
+@media (min-width: 992px) and (max-width: 1199px) {
+  :root {
+    --pt-cell-size: 65px;
+    --pt-cell-gap: 6px;
+    --pt-grid-padding: 20px;
+    --pt-symbol-size: 1.6rem;
+    --pt-name-size: 0.8rem;
+  }
+
+  .periodic-table-title {
+    font-size: 2.2rem;
+  }
+}
+
+/* Tablet (768-991px) - Con scroll horizontal */
+@media (min-width: 768px) and (max-width: 991px) {
+  :root {
+    --pt-cell-size: 60px;
+    --pt-cell-gap: 6px;
+    --pt-grid-padding: 16px;
+    --pt-symbol-size: 1.4rem;
+    --pt-name-size: 0.75rem;
+  }
+
+  .periodic-table-title {
+    font-size: 2rem;
+  }
+
+  .periodic-table-subtitle {
+    font-size: 1rem;
+  }
+
+  .periodic-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .periodic-table-grid {
+    width: max-content;
+  }
+}
+
+/* Mobile Grande (576-767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  :root {
+    --pt-cell-size: 50px;
+    --pt-cell-gap: 4px;
+    --pt-grid-padding: 12px;
+    --pt-symbol-size: 1.2rem;
+    --pt-name-size: 0.7rem;
+  }
+
+  .periodic-table-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .periodic-table-title {
+    font-size: 1.8rem;
+  }
+
+  .periodic-table-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .element-cell {
+    padding: 6px;
+  }
+}
+
+/* Mobile Pequeño (<576px) */
+@media (max-width: 575px) {
+  :root {
+    --pt-cell-size: 45px;
+    --pt-cell-gap: 3px;
+    --pt-grid-padding: 8px;
+    --pt-symbol-size: 1rem;
+    --pt-name-size: 0.65rem;
+  }
+
+  .periodic-table-header {
+    margin-bottom: 1rem;
+  }
+
+  .periodic-table-title {
+    font-size: 1.5rem;
+  }
+
+  .periodic-table-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .element-cell {
+    padding: 4px;
+  }
+
+  .element-cell__symbol {
+    margin-bottom: 2px;
+  }
+}
+
+/* Orientación Landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+  .periodic-table-header {
+    margin-bottom: 1rem;
+  }
+
+  .periodic-table-title {
+    font-size: 1.5rem;
+  }
+
+  .periodic-table-subtitle {
+    display: none;
+  }
+}
+
+/* Dark Mode support (si lo necesitas en futuro) */
+@media (prefers-color-scheme: dark) {
+  /* Ya está en dark por defecto, pero por si acaso */
+}
+
+/* Reduce motion para accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
