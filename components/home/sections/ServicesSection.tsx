@@ -1,8 +1,13 @@
-import React from "react";
+import React, { Suspense, lazy, useRef } from "react";
 import Reveal from "./Reveal";
 import CalLink from "../../shared/CalLink";
 import { ServiceIcon, type ServiceIconName } from "../heroIcons";
 import { CONTACT_ID, scrollToSection } from "./homeLinks";
+import { useInView } from "./useInView";
+import type { DemoId } from "./demos";
+
+/** Las demos se cargan aparte, al acercarse a la sección. */
+const ServiceDemo = lazy(() => import("./demos"));
 
 /** Tipos de cliente a los que apunta cada servicio. */
 type Audience = "pequenos" | "emprendedores" | "medianas" | "independientes";
@@ -23,11 +28,13 @@ interface Service {
   pain: string;
   examples: [string, string];
   ideal: Audience[];
+  demo: DemoId;
 }
 
 const SERVICES: Service[] = [
   {
     title: "Páginas web",
+    demo: "web",
     icon: "globe",
     pain: "Que te encuentren en Google y te escriban, sin depender solo de las redes sociales.",
     examples: ["Web con catálogo y pedidos por WhatsApp", "Landing para una campaña o un lanzamiento"],
@@ -35,6 +42,7 @@ const SERVICES: Service[] = [
   },
   {
     title: "Agentes y chatbots de IA",
+    demo: "chat",
     icon: "bot",
     pain: "Un asistente que responde y hace tareas por ti, con la información real de tu negocio.",
     examples: ["Chatbot que responde en WhatsApp 24/7", "Asistente interno que consulta tus precios y documentos"],
@@ -42,6 +50,7 @@ const SERVICES: Service[] = [
   },
   {
     title: "Automatización de procesos",
+    demo: "flow",
     icon: "zap",
     pain: "Deja de copiar y pegar datos entre hojas, correos y sistemas cada semana.",
     examples: ["Reporte de ventas automático cada lunes", "Pedido nuevo → factura, aviso y registro sin tocar nada"],
@@ -49,6 +58,7 @@ const SERVICES: Service[] = [
   },
   {
     title: "Integraciones y APIs",
+    demo: "int",
     icon: "blend",
     pain: "Que tus herramientas se hablen entre sí y la información viva en un solo lugar.",
     examples: ["Formulario web conectado a tu CRM o Google Sheets", "Pagos e inventario sincronizados con tu tienda online"],
@@ -56,6 +66,7 @@ const SERVICES: Service[] = [
   },
   {
     title: "Dashboards y datos",
+    demo: "dash",
     icon: "chart",
     pain: "Decide con números claros en una pantalla, no con hojas sueltas ni intuición.",
     examples: ["Panel de ventas, gastos y stock al día", "Alerta cuando un indicador se sale de lo normal"],
@@ -63,6 +74,7 @@ const SERVICES: Service[] = [
   },
   {
     title: "Atención al cliente con IA",
+    demo: "inbox",
     icon: "chat",
     pain: "Responde rápido a cada cliente, también fuera de horario, sin sumar más personal.",
     examples: ["Respuestas automáticas a preguntas frecuentes en web y WhatsApp", "Agenda de citas y paso a una persona cuando hace falta"],
@@ -73,6 +85,22 @@ const SERVICES: Service[] = [
 const AudienceIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">{children}</svg>
 );
+
+const DemoSlot: React.FC<{ id: DemoId }> = ({ id }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const near = useInView(ref, { once: true, rootMargin: "600px 0px", threshold: 0 });
+  return (
+    <div ref={ref} className={`svc-row__demo tone-${id}`}>
+      {near ? (
+        <Suspense fallback={<div className="dm-ph" />}>
+          <ServiceDemo id={id} />
+        </Suspense>
+      ) : (
+        <div className="dm-ph" />
+      )}
+    </div>
+  );
+};
 
 const ServicesSection: React.FC = () => (
   <section className="section" id="servicios" aria-labelledby="servicios-title">
@@ -99,22 +127,25 @@ const ServicesSection: React.FC = () => (
         </ul>
       </Reveal>
 
-      <div className="svc-grid">
+      <div className="svc-rows">
         {SERVICES.map((s, i) => (
-          <Reveal as="article" className="svc" key={s.title} delay={(i % 3) * 80}>
-            <div className="svc__top">
-              <span className="svc__ic" aria-hidden="true"><ServiceIcon name={s.icon} /></span>
-              <span className="svc__n" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+          <Reveal as="article" className={`svc-row${i % 2 ? " is-rev" : ""}`} key={s.title} aria-labelledby={`svc-${s.demo}`}>
+            <div className="svc">
+              <div className="svc__top">
+                <span className="svc__ic" aria-hidden="true"><ServiceIcon name={s.icon} /></span>
+                <span className="svc__n" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              </div>
+              <h3 id={`svc-${s.demo}`}>{s.title}</h3>
+              <p className="svc__pain">{s.pain}</p>
+              <p className="svc__k">Por ejemplo</p>
+              <ul className="checks">
+                {s.examples.map((e) => <li key={e}>{e}</li>)}
+              </ul>
+              <p className="svc__ideal">
+                <span>Ideal para</span> {s.ideal.map((a) => LABEL[a]).join(" · ")}
+              </p>
             </div>
-            <h3>{s.title}</h3>
-            <p className="svc__pain">{s.pain}</p>
-            <p className="svc__k">Por ejemplo</p>
-            <ul className="checks">
-              {s.examples.map((e) => <li key={e}>{e}</li>)}
-            </ul>
-            <p className="svc__ideal">
-              <span>Ideal para</span> {s.ideal.map((a) => LABEL[a]).join(" · ")}
-            </p>
+            <DemoSlot id={s.demo} />
           </Reveal>
         ))}
       </div>
