@@ -37,9 +37,8 @@ export interface HomeSectionLink {
 export const HOME_SECTIONS: HomeSectionLink[] = [
   { id: "servicios", i18nKey: "navbar.services", label: "Servicios" },
   { id: "proyectos", i18nKey: "navbar.projects", label: "Proyectos" },
-  { id: "proceso", i18nKey: "navbar.process", label: "Proceso" },
-  { id: "faq", i18nKey: "navbar.faq", label: "Preguntas" },
 ];
+/* Proceso (#proceso) y Preguntas (#faq) se enlazan desde el pie. */
 
 /** ¿Algún ancestro sigue con transform (p. ej. la transición de página)? */
 const isTransformed = (el: HTMLElement) => {

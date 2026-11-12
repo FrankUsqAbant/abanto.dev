@@ -20,7 +20,9 @@ type NavItem =
   | { kind: "view"; view: View; label: string }
   | { kind: "section"; id: string; label: string };
 
-/** Secciones observadas para el resaltado (en orden del DOM). */
+/** Secciones observadas para el resaltado (en orden del DOM). Se observan
+ *  también las que no están en el menú para que "Proyectos" se apague al
+ *  pasar a Proceso/Preguntas/Contacto. */
 const OBSERVED_IDS = ["servicios", "agendar", "proyectos", "proceso", "faq", CONTACT_ID, "pie"];
 
 const ArrowUpRight: React.FC = () => (
@@ -60,7 +62,6 @@ const Navbar: React.FC<NavbarProps> = ({
   const onHome = currentView === "home";
 
   const navItems: NavItem[] = [
-    { kind: "view", view: "home", label: t("navbar.home") },
     ...HOME_SECTIONS.map(
       (sec): NavItem => ({
         kind: "section",
@@ -69,8 +70,7 @@ const Navbar: React.FC<NavbarProps> = ({
       }),
     ),
     { kind: "view", view: "blog", label: t("navbar.blog") },
-    { kind: "view", view: "about", label: t("navbar.about") },
-    // Cursos y Lecturas siguen en el router, pero ya no en el menú.
+    // Inicio = el logo; Proceso, Preguntas y Sobre mí viven en el pie.
   ];
 
   const activeSection = useActiveSection(OBSERVED_IDS, onHome);
