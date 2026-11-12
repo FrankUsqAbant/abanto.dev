@@ -47,6 +47,8 @@ const About: React.FC = () => (
         <Reveal className="about-hero__photo" delay={120}>
           <img
             src="/images/frank-hero.webp"
+            srcSet="/images/frank-hero-360.webp 360w, /images/frank-hero-520.webp 520w, /images/frank-hero.webp 695w"
+            sizes="(max-width: 899px) min(80vw, 420px), 34vw"
             alt="Frank Abanto con chaqueta negra y lentes de sol"
             width={695}
             height={1642}

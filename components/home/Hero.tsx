@@ -12,6 +12,9 @@ import ServiceOrbit, { ServiceMarquee } from "./ServiceOrbit";
 import "./Hero.css";
 
 const HERO_PHOTO = "/images/frank-hero.webp";
+const HERO_SRCSET = "/images/frank-hero-360.webp 360w, /images/frank-hero-520.webp 520w, /images/frank-hero.webp 695w";
+/** Ancho real de la foto: móvil, tablet y desktop (escala --s del hero). */
+const HERO_SIZES = "(max-width: 639px) min(72vw, 380px), (max-width: 1023px) 340px, 25vw";
 
 /**
  * Retrasos (ms) de cada pieza desde que la cortina empieza a subir.
@@ -160,7 +163,11 @@ const Hero: React.FC = () => {
               style={{ "--ix-delay": `${DELAY.photo}ms` } as React.CSSProperties}
             >
             <picture>
-              <source srcSet={HERO_PHOTO} type="image/webp" />
+              <source
+                srcSet={HERO_SRCSET}
+                sizes={HERO_SIZES}
+                type="image/webp"
+              />
               <img
                 src="/images/frank-hero.png"
                 alt="Frank Abanto con chaqueta negra y lentes de sol"
