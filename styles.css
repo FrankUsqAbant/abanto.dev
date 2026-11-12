@@ -11,6 +11,8 @@
 
   --font-heading: "Plus Jakarta Sans", sans-serif;
   --font-sans: "Inter", sans-serif;
+  --font-signature: "La Belle Aurore", "Mrs Saint Delafield", cursive;
+  --font-serif-display: "Instrument Serif", Georgia, serif;
 
   --image-gradient-text: linear-gradient(to right, #fff, #94a3b8);
 }

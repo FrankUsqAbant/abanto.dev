@@ -9,6 +9,8 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       host: "0.0.0.0",
+      // Necesario para recarga en vivo dentro de Docker en Windows
+      watch: { usePolling: !!process.env.CHOKIDAR_USEPOLLING },
     },
     plugins: [react(), tailwindcss()],
     define: {

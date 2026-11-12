@@ -16,7 +16,7 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
     fallbackLng: "es", // Default to Spanish as requested by context (or 'en' if preferred)
-    debug: true,
+    debug: import.meta.env.DEV,
 
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
@@ -31,7 +31,7 @@ i18n
     detection: {
       lookupQuerystring: "lng",
       lookupCookie: "i18next",
-      lookupSession: "i18next",
+      lookupSessionStorage: "i18next",
       order: ["querystring", "cookie", "navigator"],
     },
   });

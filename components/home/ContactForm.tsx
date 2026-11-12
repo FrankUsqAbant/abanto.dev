@@ -40,7 +40,10 @@ const ContactForm: React.FC = () => {
   };
 
   return (
-    <section className="relative w-full max-w-7xl mx-auto px-6 py-24 md:py-32">
+    <section
+      id="contacto"
+      className="relative w-full max-w-7xl mx-auto px-6 py-24 md:py-32 scroll-mt-24"
+    >
       <div className="flex flex-col md:flex-row gap-12 lg:gap-20 items-start">
         {/* Text Side */}
         <div className="w-full md:w-1/3 space-y-6">
