@@ -25,8 +25,8 @@ const Terminos: React.FC = () => (
     <h2>3. Demos ilustrativas</h2>
     <p>
       Las demos interactivas de la sección Servicios son ejemplos para explicar cómo funcionaría cada servicio. Los
-      negocios, nombres, conversaciones y cifras que muestran son ficticios y no representan resultados reales de
-      clientes.
+      negocios, nombres, conversaciones y cifras que muestran son ficticios y no representan resultados
+      reales.
     </p>
 
     <h2>4. Servicios y cotizaciones</h2>

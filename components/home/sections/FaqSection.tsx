@@ -5,7 +5,7 @@ import { CONTACT_ID, scrollToSection } from "./homeLinks";
 const FAQS: { q: string; a: string }[] = [
   {
     q: "¿Con qué tipo de negocios trabajas?",
-    a: "Con pymes que ya venden y quieren ordenar su operación: comercio, servicios, educación y salud.",
+    a: "Con pequeños negocios, emprendedores, empresas medianas y profesionales independientes que quieren ordenar su operación y ganar tiempo.",
   },
   {
     q: "¿Cuánto cuesta un proyecto?",
@@ -20,8 +20,12 @@ const FAQS: { q: string; a: string }[] = [
     a: "No. Yo me encargo de la parte técnica y te explico cada decisión en lenguaje simple.",
   },
   {
-    q: "¿Qué pasa después del lanzamiento?",
-    a: "Seguimos mejorando con soporte mensual, o te llevas el sistema documentado.",
+    q: "¿Cuánto tarda un proyecto?",
+    a: "Depende del alcance. Una web sencilla o una automatización suele estar lista en 1 a 3 semanas; los sistemas más grandes se cotizan con plazos claros tras la llamada.",
+  },
+  {
+    q: "¿Qué pasa después de la entrega?",
+    a: "Te acompaño con soporte y ajustes tras la entrega, te dejo el sistema documentado y, si lo necesitas, seguimos con un mantenimiento opcional.",
   },
 ];
 
