@@ -16,6 +16,9 @@ const usePageTitle = () => {
       case path === "/":
         title = `${t("navbar.home")} | FrankDev`;
         break;
+      case path === "/privacidad":
+        title = "Privacidad | FrankDev";
+        break;
       case path === "/about":
         title = `${t("navbar.about")} | FrankDev`;
         break;

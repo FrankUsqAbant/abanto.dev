@@ -14,6 +14,7 @@ import "./components/home/sections/home.css";
 import PageTransition from "./components/layout/PageTransition";
 import Home from "./pages/Home";
 import Aprende from "./pages/Aprende";
+import Privacidad from "./pages/Privacidad";
 import About from "./pages/About";
 import CommandCenter from "./components/features/CommandCenter";
 import { View } from "./types";
@@ -113,6 +114,14 @@ const App: React.FC = () => {
               element={
                 <PageTransition>
                   <Aprende />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/privacidad"
+              element={
+                <PageTransition>
+                  <Privacidad />
                 </PageTransition>
               }
             />
