@@ -39,12 +39,12 @@ const ArrowUpRight: React.FC = () => (
   </svg>
 );
 
-/* Entrada de la cabecera en la intro (ver intro.css): firma primero,
-   luego los enlaces escalonados y al final el botón. */
-const NAV_LINKS_DELAY = 520;
-const NAV_LINK_STAGGER = 60;
+/* Entrada de la cabecera en la intro (ver intro.css): cuando la firma
+   aterriza en el logo, los enlaces y el botón aparecen suavemente. */
+const NAV_LINKS_DELAY = 760;
+const NAV_LINK_STAGGER = 45;
 const navDelay = (ms: number): React.CSSProperties =>
-  ({ "--nav-delay": `${ms}ms` }) as React.CSSProperties;
+  ({ "--ix-delay": `${ms}ms` }) as React.CSSProperties;
 
 const Navbar: React.FC<NavbarProps> = ({
   currentView,
@@ -158,7 +158,7 @@ const Navbar: React.FC<NavbarProps> = ({
     <>
       <nav
         aria-label="Principal"
-        className={`nav-in nav-in--fade fixed top-0 left-0 right-0 z-[100] backdrop-blur-xl transition-colors duration-500 ${theme.bar}`}
+        className={`fixed top-0 left-0 right-0 z-[100] backdrop-blur-xl transition-colors duration-500 ${theme.bar}`}
       >
         <div className="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 h-20 grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center gap-4">
           {/* Firma */}
@@ -168,7 +168,7 @@ const Navbar: React.FC<NavbarProps> = ({
               e.preventDefault();
               handleNavClick("home");
             }}
-            className="nav-logo-in justify-self-start font-signature text-[30px] lg:text-[34px] leading-none pt-1 select-none"
+            className="ix-logo justify-self-start font-signature text-[30px] lg:text-[34px] leading-none pt-1 select-none"
             aria-label="Frank Abanto — Inicio"
             data-intro-logo=""
           >
@@ -192,7 +192,7 @@ const Navbar: React.FC<NavbarProps> = ({
               );
               return (
                 <li key={itemKey(item)}>
-                  <span className="nav-in inline-block" style={navDelay(NAV_LINKS_DELAY + i * NAV_LINK_STAGGER)}>
+                  <span className="ix-nav inline-block" style={navDelay(NAV_LINKS_DELAY + i * NAV_LINK_STAGGER)}>
                     {item.kind === "section" ? (
                       <a
                         href={`/#${item.id}`}
@@ -222,7 +222,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
           {/* Acciones */}
           <div
-            className="nav-in justify-self-end"
+            className="ix-nav justify-self-end"
             style={navDelay(NAV_LINKS_DELAY + navItems.length * NAV_LINK_STAGGER + 60)}
           >
           <div className="flex items-center gap-2">

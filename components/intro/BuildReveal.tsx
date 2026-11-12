@@ -1,80 +1,40 @@
 import React from "react";
-import { INTRO_TIMING, reached, useIntro } from "./IntroContext";
 
-export type BuildVariant = "text" | "lines" | "pill" | "card" | "chip";
+export type RevealVariant = "up" | "card";
 
-type BuildTag = "div" | "span" | "li" | "p";
+type RevealTag = "div" | "span" | "li" | "p";
 
 interface BuildRevealProps {
-  /** Orden en la cola de construcción (0 = primero). */
-  order: number;
+  /** Retraso (ms) desde que se levanta la cortina. */
+  delay: number;
   children: React.ReactNode;
-  /** Forma del esqueleto mientras se "construye". */
-  variant?: BuildVariant;
-  /** Etiqueta tipo componente que se ve sobre el esqueleto, p. ej. `<Card ventas />`. */
-  label?: string;
-  as?: BuildTag;
+  /** up: fundido hacia arriba · card: llega desde la profundidad. */
+  variant?: RevealVariant;
+  as?: RevealTag;
   inline?: boolean;
   className?: string;
-  /** Estilo extra del esqueleto (p. ej. la misma inclinación 3D de una tarjeta). */
-  skeletonStyle?: React.CSSProperties;
 }
 
-type CSSVars = React.CSSProperties & Record<`--${string}`, string>;
-
 /**
- * Envuelve una pieza de la interfaz para que, durante la intro, entre con
- * un fundido suave hacia arriba en su turno. El espacio está reservado
- * desde el primer render (opacity 0), así que no hay saltos de layout.
- * `label`, `variant` y `skeletonStyle` se conservan por compatibilidad.
+ * Pieza del hero que entra en la toma de la intro. Siempre está montada en
+ * su sitio (sin saltos de layout); el CSS de intro.css la tiene pausada en
+ * su primer fotograma durante "loading" y la anima en "reveal".
  * Fuera de la intro no añade ningún efecto.
  */
 const BuildReveal: React.FC<BuildRevealProps> = ({
-  order,
+  delay,
   children,
-  variant = "text",
-
+  variant = "up",
   as: Tag = "div",
   inline = false,
   className = "",
 }) => {
-  const { phase, mode, skipped } = useIntro();
-
-  const state: "idle" | "waiting" | "building" | "quick" =
-    phase === "done" || mode === "off" || skipped
-      ? "idle"
-      : !reached(phase, "building")
-        ? "waiting"
-        : mode === "short"
-          ? "quick"
-          : "building";
-
-  const delay =
-    state === "quick"
-      ? order * 25
-      : INTRO_TIMING.buildBase + order * INTRO_TIMING.buildStagger;
-
-  const style: CSSVars | undefined =
-    state === "idle"
-      ? undefined
-      : {
-          "--build-delay": `${delay}ms`,
-          "--build-fill": `${INTRO_TIMING.buildFill}ms`,
-        };
-
-  const classes = [
-    "build",
-    inline ? "build--inline" : "",
-    `build--${variant}`,
-    state !== "idle" ? `is-${state}` : "",
-    className,
-  ]
+  const classes = ["build", inline ? "build--inline" : "", className]
     .filter(Boolean)
     .join(" ");
-
   return (
-    <Tag className={classes} style={style}>
-      <span className="build__content">{children}</span>
+    <Tag className={classes} style={{ "--ix-delay": `${delay}ms` } as React.CSSProperties}>
+      <span className={`build__content ix-${variant}`}>{children}</span>
     </Tag>
   );
 };

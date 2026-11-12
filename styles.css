@@ -19,7 +19,8 @@
 
 /* Base styles */
 body {
-  background-color: var(--color-background);
+  /* crema: el mismo color que el placeholder de index.html y la cortina de la intro */
+  background-color: #f4f2ee;
   color: white;
   font-family: var(--font-sans);
   overflow-x: hidden;

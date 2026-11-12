@@ -1,58 +1,36 @@
 /* =====================================================================
-   INTRO CINEMATOGRÁFICA — loader, titular que se escribe y construcción
-   Solo transform / opacity / clip-path para no forzar layout.
+   INTRO "EN UNA TOMA"
+   La página está montada en su layout final desde el primer fotograma.
+   Cada pieza tiene su animación ix-* aplicada desde "loading" pero
+   PAUSADA (se ve su primer fotograma); en "reveal" todas corren a la vez
+   con sus retrasos; en "done" se quitan (ya coinciden con el estado final).
+   Solo transform / opacity / clip-path / filter.
    ===================================================================== */
 
 :root {
   --intro-cream: #f4f2ee;
   --intro-ink: #161514;
-  --intro-muted: #8d8983;
-  --intro-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --intro-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ix-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ix-move: cubic-bezier(0.7, 0, 0.2, 1);
+  /* multiplicador de tiempos: 1 = toma completa, menor = visita repetida */
+  --ix-k: 1;
+}
+html[data-intro-mode="short"] {
+  --ix-k: 0.42;
 }
 
-/* Durante la intro completa no se ve la barra de scroll del body */
-html[data-intro-phase="loading"] body {
-  overflow: hidden;
+/* Bajo la cortina la página se maqueta (fuentes, foto, medidas del logo)
+   pero no se pinta: así ni el cambio de fuente cuenta como salto. */
+html[data-intro-phase="loading"] #root {
+  visibility: hidden;
 }
 
-/* ---------- Titular con máquina de escribir ---------- */
-.tw-word {
-  display: inline-block;
-  white-space: nowrap;
-}
-.tw-ch {
-  opacity: 0;
-}
-.tw-ch.is-on {
-  opacity: 1;
-}
-.tw-caret {
-  position: relative;
-  display: inline-block;
-  width: 0;
-  height: 0.82em;
-  vertical-align: -0.04em;
-}
-.tw-caret::after {
-  content: "";
-  position: absolute;
-  left: 0.03em;
-  top: 0;
-  bottom: 0;
-  width: 0.045em;
-  min-width: 2px;
-  border-radius: 1px;
-  background: currentColor;
-  animation: tw-blink 1s steps(1, end) infinite;
-}
-@keyframes tw-blink {
-  50% {
-    opacity: 0;
-  }
+/* La barra de scroll nunca aparece/desaparece (cambiaría el ancho). */
+html {
+  scrollbar-gutter: stable;
 }
 
-/* ---------- Construcción por piezas ---------- */
+/* ---------- Bloques reutilizables ---------- */
 .build {
   position: relative;
 }
@@ -66,62 +44,95 @@ html[data-intro-phase="loading"] body {
   display: inline-block;
 }
 
-/* Antes de construir: el espacio existe pero no se ve nada */
-.build.is-waiting > .build__content,
-.build.is-waiting > .build__skeleton {
-  opacity: 0;
+/* Máscara de cada línea del titular (con aire para descendentes/itálica) */
+.ix-mask {
+  overflow: hidden;
+}
+.ix-rise {
+  display: inline-block;
 }
 
-/* Construyendo: cada pieza entra con un fundido suave hacia arriba */
-.build.is-building > .build__content {
-  opacity: 0;
-  animation: build-soft var(--build-fill, 720ms) var(--intro-ease) var(--build-delay, 0ms) forwards;
+/* ---------- Asignación de animaciones (solo durante la intro) ---------- */
+html:is([data-intro-phase="loading"], [data-intro-phase="reveal"]) .ix-up {
+  animation: ix-up calc(900ms * var(--ix-k)) var(--ix-ease) calc(var(--ix-delay, 0ms) * var(--ix-k)) both;
+}
+html:is([data-intro-phase="loading"], [data-intro-phase="reveal"]) .ix-rise {
+  animation: ix-rise calc(1100ms * var(--ix-k)) var(--ix-ease) calc(var(--ix-delay, 0ms) * var(--ix-k)) both;
+}
+html:is([data-intro-phase="loading"], [data-intro-phase="reveal"]) .ix-photo {
+  animation: ix-photo calc(1400ms * var(--ix-k)) var(--ix-ease) calc(var(--ix-delay, 0ms) * var(--ix-k)) both;
+}
+/* Tarjetas: el contenedor llega desde la profundidad (solo transform) y la
+   tarjeta misma hace el fundido (opacity en un ancestro anularía su vidrio). */
+html:is([data-intro-phase="loading"], [data-intro-phase="reveal"]) .ix-card {
+  animation: ix-depth calc(1200ms * var(--ix-k)) var(--ix-ease) calc(var(--ix-delay, 0ms) * var(--ix-k)) both;
+}
+html:is([data-intro-phase="loading"], [data-intro-phase="reveal"]) .ix-card .hero-card {
+  animation: ix-fade calc(800ms * var(--ix-k)) var(--ix-ease) calc(var(--ix-delay, 0ms) * var(--ix-k)) both;
+}
+/* Navbar: solo en la toma completa (en visitas repetidas ya está ahí) */
+html[data-intro-mode="full"]:is([data-intro-phase="loading"], [data-intro-phase="reveal"]) .ix-nav {
+  animation: ix-nav 700ms var(--ix-ease) var(--ix-delay, 0ms) both;
+}
+html[data-intro-mode="full"]:is([data-intro-phase="loading"], [data-intro-phase="reveal"]) .ix-logo {
+  animation: ix-fade 160ms linear 840ms both;
 }
 
-/* Visita repetida: solo un fundido rápido */
-.build.is-quick > .build__content {
-  opacity: 0;
-  animation: build-quick 320ms var(--intro-ease) var(--build-delay, 0ms) forwards;
+/* Mientras carga, todo espera en su primer fotograma */
+html[data-intro-phase="loading"] :is(.ix-up, .ix-rise, .ix-photo, .ix-card, .ix-card .hero-card, .ix-nav, .ix-logo, .ix-curtain, .ix-sig, .ix-sig-layer) {
+  animation-play-state: paused;
 }
 
-@keyframes build-soft {
+@keyframes ix-up {
   from {
     opacity: 0;
-    transform: translate3d(0, 10px, 0);
+    transform: translate3d(0, 16px, 0);
   }
   to {
     opacity: 1;
     transform: none;
   }
 }
-@keyframes build-quick {
+@keyframes ix-rise {
+  from {
+    transform: translate3d(0, 112%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes ix-photo {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translate3d(0, 70px, 0) scale(1.02);
+    filter: blur(14px);
+  }
+  55% {
+    opacity: 1;
   }
   to {
     opacity: 1;
     transform: none;
+    filter: blur(0);
   }
 }
-
-/* ---------- Cabecera primero (solo intro completa) ----------
-   Mientras carga, la barra ya ocupa su sitio pero es invisible. Luego:
-   barra → firma que se escribe → enlaces escalonados → botón. */
-html[data-intro-mode="full"][data-intro-phase="loading"] .nav-in,
-html[data-intro-mode="full"][data-intro-phase="loading"] .nav-logo-in {
-  opacity: 0;
+@keyframes ix-depth {
+  from {
+    transform: translate3d(0, 24px, 0) scale(0.62);
+  }
+  to {
+    transform: none;
+  }
 }
-html[data-intro-mode="full"]:not([data-intro-phase="loading"]):not([data-intro-phase="done"]) .nav-in {
-  animation: nav-in 700ms var(--intro-ease) var(--nav-delay, 0ms) both;
+@keyframes ix-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-html[data-intro-mode="full"]:not([data-intro-phase="loading"]):not([data-intro-phase="done"]) .nav-in--fade {
-  animation-name: nav-fade;
-}
-html[data-intro-mode="full"]:not([data-intro-phase="loading"]):not([data-intro-phase="done"]) .nav-logo-in {
-  animation: nav-write 950ms cubic-bezier(0.55, 0.1, 0.3, 1) 120ms both;
-}
-@keyframes nav-in {
+@keyframes ix-nav {
   from {
     opacity: 0;
     transform: translate3d(0, -6px, 0);
@@ -131,34 +142,96 @@ html[data-intro-mode="full"]:not([data-intro-phase="loading"]):not([data-intro-p
     transform: none;
   }
 }
-@keyframes nav-fade {
+
+/* ---------- Cortina ---------- */
+.ix-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--intro-cream);
+}
+/* borde inferior difuminado: la cortina sube como un velo, sin línea dura */
+.ix-curtain::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 22vh;
+  background: linear-gradient(180deg, var(--intro-cream) 0%, rgba(244, 242, 238, 0.85) 35%, rgba(244, 242, 238, 0) 100%);
+}
+html[data-intro-mode="full"] .ix-curtain {
+  animation: ix-lift 1150ms var(--ix-move) 120ms both;
+}
+html[data-intro-mode="short"] .ix-curtain {
+  animation: ix-fade-out 420ms ease-out both;
+}
+@keyframes ix-lift {
   from {
-    opacity: 0;
+    transform: none;
   }
   to {
-    opacity: 1;
+    transform: translate3d(0, -124%, 0);
   }
 }
-/* La firma se "escribe" de izquierda a derecha */
-@keyframes nav-write {
+@keyframes ix-fade-out {
   from {
-    opacity: 0.001;
-    clip-path: inset(-30% 100% -30% -10%);
-  }
-  15% {
     opacity: 1;
   }
   to {
-    opacity: 1;
-    clip-path: inset(-30% -10% -30% -10%);
+    opacity: 0;
+  }
+}
+
+/* ---------- Firma ---------- */
+.ix-sig-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  color: var(--intro-ink);
+  animation: ix-fade-out 160ms linear 1000ms both;
+}
+/* sin pintar hasta que su fuente está lista (ni un salto por el swap) */
+.ix-sig-layer.is-waiting {
+  visibility: hidden;
+}
+.ix-sig {
+  display: inline-block;
+  font-family: var(--font-signature, "La Belle Aurore", cursive);
+  font-size: clamp(56px, 10vw, 128px);
+  line-height: 1;
+  white-space: nowrap;
+  transform-origin: 0 0;
+  animation: ix-fly 1000ms var(--ix-move) both;
+}
+@keyframes ix-fly {
+  to {
+    transform: translate(var(--fly-x, 0px), var(--fly-y, -40vh)) scale(var(--fly-s, 0.3));
+  }
+}
+/* La firma se dibuja de izquierda a derecha, como a mano */
+.ix-sig__ink {
+  display: inline-block;
+  clip-path: inset(-30% 100% -30% -8%);
+}
+.ix-sig__ink.is-drawing {
+  animation: ix-draw 1150ms cubic-bezier(0.45, 0.05, 0.35, 1) both;
+}
+@keyframes ix-draw {
+  from {
+    clip-path: inset(-30% 100% -30% -8%);
+  }
+  to {
+    clip-path: inset(-30% -8% -30% -8%);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nav-in,
-  .nav-logo-in,
-  .build > .build__content {
-    animation: none !important;
-    opacity: 1 !important;
+  .ix-curtain,
+  .ix-sig-layer {
+    display: none;
   }
 }

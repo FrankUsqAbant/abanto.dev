@@ -187,7 +187,7 @@ interface ServiceOrbitProps {
   mouseY: MotionValue<number>;
   reduceMotion: boolean;
   /** Orden de construcción de la primera tarjeta (intro). */
-  buildOrder: number;
+  buildDelay: number;
 }
 
 /**
@@ -200,7 +200,7 @@ const ServiceOrbit: React.FC<ServiceOrbitProps> = ({
   mouseX,
   mouseY,
   reduceMotion,
-  buildOrder,
+  buildDelay,
 }) => {
   const { phase } = useIntro();
   const ringRef = useRef<HTMLDivElement>(null);
@@ -208,7 +208,8 @@ const ServiceOrbit: React.FC<ServiceOrbitProps> = ({
   const angle = useRef(0);
   const speed = useRef(0);
   const hovered = useRef(false);
-  const running = phase === "done" && !reduceMotion;
+  // Ya orbita mientras las tarjetas llegan (arranque suave por la inercia).
+  const running = phase !== "loading" && !reduceMotion;
   const runningRef = useRef(running);
   runningRef.current = running;
 
@@ -293,12 +294,7 @@ const ServiceOrbit: React.FC<ServiceOrbitProps> = ({
               hovered.current = false;
             }}
           >
-            <BuildReveal
-              order={buildOrder + i * 0.5}
-              variant="card"
-              label={`<Card ${service.id} />`}
-              skeletonStyle={{ transform: "var(--card-tilt)" }}
-            >
+            <BuildReveal delay={buildDelay + i * 60} variant="card">
               <ServiceCard service={service} />
             </BuildReveal>
           </div>
@@ -314,13 +310,8 @@ export default ServiceOrbit;
 /* Móvil: cinta que se desplaza sola                                   */
 /* ------------------------------------------------------------------ */
 
-export const ServiceMarquee: React.FC<{ buildOrder: number }> = ({ buildOrder }) => (
-  <BuildReveal
-    order={buildOrder}
-    variant="lines"
-    label="<Servicios />"
-    className="marquee-wrap"
-  >
+export const ServiceMarquee: React.FC<{ buildDelay: number }> = ({ buildDelay }) => (
+  <BuildReveal delay={buildDelay} className="marquee-wrap">
     <div className="marquee" aria-label="Servicios">
       <div className="marquee__track">
         {[0, 1].map((copy) => (

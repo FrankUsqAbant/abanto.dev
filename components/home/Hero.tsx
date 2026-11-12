@@ -6,28 +6,27 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import {
-  BuildReveal,
-  IntroLoader,
-  TypewriterHeadline,
-  reached,
-  useIntro,
-} from "../intro";
+import { BuildReveal, CreditsHeadline, IntroLoader } from "../intro";
 import { ArrowDown, ArrowUpRight } from "./heroIcons";
 import ServiceOrbit, { ServiceMarquee } from "./ServiceOrbit";
 import "./Hero.css";
 
-const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1];
-
 const HERO_PHOTO = "/images/frank-hero.webp";
 
-/** Orden de construcción de cada pieza del hero (el navbar usa 2–7). */
-const BUILD_ORDER = {
-  eyebrow: 0,
-  lead: 1,
-  primary: 2,
-  secondary: 3,
-  cards: 4, // 4–7.5 (medio paso por tarjeta)
+/**
+ * Retrasos (ms) de cada pieza desde que la cortina empieza a subir.
+ * La cortina descubre la página de abajo hacia arriba, así que primero
+ * entran la foto y las tarjetas, y el titular justo cuando queda a la vista.
+ */
+const DELAY = {
+  photo: 150,
+  cards: 300, // + 60 ms por tarjeta
+  marquee: 500,
+  eyebrow: 560,
+  headline: 620,
+  lead: 820,
+  primary: 930,
+  secondary: 1000,
 } as const;
 
 /* ------------------------------------------------------------------ */
@@ -58,9 +57,6 @@ const Hero: React.FC = () => {
     rawY.set(0);
   }, [rawX, rawY]);
 
-  const { phase, mode, skipped } = useIntro();
-  const photoShown = reached(phase, "photo");
-  const animatePhoto = mode === "full" && !skipped;
 
   return (
     <section
@@ -74,17 +70,13 @@ const Hero: React.FC = () => {
       <div className="hero__frame">
         {/* Texto central */}
         <div className="hero__content">
-          <BuildReveal
-            order={BUILD_ORDER.eyebrow}
-            variant="chip"
-            label="<Eyebrow />"
-            inline
-          >
+          <BuildReveal delay={DELAY.eyebrow} inline>
             <p className="hero__eyebrow">Menos tareas. Más posibilidades.</p>
           </BuildReveal>
 
-          <TypewriterHeadline
+          <CreditsHeadline
             id="hero-title"
+            delay={DELAY.headline}
             className="hero__title"
             lineClassName="hero__title-line"
             lines={[
@@ -94,9 +86,7 @@ const Hero: React.FC = () => {
           />
 
           <BuildReveal
-            order={BUILD_ORDER.lead}
-            variant="lines"
-            label="<Lead />"
+            delay={DELAY.lead}
             inline
             className="hero__lead-wrap"
           >
@@ -109,18 +99,13 @@ const Hero: React.FC = () => {
           </BuildReveal>
 
           <div className="hero__actions">
-            <BuildReveal
-              order={BUILD_ORDER.primary}
-              variant="pill"
-              label="<Button primary />"
-              inline
-            >
+            <BuildReveal delay={DELAY.primary} inline>
               <a href="#contacto" className="hero__btn">
                 Hablemos de tu negocio
                 <ArrowUpRight className="hero__btn-icon" />
               </a>
             </BuildReveal>
-            <BuildReveal order={BUILD_ORDER.secondary} variant="pill" inline>
+            <BuildReveal delay={DELAY.secondary} inline>
               <a href="#servicios" className="hero__link">
                 Explorar soluciones
                 <ArrowDown className="hero__link-icon" />
@@ -134,18 +119,11 @@ const Hero: React.FC = () => {
           <motion.div
             className="hero__photo"
             style={reduceMotion ? undefined : { x: photoX }}
-            initial={false}
-            animate={
-              photoShown
-                ? { opacity: 1, y: 0, scale: 1 }
-                : { opacity: 0, y: 22, scale: 1.015 }
-            }
-            transition={
-              animatePhoto
-                ? { duration: 1.2, ease: EASE_OUT }
-                : { duration: 0 }
-            }
           >
+            <div
+              className="ix-photo"
+              style={{ "--ix-delay": `${DELAY.photo}ms` } as React.CSSProperties}
+            >
             <picture>
               <source srcSet={HERO_PHOTO} type="image/webp" />
               <img
@@ -158,6 +136,7 @@ const Hero: React.FC = () => {
                 draggable={false}
               />
             </picture>
+            </div>
           </motion.div>
 
           {/* Servicios orbitando alrededor de la foto (tablet/desktop) */}
@@ -165,15 +144,15 @@ const Hero: React.FC = () => {
             mouseX={mouseX}
             mouseY={mouseY}
             reduceMotion={reduceMotion}
-            buildOrder={BUILD_ORDER.cards}
+            buildDelay={DELAY.cards}
           />
 
           {/* Móvil: cinta de servicios que se desplaza sola */}
-          <ServiceMarquee buildOrder={BUILD_ORDER.cards} />
+          <ServiceMarquee buildDelay={DELAY.marquee} />
         </div>
       </div>
 
-      {/* Intro: espera fuentes + foto antes de arrancar la secuencia */}
+      {/* Intro: cortina + firma; espera fuentes y foto antes de la toma */}
       <IntroLoader images={[HERO_PHOTO]} />
     </section>
   );
