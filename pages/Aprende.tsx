@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import { setPageMeta } from "../lib/seo";
 import { DEFAULT_TABLE, LEGACY_TABLES, TABLES, getTable, loadDetails, loadTable } from "../components/blog/tables";
 import type { PCategory, PDetails, PItem, PTableData } from "../components/blog/types";
 import ElementTile from "../components/blog/ElementTile";
@@ -82,9 +83,6 @@ const Aprende: React.FC = () => {
     };
   }, [tableId]);
 
-  useEffect(() => {
-    if (meta) document.title = `Aprende: la tabla periódica ${meta.titleEm} | FrankDev`;
-  }, [meta]);
 
   // Ctrl/Cmd + K enfoca la búsqueda de la tabla (en Aprende reemplaza al Command Center).
   useEffect(() => {
@@ -103,6 +101,23 @@ const Aprende: React.FC = () => {
   const ready = !!data && data.id === tableId;
   const selected = useMemo(() => (el && data && data.id === tableId ? data.items.find((x) => x.k === el) ?? null : null), [el, data, tableId]);
   const notFound = !!(el && ready && !selected);
+
+  useEffect(() => {
+    if (!meta) return;
+    if (selected) {
+      setPageMeta({
+        title: `${selected.name} — ${meta.label} · Aprende`,
+        description: `${selected.d.replace(/\.$/, "")}. Ficha de la tabla periódica ${meta.titleEm}: qué es, para qué sirve y un ejemplo.`,
+        path: `/aprende/${meta.id}/${selected.k}`,
+      });
+    } else {
+      setPageMeta({
+        title: `Aprende: la tabla periódica ${meta.titleEm}`,
+        description: `La tabla periódica ${meta.titleEm}: ${meta.keyText}`,
+        path: `/aprende/${meta.id}`,
+      });
+    }
+  }, [meta, selected]);
 
   const q = norm(query);
   const matches = useCallback(

@@ -1,15 +1,16 @@
 {
-  "name": "frankdev-|-software-architect-portfolio",
+  "name": "frank-abanto-site",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "node scripts/fetch-github-projects.mjs",
+    "prebuild": "node scripts/fetch-github-projects.mjs && node scripts/generate-sitemap.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "github:sync": "node scripts/fetch-github-projects.mjs",
-    "projects:shots": "node scripts/project-shots.mjs"
+    "projects:shots": "node scripts/project-shots.mjs",
+    "sitemap": "node scripts/generate-sitemap.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.26.1",
