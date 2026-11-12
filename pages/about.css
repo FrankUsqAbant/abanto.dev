@@ -66,3 +66,7 @@
   .about-values, .about-journey { grid-template-columns: 1fr; }
   .about-journey::before { display: none; }
 }
+
+@media (pointer: coarse) {
+  .about-socials a { padding-block: 12px; margin-block: -12px; }
+}

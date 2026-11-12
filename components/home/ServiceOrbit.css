@@ -169,3 +169,24 @@
     0 calc(var(--cs) * 14) calc(var(--cs) * 26) calc(var(--cs) * -14) rgba(40, 32, 24, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
+
+/* Móvil: la cinta usa tarjetas un poco más grandes y texto legible (≥12px). */
+.marquee {
+  --cs: 1px;
+}
+.marquee .hero-card__title {
+  font-size: 14px;
+}
+.marquee .hero-card__desc {
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.marquee__item {
+  width: 248px;
+}
+.marquee .hero-card__desc {
+  font-size: 12px;
+}
+.marquee .hero-card__desc br {
+  display: none;
+}

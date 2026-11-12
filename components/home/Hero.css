@@ -302,7 +302,7 @@
 }
 .hero-card__desc {
   margin: calc(var(--cs) * 4) 0 0;
-  font-size: max(9.5px, calc(var(--cs) * 7.8));
+  font-size: max(10.5px, calc(var(--cs) * 7.8));
   line-height: 1.5;
   color: #4f4b46;
 }
@@ -503,4 +503,74 @@
 @media (prefers-reduced-motion: reduce) {
   .hero__cue { transition: none; }
   .hero__cue-line::after { animation: none; height: 100%; opacity: 0.5; }
+}
+
+/* ---------- Teléfonos: el hero cabe en la primera pantalla ----------
+   La altura del escenario sigue al alto visible (svh) para que la cinta de
+   servicios asome sin hacer scroll; 100vh primero como respaldo. */
+@media (max-width: 639px) {
+  .hero__stage {
+    height: clamp(340px, calc(100vh - 380px), 600px);
+    height: clamp(340px, calc(100svh - 380px), 600px);
+    margin-top: 28px;
+  }
+  .hero__content {
+    padding-top: 32px;
+  }
+}
+@media (max-width: 379px) {
+  .hero__title {
+    font-size: 34px;
+  }
+  .hero__lead {
+    font-size: 15px;
+  }
+}
+
+/* ---------- Teléfono en horizontal: compacto ---------- */
+@media (orientation: landscape) and (max-height: 500px) {
+  .hero__content {
+    padding-top: 20px;
+  }
+  .hero__title {
+    font-size: clamp(30px, 13svh, 56px);
+  }
+  .hero__lead-wrap {
+    margin-top: 10px;
+  }
+  .hero__lead {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .hero__actions {
+    margin-top: 14px;
+  }
+  .hero__stage {
+    height: 480px;
+    margin-top: 20px;
+  }
+  .hero__photo {
+    left: calc(50% - 140px);
+    width: 280px;
+  }
+}
+
+/* ---------- Táctil: zonas de toque de 44px ---------- */
+@media (pointer: coarse) {
+  .hero__link {
+    padding-block: 12px;
+    margin-block: -12px;
+  }
+  .hero__btn {
+    position: relative;
+  }
+  .hero__btn::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: max(100%, 44px);
+    transform: translateY(-50%);
+  }
 }

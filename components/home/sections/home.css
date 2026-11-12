@@ -490,3 +490,39 @@
 .hm .nf__lead{margin:18px auto 0;max-width:460px;color:var(--g1);font-size:16px}
 .hm .nf__actions{margin-top:30px;display:flex;gap:22px;justify-content:center;align-items:center;flex-wrap:wrap}
 .hm .nf__path{margin-top:34px;font-family:var(--mono);font-size:11px;color:var(--g2);word-break:break-all}
+
+/* ---- Rendimiento: nada se anima ni se pinta fuera de pantalla ---- */
+[data-off] *,[data-off] *::before,[data-off] *::after{animation-play-state:paused!important}
+/* Secciones de texto bajo el pliegue: el navegador se salta su render hasta acercarse. */
+.hm > #proceso,.hm > #faq,.hm > .contact{content-visibility:auto;contain-intrinsic-size:auto 900px}
+
+/* ---- Móvil: textos legibles (cuerpo ≥14px, etiquetas ≥11px) ---- */
+@media (max-width:720px){
+  .hm .eyebrow{font-size:11px;letter-spacing:.22em}
+  .hm .checks li,.hm .timeline p,.hm .timeline ul li,.hm .svc-for__list li,.hm .svc__ideal,.hm .svc-trust__s,.hm .gh p,.hm .socials a,.hm .legal__table table{font-size:14px}
+  .hm .legal__note{font-size:14px!important}
+  .hm .svc-for__k,.hm .svc__k,.hm .svc__ideal span,.hm .tl-week,.hm .ghv__lang{font-size:11.5px}
+  .hm.legal .legal__date{font-size:12.5px}
+  .hm .band__note,.hm .form__consent,.hm .ft__legal button,.hm .ft__mail{font-size:13.5px}
+}
+
+/* ---- Táctil: zonas de toque de 44px sin mover el diseño ----
+   padding y margin negativos agrandan el área sin cambiar la maqueta. */
+@media (pointer:coarse){
+  .hm .link-arrow,.hm .ft__up,.hm .ft__legal a,.hm .ft__legal button,.hm .ft__mail,.hm .legal__tabs a{padding-block:12px;margin-block:-12px}
+  .hm .ft__nav a{padding-block:12px;margin-block:-8px}
+  .hm .logo{display:inline-block;padding-block:10px;margin-block:-10px}
+  .hm .ft__soc a{width:44px;height:44px}
+  .hm .ft__soc{gap:4px}
+  .hm .form__consent input[type=checkbox]{width:22px;height:22px}
+  .hm .ck__btns button{min-height:44px;padding-inline:16px}
+  .hm .legal__btn{min-height:40px;padding-block:10px}
+}
+.hm.ck{margin-bottom:env(safe-area-inset-bottom,0px)}
+/* Teléfono en horizontal: aviso de una línea, corto y pegado abajo */
+@media (orientation:landscape) and (max-height:500px){
+.hm.ck{width:min(560px,calc(100vw - 24px));bottom:8px;padding:6px 6px 6px 14px;gap:10px;border-radius:14px}
+.hm .ck__long{display:none}.hm .ck__short{display:inline}
+.hm .ck__btns button{min-height:40px;padding-block:6px}
+}
+@media (max-width:479px){.hm.ck{font-size:12.5px}.hm .ck__btns button{font-size:12.5px}}

@@ -104,11 +104,14 @@ const markIntroSeen = () => {
   }
 };
 
-/** En móvil (< 720px) el hero se muestra al instante: mejor LCP en redes lentas. */
+/**
+ * En teléfonos (< 720px de ancho, o en horizontal con poca altura) el hero se
+ * muestra al instante: mejor LCP en redes lentas y nada que esperar.
+ */
 const isSmallScreen = (): boolean =>
   typeof window !== "undefined" &&
   typeof window.matchMedia === "function" &&
-  window.matchMedia("(max-width: 719px)").matches;
+  window.matchMedia("(max-width: 719px), (max-height: 500px) and (orientation: landscape)").matches;
 
 const resolveMode = (enabled: boolean): IntroMode => {
   if (!enabled || prefersReducedMotion() || isSmallScreen()) return "off";
