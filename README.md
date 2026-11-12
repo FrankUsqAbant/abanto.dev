@@ -1,20 +1,18 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Frank Abanto — Portafolio
 
-# Run and deploy your AI Studio app
+Sitio personal de Frank Abanto (Software Architect & Content Creator): inicio con intro animada,
+servicios de agentes de IA y software a medida, proyectos reales, proceso, preguntas, contacto
+(Formspree) y reserva de llamadas (Cal.com). El blog son tablas periódicas interactivas de HTML,
+CSS, JavaScript, Python, bases de datos, Git, Bash, ciberseguridad, machine learning y redes neuronales.
 
-This contains everything you need to run your app locally.
+## Desarrollo
 
-View your app in AI Studio: https://ai.studio/apps/drive/1QbkCRblFKIZ5P8SR4ofy_tk45b81t--Y
+```bash
+npm install
+npm run dev     # servidor de desarrollo (Vite)
+npm run build   # build de producción en dist/
+```
 
-## Run Locally
+## Stack
 
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+React 19 · TypeScript · Vite 6 · Tailwind CSS v4 · Framer Motion · React Router 7 · i18next

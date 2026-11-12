@@ -14,12 +14,7 @@ import "./components/home/sections/home.css";
 import PageTransition from "./components/layout/PageTransition";
 import Home from "./pages/Home";
 import Blog from "./pages/Blog";
-import Courses from "./pages/Courses";
 import About from "./pages/About";
-import Tech from "./pages/Tech";
-import Exercises from "./pages/Exercises";
-import ExerciseDetail from "./pages/ExerciseDetail";
-import CoursePlayer from "./pages/CoursePlayer";
 import CommandCenter from "./components/features/CommandCenter";
 import { View } from "./types";
 import usePageTitle from "./hooks/usePageTitle";
@@ -115,14 +110,6 @@ const App: React.FC = () => {
               }
             />
             <Route
-              path="/courses"
-              element={
-                <PageTransition>
-                  <Courses />
-                </PageTransition>
-              }
-            />
-            <Route
               path="/about"
               element={
                 <PageTransition>
@@ -130,50 +117,11 @@ const App: React.FC = () => {
                 </PageTransition>
               }
             />
-            <Route
-              path="/theme"
-              element={
-                <PageTransition>
-                  <Tech />
-                </PageTransition>
-              }
-            />
             <Route path="/html-periodic" element={<Navigate to="/blog/html" replace />} />
             <Route path="/js-periodic" element={<Navigate to="/blog/javascript" replace />} />
             <Route path="/python-periodic" element={<Navigate to="/blog/python" replace />} />
-            <Route
-              path="/exercises"
-              element={
-                <PageTransition>
-                  <Exercises />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/exercises/:id"
-              element={
-                <PageTransition>
-                  <ExerciseDetail />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/courses/:courseId/learn"
-              element={
-                <PageTransition>
-                  <CoursePlayer />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/courses/:courseId/learn/:videoId"
-              element={
-                <PageTransition>
-                  <CoursePlayer />
-                </PageTransition>
-              }
-            />
             <Route path="/element/:tag" element={<ElementRedirect />} />
+            {/* Cursos, Lecturas y Ejercicios se retiraron: /courses, /theme, /exercises… caen aquí */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AnimatePresence>

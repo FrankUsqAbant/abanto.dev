@@ -91,8 +91,8 @@ const Hero: React.FC = () => {
             className="hero__title"
             lineClassName="hero__title-line"
             lines={[
-              { text: "Construimos sistemas de IA" },
-              { text: "que operan tu negocio.", className: "hero__title-italic" },
+              { text: "Software e IA" },
+              { text: "hechos a tu medida.", className: "hero__title-italic" },
             ]}
           />
 
