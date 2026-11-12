@@ -71,7 +71,7 @@ const App: React.FC = () => {
 
   return (
     <IntroProvider enabled={location.pathname === "/"}>
-    <div className={`min-h-screen ${location.pathname.startsWith("/about") ? "bg-[#050505]" : "bg-[#f4f2ee]"} flex flex-col selection:bg-blue-600/30`}>
+    <div className="min-h-screen bg-[#f4f2ee] flex flex-col selection:bg-blue-600/30">
       <Navbar
         currentView={
           location.pathname === "/"

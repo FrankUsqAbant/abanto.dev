@@ -17,65 +17,44 @@ export interface Service {
 }
 
 /**
- * Orden alrededor del anillo. Los 4 primeros arrancan delante de la foto;
- * los otros 4, detrás.
+ * Los 5 servicios principales, repartidos a 72° en la elipse (3 arrancan
+ * delante de la foto y 2 detrás).
  */
 export const SERVICES: Service[] = [
   {
-    id: "ventas",
+    id: "agentes",
     index: "01",
-    title: "Ventas",
-    description: ["Convierte conversaciones", "en nuevas oportunidades."],
-    icon: "trend",
-  },
-  {
-    id: "integraciones",
-    index: "02",
-    title: "Integraciones",
-    description: ["Tus herramientas,", "trabajando en sincronía."],
-    icon: "blend",
-  },
-  {
-    id: "atencion",
-    index: "03",
-    title: "Atención al cliente",
-    description: ["Respuestas útiles.", "Sin tiempos de espera."],
-    icon: "chat",
+    title: "Agentes de IA",
+    description: ["Asistentes que responden", "y ejecutan tareas por ti."],
+    icon: "bot",
   },
   {
     id: "automatizacion",
-    index: "04",
+    index: "02",
     title: "Automatización",
     description: ["Menos tareas repetitivas.", "Más tiempo para lo importante."],
     icon: "zap",
   },
   {
     id: "web",
-    index: "05",
+    index: "03",
     title: "Páginas web",
     description: ["Sitios rápidos y a medida,", "pensados para vender."],
     icon: "globe",
   },
   {
-    id: "redes",
-    index: "06",
-    title: "Redes sociales",
-    description: ["Contenido que se publica solo,", "con tu estilo y a tiempo."],
-    icon: "share",
+    id: "atencion",
+    index: "04",
+    title: "Atención al cliente",
+    description: ["Respuestas útiles.", "Sin tiempos de espera."],
+    icon: "chat",
   },
   {
-    id: "agentes",
-    index: "07",
-    title: "Agentes de IA",
-    description: ["Asistentes que responden", "y ejecutan tareas por ti."],
-    icon: "bot",
-  },
-  {
-    id: "datos",
-    index: "08",
-    title: "Datos y dashboards",
-    description: ["Reportes en tiempo real", "para decidir con claridad."],
-    icon: "chart",
+    id: "integraciones",
+    index: "05",
+    title: "Integraciones",
+    description: ["Tus herramientas,", "trabajando en sincronía."],
+    icon: "blend",
   },
 ];
 

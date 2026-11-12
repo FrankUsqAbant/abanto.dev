@@ -18,8 +18,9 @@
   position: absolute;
   left: var(--ring-cx);
   top: var(--ring-cy);
-  width: calc(var(--cs) * 214);
-  margin-left: calc(var(--cs) * -107);
+  /* 5 tarjetas: algo más grandes para que el anillo no se vea vacío */
+  width: calc(var(--cs) * 232);
+  margin-left: calc(var(--cs) * -116);
   margin-top: calc(var(--cs) * -52);
   transform: translate3d(
       calc(var(--ox) * var(--rx) + var(--mx) * 18px),
@@ -87,7 +88,7 @@
     --ring-cy: 330px;
     --rx: min(38vw, 330px);
     --ry: 70px;
-    --cs: 0.8px;
+    --cs: 0.86px;
   }
 }
 
@@ -97,7 +98,7 @@
     --ring-cy: calc(var(--s) * 450);
     --rx: calc(var(--s) * 372);
     --ry: calc(var(--s) * 72);
-    --cs: calc(var(--s) * 0.84);
+    --cs: calc(var(--s) * 0.92);
   }
 }
 
@@ -125,7 +126,7 @@
 .marquee__track {
   display: flex;
   width: max-content;
-  animation: marquee 38s linear infinite;
+  animation: marquee 26s linear infinite;
 }
 .marquee:hover .marquee__track,
 .marquee:active .marquee__track {

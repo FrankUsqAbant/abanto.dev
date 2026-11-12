@@ -58,7 +58,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
   // En Inicio el encabezado es claro (sobre el hero crema);
   // en el resto de páginas, que siguen siendo oscuras, usa la variante oscura.
-  const isLight = currentView === "home" || currentView === "blog";
+  const isLight = currentView === "home" || currentView === "blog" || currentView === "about";
   const onHome = currentView === "home";
 
   const navItems: NavItem[] = [
