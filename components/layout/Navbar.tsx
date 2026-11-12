@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "../../types";
-import { BuildReveal, useIntro } from "../intro";
 import {
   CONTACT_ID,
   HOME_SECTIONS,
@@ -40,13 +39,19 @@ const ArrowUpRight: React.FC = () => (
   </svg>
 );
 
+/* Entrada de la cabecera en la intro (ver intro.css): firma primero,
+   luego los enlaces escalonados y al final el botón. */
+const NAV_LINKS_DELAY = 520;
+const NAV_LINK_STAGGER = 60;
+const navDelay = (ms: number): React.CSSProperties =>
+  ({ "--nav-delay": `${ms}ms` }) as React.CSSProperties;
+
 const Navbar: React.FC<NavbarProps> = ({
   currentView,
   onNavigate,
   onOpenSearch,
 }) => {
   const { t } = useTranslation();
-  const { logoVisible } = useIntro();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // En Inicio el encabezado es claro (sobre el hero crema);
@@ -153,7 +158,7 @@ const Navbar: React.FC<NavbarProps> = ({
     <>
       <nav
         aria-label="Principal"
-        className={`fixed top-0 left-0 right-0 z-[100] backdrop-blur-xl transition-colors duration-500 ${theme.bar}`}
+        className={`nav-in nav-in--fade fixed top-0 left-0 right-0 z-[100] backdrop-blur-xl transition-colors duration-500 ${theme.bar}`}
       >
         <div className="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 h-20 grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center gap-4">
           {/* Firma */}
@@ -163,9 +168,7 @@ const Navbar: React.FC<NavbarProps> = ({
               e.preventDefault();
               handleNavClick("home");
             }}
-            className={`justify-self-start font-signature text-[30px] lg:text-[34px] leading-none pt-1 select-none ${
-              logoVisible ? "" : "opacity-0"
-            }`}
+            className="nav-logo-in justify-self-start font-signature text-[30px] lg:text-[34px] leading-none pt-1 select-none"
             aria-label="Frank Abanto — Inicio"
             data-intro-logo=""
           >
@@ -189,7 +192,7 @@ const Navbar: React.FC<NavbarProps> = ({
               );
               return (
                 <li key={itemKey(item)}>
-                  <BuildReveal order={2 + i * 0.5} variant="text" inline>
+                  <span className="nav-in inline-block" style={navDelay(NAV_LINKS_DELAY + i * NAV_LINK_STAGGER)}>
                     {item.kind === "section" ? (
                       <a
                         href={`/#${item.id}`}
@@ -211,18 +214,16 @@ const Navbar: React.FC<NavbarProps> = ({
                         {dot}
                       </button>
                     )}
-                  </BuildReveal>
+                  </span>
                 </li>
               );
             })}
           </ul>
 
           {/* Acciones */}
-          <BuildReveal
-            order={2 + navItems.length * 0.5}
-            variant="pill"
-            label="<Nav.Cta />"
-            className="justify-self-end"
+          <div
+            className="nav-in justify-self-end"
+            style={navDelay(NAV_LINKS_DELAY + navItems.length * NAV_LINK_STAGGER + 60)}
           >
           <div className="flex items-center gap-2">
             <CalLink
@@ -248,7 +249,7 @@ const Navbar: React.FC<NavbarProps> = ({
               ></i>
             </button>
           </div>
-          </BuildReveal>
+          </div>
 
           {/* Línea divisoria */}
           <span

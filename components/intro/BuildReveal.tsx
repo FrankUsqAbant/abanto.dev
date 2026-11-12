@@ -20,31 +20,23 @@ interface BuildRevealProps {
   skeletonStyle?: React.CSSProperties;
 }
 
-const BAR_COUNT: Record<BuildVariant, number> = {
-  text: 1,
-  lines: 2,
-  pill: 1,
-  card: 3,
-  chip: 1,
-};
-
 type CSSVars = React.CSSProperties & Record<`--${string}`, string>;
 
 /**
- * Envuelve una pieza de la interfaz para que, durante la intro, aparezca
- * primero como un esqueleto (contorno punteado + barras con brillo) y
- * luego se "rellene" con el contenido real, como si una IA la armara.
+ * Envuelve una pieza de la interfaz para que, durante la intro, entre con
+ * un fundido suave hacia arriba en su turno. El espacio está reservado
+ * desde el primer render (opacity 0), así que no hay saltos de layout.
+ * `label`, `variant` y `skeletonStyle` se conservan por compatibilidad.
  * Fuera de la intro no añade ningún efecto.
  */
 const BuildReveal: React.FC<BuildRevealProps> = ({
   order,
   children,
   variant = "text",
-  label,
+
   as: Tag = "div",
   inline = false,
   className = "",
-  skeletonStyle,
 }) => {
   const { phase, mode, skipped } = useIntro();
 
@@ -83,14 +75,6 @@ const BuildReveal: React.FC<BuildRevealProps> = ({
   return (
     <Tag className={classes} style={style}>
       <span className="build__content">{children}</span>
-      {state === "building" || state === "waiting" ? (
-        <span className="build__skeleton" aria-hidden="true" style={skeletonStyle}>
-          {label ? <span className="build__label">{label}</span> : null}
-          {Array.from({ length: BAR_COUNT[variant] }, (_, i) => (
-            <span key={i} className="build__bar" />
-          ))}
-        </span>
-      ) : null}
     </Tag>
   );
 };

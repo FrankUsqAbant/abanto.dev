@@ -61,7 +61,6 @@ const Hero: React.FC = () => {
   const { phase, mode, skipped } = useIntro();
   const photoShown = reached(phase, "photo");
   const animatePhoto = mode === "full" && !skipped;
-  const building = phase === "building" && mode === "full";
 
   return (
     <section
@@ -138,12 +137,12 @@ const Hero: React.FC = () => {
             initial={false}
             animate={
               photoShown
-                ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
-                : { opacity: 0, y: 48, scale: 1.03, filter: "blur(18px)" }
+                ? { opacity: 1, y: 0, scale: 1 }
+                : { opacity: 0, y: 22, scale: 1.015 }
             }
             transition={
               animatePhoto
-                ? { duration: 1.0, ease: EASE_OUT }
+                ? { duration: 1.2, ease: EASE_OUT }
                 : { duration: 0 }
             }
           >
@@ -174,17 +173,8 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Intro: firma de carga, escaneo e indicador de construcción */}
+      {/* Intro: espera fuentes + foto antes de arrancar la secuencia */}
       <IntroLoader images={[HERO_PHOTO]} />
-      {building ? (
-        <>
-          <div className="intro-scan" aria-hidden="true" />
-          <div className="intro-status" aria-hidden="true">
-            <i />
-            IA construyendo la interfaz…
-          </div>
-        </>
-      ) : null}
     </section>
   );
 };

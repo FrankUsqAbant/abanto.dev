@@ -15,7 +15,8 @@ import React, {
 
 /** Fases de la intro, en orden. */
 export const INTRO_PHASES = [
-  "loading", // pantalla con la firma mientras cargan fuentes y foto
+  "loading", // crema vacía (espacio ya reservado) mientras cargan fuentes y foto
+  "nav", // aparece la cabecera: primero la firma, luego enlaces y botón
   "photo", // revelado de la foto
   "typing", // el titular se escribe solo
   "building", // la IA "construye" el resto de la interfaz
@@ -36,13 +37,10 @@ export interface IntroContextValue {
   mode: IntroMode;
   /** true si el visitante saltó la intro (todo debe aparecer sin animar). */
   skipped: boolean;
-  /** La firma del navbar ya puede mostrarse (la del loader llegó a su lugar). */
-  logoVisible: boolean;
   /** Avanza a una fase posterior (nunca retrocede). */
   advance: (to: IntroPhase) => void;
   /** Salta al estado final al instante. */
   skip: () => void;
-  showLogo: () => void;
 }
 
 /* ------------------------------------------------------------------ */
@@ -50,9 +48,11 @@ export interface IntroContextValue {
 /* ------------------------------------------------------------------ */
 
 export const INTRO_TIMING = {
-  loaderMin: 800,
-  loaderMax: 2500,
-  loaderExit: 650,
+  /** Espera mínima/máxima a fuentes + foto antes de empezar (nada se ve aún). */
+  loaderMin: 150,
+  loaderMax: 1800,
+  /** Desde que empieza la cabecera hasta que empieza el hero. */
+  navLead: 1150,
   /** Desde que empieza el revelado de la foto hasta que empieza a escribir. */
   photoLead: 280,
   photoReveal: 1000,
@@ -62,9 +62,9 @@ export const INTRO_TIMING = {
   linePause: 140,
   /** Construcción: retraso base, separación entre piezas y duración de cada una. */
   buildBase: 240,
-  buildStagger: 60,
-  buildFill: 460,
-  buildTotal: 1250,
+  buildStagger: 90,
+  buildFill: 720,
+  buildTotal: 1750,
   buildTotalShort: 380,
 } as const;
 
@@ -85,10 +85,8 @@ const DONE_VALUE: IntroContextValue = {
   phase: "done",
   mode: "off",
   skipped: false,
-  logoVisible: true,
   advance: noop,
   skip: noop,
-  showLogo: noop,
 };
 
 const IntroContext = createContext<IntroContextValue>(DONE_VALUE);
@@ -142,7 +140,6 @@ export const IntroProvider: React.FC<IntroProviderProps> = ({
   const [mode] = useState<IntroMode>(() => resolveMode(enabled));
   const [phase, setPhase] = useState<IntroPhase>(() => initialPhase(mode));
   const [skipped, setSkipped] = useState(false);
-  const [logoVisible, setLogoVisible] = useState(mode !== "full");
   const phaseRef = useRef(phase);
   phaseRef.current = phase;
 
@@ -153,11 +150,8 @@ export const IntroProvider: React.FC<IntroProviderProps> = ({
   const skip = useCallback(() => {
     if (phaseRef.current === "done") return;
     setSkipped(true);
-    setLogoVisible(true);
     setPhase("done");
   }, []);
-
-  const showLogo = useCallback(() => setLogoVisible(true), []);
 
   // Expone la fase en <html> para estilos globales (p. ej. ocultar la barra de scroll).
   useLayoutEffect(() => {
@@ -165,6 +159,13 @@ export const IntroProvider: React.FC<IntroProviderProps> = ({
     root.dataset.introPhase = phase;
     root.dataset.introMode = mode;
   }, [phase, mode]);
+
+  // nav → photo: el hero llega cuando la cabecera ya casi terminó
+  useEffect(() => {
+    if (phase !== "nav") return;
+    const id = window.setTimeout(() => advance("photo"), INTRO_TIMING.navLead);
+    return () => window.clearTimeout(id);
+  }, [phase, advance]);
 
   // photo → typing
   useEffect(() => {
@@ -186,7 +187,6 @@ export const IntroProvider: React.FC<IntroProviderProps> = ({
   useEffect(() => {
     if (phase === "done" && mode !== "off") {
       markIntroSeen();
-      setLogoVisible(true);
     }
   }, [phase, mode]);
 
@@ -205,8 +205,8 @@ export const IntroProvider: React.FC<IntroProviderProps> = ({
   }, [phase === "done", skip]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const value = useMemo<IntroContextValue>(
-    () => ({ phase, mode, skipped, logoVisible, advance, skip, showLogo }),
-    [phase, mode, skipped, logoVisible, advance, skip, showLogo]
+    () => ({ phase, mode, skipped, advance, skip }),
+    [phase, mode, skipped, advance, skip]
   );
 
   return (

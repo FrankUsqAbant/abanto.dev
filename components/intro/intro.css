@@ -16,98 +16,6 @@ html[data-intro-phase="loading"] body {
   overflow: hidden;
 }
 
-/* ---------- Loader ---------- */
-.intro-loader {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: grid;
-  place-items: center;
-  background:
-    radial-gradient(90% 75% at 50% 46%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 75%),
-    var(--intro-cream);
-  color: var(--intro-ink);
-}
-
-.intro-loader__sig {
-  position: relative;
-  display: flex;
-  align-items: baseline;
-  gap: 0.35em;
-  font-size: clamp(46px, 8vw, 104px);
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.intro-loader__name {
-  display: inline-block;
-  font-family: var(--font-signature, "La Belle Aurore", cursive);
-  transform-origin: 50% 50%;
-  will-change: transform;
-}
-
-/* La firma se "escribe" de izquierda a derecha */
-.intro-loader__ink {
-  display: inline-block;
-  padding: 0.1em 0.12em 0.2em 0.04em;
-  margin: -0.1em -0.12em -0.2em -0.04em;
-  clip-path: inset(0 100% 0 0);
-}
-.intro-loader__ink.is-writing {
-  animation: intro-write 680ms cubic-bezier(0.55, 0.1, 0.3, 1) forwards;
-}
-@keyframes intro-write {
-  to {
-    clip-path: inset(0 -2% 0 0);
-  }
-}
-
-.intro-loader__dev {
-  display: inline-block;
-  font-family: var(--font-serif-display, "Instrument Serif", Georgia, serif);
-  font-style: italic;
-  font-size: 0.56em;
-  letter-spacing: -0.01em;
-  color: var(--intro-ink);
-}
-.intro-loader__dev-ink {
-  display: inline-block;
-  opacity: 0;
-}
-.intro-loader__dev-ink.is-writing {
-  animation: intro-dev 480ms var(--intro-ease) 420ms forwards;
-}
-@keyframes intro-dev {
-  from {
-    opacity: 0;
-    transform: translateY(0.18em);
-    filter: blur(4px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    filter: blur(0);
-  }
-}
-
-.intro-loader__bar {
-  position: absolute;
-  left: 50%;
-  bottom: clamp(48px, 9vh, 88px);
-  width: 120px;
-  height: 1px;
-  margin-left: -60px;
-  overflow: hidden;
-  background: rgba(22, 21, 20, 0.1);
-}
-.intro-loader__bar > span {
-  display: block;
-  height: 100%;
-  background: var(--intro-ink);
-  transform-origin: 0 50%;
-  transition: transform 500ms var(--intro-ease);
-}
-
 /* ---------- Titular con máquina de escribir ---------- */
 .tw-word {
   display: inline-block;
@@ -164,15 +72,10 @@ html[data-intro-phase="loading"] body {
   opacity: 0;
 }
 
-/* Construyendo: aparece el esqueleto y luego se rellena */
+/* Construyendo: cada pieza entra con un fundido suave hacia arriba */
 .build.is-building > .build__content {
   opacity: 0;
-  animation: build-fill var(--build-fill, 460ms) var(--intro-ease) var(--build-delay, 0ms) forwards;
-}
-.build.is-building > .build__skeleton {
-  animation:
-    build-skel-in 260ms var(--intro-ease) calc(var(--build-delay, 0ms) * 0.35) both,
-    build-skel-out 320ms ease calc(var(--build-delay, 0ms) + var(--build-fill, 460ms) * 0.55) forwards;
+  animation: build-soft var(--build-fill, 720ms) var(--intro-ease) var(--build-delay, 0ms) forwards;
 }
 
 /* Visita repetida: solo un fundido rápido */
@@ -181,23 +84,13 @@ html[data-intro-phase="loading"] body {
   animation: build-quick 320ms var(--intro-ease) var(--build-delay, 0ms) forwards;
 }
 
-@keyframes build-fill {
-  0% {
+@keyframes build-soft {
+  from {
     opacity: 0;
-    clip-path: inset(-30% -30% 130% -30%);
-    transform: translateY(4px);
+    transform: translate3d(0, 10px, 0);
   }
-  35% {
+  to {
     opacity: 1;
-  }
-  99% {
-    opacity: 1;
-    clip-path: inset(-30% -30% -30% -30%);
-    transform: none;
-  }
-  100% {
-    opacity: 1;
-    clip-path: none;
     transform: none;
   }
 }
@@ -211,208 +104,61 @@ html[data-intro-phase="loading"] body {
     transform: none;
   }
 }
-@keyframes build-skel-in {
+
+/* ---------- Cabecera primero (solo intro completa) ----------
+   Mientras carga, la barra ya ocupa su sitio pero es invisible. Luego:
+   barra → firma que se escribe → enlaces escalonados → botón. */
+html[data-intro-mode="full"][data-intro-phase="loading"] .nav-in,
+html[data-intro-mode="full"][data-intro-phase="loading"] .nav-logo-in {
+  opacity: 0;
+}
+html[data-intro-mode="full"]:not([data-intro-phase="loading"]):not([data-intro-phase="done"]) .nav-in {
+  animation: nav-in 700ms var(--intro-ease) var(--nav-delay, 0ms) both;
+}
+html[data-intro-mode="full"]:not([data-intro-phase="loading"]):not([data-intro-phase="done"]) .nav-in--fade {
+  animation-name: nav-fade;
+}
+html[data-intro-mode="full"]:not([data-intro-phase="loading"]):not([data-intro-phase="done"]) .nav-logo-in {
+  animation: nav-write 950ms cubic-bezier(0.55, 0.1, 0.3, 1) 120ms both;
+}
+@keyframes nav-in {
   from {
     opacity: 0;
-    transform: scale(0.97);
+    transform: translate3d(0, -6px, 0);
   }
   to {
     opacity: 1;
     transform: none;
   }
 }
-@keyframes build-skel-out {
-  to {
+@keyframes nav-fade {
+  from {
     opacity: 0;
-    visibility: hidden;
   }
-}
-
-.build__skeleton {
-  position: absolute;
-  inset: -3px -6px;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6px;
-  padding: 0 10px;
-  border: 1px dashed rgba(22, 21, 20, 0.28);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.28);
-  overflow: hidden;
-  pointer-events: none;
-}
-/* Brillo que recorre el esqueleto */
-.build__skeleton::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    100deg,
-    rgba(255, 255, 255, 0) 30%,
-    rgba(255, 255, 255, 0.85) 50%,
-    rgba(255, 255, 255, 0) 70%
-  );
-  transform: translateX(-100%);
-  animation: build-shimmer 900ms ease-in-out infinite;
-}
-@keyframes build-shimmer {
   to {
-    transform: translateX(100%);
-  }
-}
-
-.build__bar {
-  display: block;
-  height: 6px;
-  max-height: 32%;
-  border-radius: 3px;
-  background: rgba(22, 21, 20, 0.1);
-}
-.build__bar:nth-child(odd) {
-  width: 82%;
-}
-.build__bar:nth-child(even) {
-  width: 58%;
-}
-
-.build__label {
-  position: absolute;
-  left: -1px;
-  bottom: calc(100% + 3px);
-  padding: 1px 5px;
-  border-radius: 3px;
-  font-family: var(--intro-mono);
-  font-size: 9px;
-  line-height: 1.5;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  color: #fff;
-  background: var(--intro-ink);
-  overflow: visible;
-}
-.build__skeleton:has(.build__label) {
-  overflow: visible;
-}
-.build__skeleton:has(.build__label)::after {
-  /* con etiqueta, el brillo se recorta con su propio contenedor */
-  clip-path: inset(0 round 6px);
-}
-
-/* Variantes */
-.build--pill > .build__skeleton {
-  inset: 0;
-  border-radius: 999px;
-  align-items: center;
-}
-.build--pill .build__bar {
-  width: 56%;
-}
-.build--chip > .build__skeleton {
-  inset: -4px -8px;
-  border-radius: 999px;
-}
-.build--chip .build__bar {
-  height: 4px;
-  width: 100%;
-}
-.build--card > .build__skeleton {
-  inset: 0;
-  justify-content: flex-start;
-  gap: 8px;
-  padding: 18% 9% 0 30%;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.35);
-}
-.build--card .build__bar:nth-of-type(2) {
-  width: 46%;
-  height: 8px;
-  background: rgba(22, 21, 20, 0.16);
-}
-
-/* Línea de escaneo que recorre el hero mientras se construye */
-.intro-scan {
-  position: absolute;
-  inset: 0;
-  z-index: 6;
-  pointer-events: none;
-  overflow: hidden;
-}
-.intro-scan::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 120px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.28) 85%,
-    rgba(22, 21, 20, 0.1) 99%,
-    rgba(22, 21, 20, 0) 100%
-  );
-  transform: translateY(-120px);
-  animation: intro-scan 1250ms cubic-bezier(0.45, 0, 0.25, 1) 150ms forwards;
-}
-@keyframes intro-scan {
-  to {
-    transform: translateY(calc(100vh + 120px));
-  }
-}
-
-/* Indicador "IA construyendo…" */
-.intro-status {
-  position: fixed;
-  left: 50%;
-  bottom: 22px;
-  z-index: 60;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-family: var(--intro-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.02em;
-  color: var(--intro-ink);
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(22, 21, 20, 0.08);
-  box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.25);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  transform: translateX(-50%);
-  pointer-events: none;
-  animation: intro-status 1250ms var(--intro-ease) forwards;
-}
-.intro-status i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #2f9e6e;
-  box-shadow: 0 0 0 3px rgba(47, 158, 110, 0.18);
-}
-@keyframes intro-status {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, 8px);
-  }
-  15%,
-  80% {
     opacity: 1;
-    transform: translate(-50%, 0);
   }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, 0);
+}
+/* La firma se "escribe" de izquierda a derecha */
+@keyframes nav-write {
+  from {
+    opacity: 0.001;
+    clip-path: inset(-30% 100% -30% -10%);
+  }
+  15% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(-30% -10% -30% -10%);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .intro-loader,
-  .intro-scan,
-  .intro-status {
-    display: none;
+  .nav-in,
+  .nav-logo-in,
+  .build > .build__content {
+    animation: none !important;
+    opacity: 1 !important;
   }
 }
