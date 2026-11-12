@@ -28,8 +28,6 @@ const BUILD_ORDER = {
   primary: 2,
   secondary: 3,
   cards: 4, // 4–7.5 (medio paso por tarjeta)
-  bottomLeft: 8,
-  bottomRight: 9,
 } as const;
 
 /* ------------------------------------------------------------------ */
@@ -174,27 +172,6 @@ const Hero: React.FC = () => {
           {/* Móvil: cinta de servicios que se desplaza sola */}
           <ServiceMarquee buildOrder={BUILD_ORDER.cards} />
         </div>
-      </div>
-
-      {/* Pie del hero */}
-      <div className="hero__bottom">
-        <BuildReveal
-          order={BUILD_ORDER.bottomLeft}
-          variant="lines"
-          as="div"
-          inline
-        >
-          <p className="hero__bottom-left">
-            Diseñados para tu negocio.
-            <br />
-            Conectados a tu forma de trabajar.
-          </p>
-        </BuildReveal>
-        <BuildReveal order={BUILD_ORDER.bottomRight} variant="text" inline>
-          <p className="hero__bottom-right">
-            Inteligencia que se convierte en acción.
-          </p>
-        </BuildReveal>
       </div>
 
       {/* Intro: firma de carga, escaneo e indicador de construcción */}
