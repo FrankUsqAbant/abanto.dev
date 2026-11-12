@@ -85,6 +85,17 @@ const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileMenuOpen]);
 
+  // Bloquea el scroll de la página mientras el menú móvil está abierto.
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const root = document.documentElement;
+    const prev = root.style.overflow;
+    root.style.overflow = "hidden";
+    return () => {
+      root.style.overflow = prev;
+    };
+  }, [mobileMenuOpen]);
+
   // Cierra el menú móvil si la ventana crece hasta el layout de escritorio.
   useEffect(() => {
     if (!mobileMenuOpen) return;
@@ -145,7 +156,7 @@ const Navbar: React.FC<NavbarProps> = ({
         menuItem: "text-[#57534d] hover:text-[#161514]",
       }
     : {
-        bar: "bg-[#050505]/90 text-white",
+        bar: "bg-[#050505]/95 md:bg-[#050505]/90 md:backdrop-blur-xl text-white",
         line: "bg-white/[0.08]",
         link: "text-neutral-500 hover:text-white",
         active: "text-white font-medium",
@@ -159,7 +170,7 @@ const Navbar: React.FC<NavbarProps> = ({
     <>
       <nav
         aria-label="Principal"
-        className={`fixed top-0 left-0 right-0 z-[100] backdrop-blur-xl transition-colors duration-500 ${theme.bar}`}
+        className={`fixed top-0 left-0 right-0 z-[100] transition-colors duration-500 ${theme.bar}`}
       >
         <div className="relative max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 h-20 grid grid-cols-[1fr_auto] lg:grid-cols-[1fr_auto_1fr] items-center gap-4">
           {/* Firma */}
@@ -169,7 +180,7 @@ const Navbar: React.FC<NavbarProps> = ({
               e.preventDefault();
               handleNavClick("home");
             }}
-            className="ix-logo justify-self-start font-signature text-[25px] min-[400px]:text-[28px] sm:text-[30px] lg:text-[34px] leading-none pt-1 select-none"
+            className="ix-logo justify-self-start pointer-coarse:py-2 pointer-coarse:-my-2 font-signature whitespace-nowrap text-[26px] min-[400px]:text-[28px] sm:text-[30px] lg:text-[34px] leading-none pt-1 select-none"
             aria-label="Frank Abanto — Inicio"
             data-intro-logo=""
           >
@@ -180,7 +191,7 @@ const Navbar: React.FC<NavbarProps> = ({
           <ul className="hidden lg:flex items-center gap-5 xl:gap-8">
             {navItems.map((item, i) => {
               const active = isItemActive(item);
-              const cls = `relative inline-flex items-center py-2 leading-none text-[13px] tracking-[0.005em] transition-colors duration-300 ${
+              const cls = `relative inline-flex items-center py-2 leading-none pointer-coarse:after:absolute pointer-coarse:after:inset-x-0 pointer-coarse:after:-inset-y-3 pointer-coarse:after:content-[''] text-[13px] tracking-[0.005em] transition-colors duration-300 ${
                 active ? theme.active : theme.link
               }`;
               const dot = (
@@ -227,18 +238,10 @@ const Navbar: React.FC<NavbarProps> = ({
             style={navDelay(NAV_LINKS_DELAY + navItems.length * NAV_LINK_STAGGER + 60)}
           >
           <div className="flex items-center gap-2">
-            {/* Móvil: píldora compacta, siempre a mano */}
             <CalLink
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Agendar llamada de 30 minutos (Cal.com)"
-              className={`sm:hidden inline-flex items-center h-9 px-3.5 rounded-full text-[12px] font-medium whitespace-nowrap shadow-[0_8px_20px_-10px_rgba(0,0,0,0.5)] transition-colors duration-300 ${theme.cta}`}
-            >
-              Agendar llamada
-            </CalLink>
-            <CalLink
-              onClick={() => setMobileMenuOpen(false)}
-              aria-label="Agendar llamada de 30 minutos (Cal.com)"
-              className={`group hidden sm:inline-flex items-center gap-3 h-10 pl-5 pr-4 rounded-full text-[13px] font-medium shadow-[0_8px_20px_-10px_rgba(0,0,0,0.5)] transition-colors duration-300 ${theme.cta}`}
+              className={`group hidden lg:inline-flex items-center gap-3 h-10 pl-5 pr-4 rounded-full text-[13px] font-medium shadow-[0_8px_20px_-10px_rgba(0,0,0,0.5)] transition-colors duration-300 ${theme.cta}`}
             >
               Agendar llamada
               <ArrowUpRight />
@@ -250,7 +253,7 @@ const Navbar: React.FC<NavbarProps> = ({
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"
               aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
-              className={`lg:hidden w-10 h-10 flex items-center justify-center rounded-full border transition-colors ${theme.icon}`}
+              className={`lg:hidden w-11 h-11 flex items-center justify-center rounded-full border transition-colors ${theme.icon}`}
             >
               <Icon name={mobileMenuOpen ? "times" : "bars"} size={16} />
             </button>
@@ -269,7 +272,7 @@ const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div
           id="mobile-menu"
-          className={`fixed inset-0 z-[90] lg:hidden flex flex-col pt-24 pb-8 px-6 overflow-y-auto animate-fade-in ${theme.menu}`}
+          className={`fixed inset-0 z-[90] lg:hidden flex flex-col pt-24 pb-[max(2rem,env(safe-area-inset-bottom))] px-6 overflow-y-auto overscroll-contain animate-fade-in ${theme.menu}`}
         >
           <ul className="flex flex-col">
             {navItems.map((item) => {
@@ -302,15 +305,8 @@ const Navbar: React.FC<NavbarProps> = ({
               );
             })}
           </ul>
-          <div className="mt-6 flex flex-col gap-3">
-            <CalLink
-              onClick={() => setMobileMenuOpen(false)}
-              aria-label="Agendar llamada de 30 minutos (Cal.com)"
-              className={`group inline-flex items-center justify-center gap-3 h-12 rounded-full text-sm font-medium ${theme.cta}`}
-            >
-              Agendar llamada
-              <ArrowUpRight />
-            </CalLink>
+          {/* Abajo del menú: buscar y, como acción principal, agendar la llamada. */}
+          <div className="mt-auto pt-8 flex flex-col gap-3">
             <button
               type="button"
               onClick={() => {
@@ -322,6 +318,14 @@ const Navbar: React.FC<NavbarProps> = ({
               <Icon name="search" size={13} className="inline-block mr-2 -mt-0.5" />
               Buscar
             </button>
+            <CalLink
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Agendar llamada de 30 minutos (Cal.com)"
+              className={`group inline-flex items-center justify-center gap-3 h-14 rounded-full text-[15px] font-medium shadow-[0_14px_30px_-14px_rgba(0,0,0,0.55)] ${theme.cta}`}
+            >
+              Agendar llamada
+              <ArrowUpRight />
+            </CalLink>
           </div>
         </div>
       )}
