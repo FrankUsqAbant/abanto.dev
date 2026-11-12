@@ -14,7 +14,10 @@
 </head>
 
 <body class="bg-background">
-  <div id="root"></div>
+  <div id="root">
+    <!-- Se reemplaza en cuanto React monta. Si el JS no carga, al menos no queda una pantalla negra. -->
+    <div style="min-height:100vh;display:grid;place-items:center;background:#f4f2ee;color:#6e6a64;font:14px/1.5 Inter,system-ui,sans-serif">Cargando…</div>
+  </div>
   <script type="module" src="/index.tsx"></script>
 </body>
 

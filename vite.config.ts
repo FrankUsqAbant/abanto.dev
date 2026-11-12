@@ -11,6 +11,8 @@ export default defineConfig(({ mode }) => {
       host: "0.0.0.0",
       // Necesario para recarga en vivo dentro de Docker en Windows
       watch: { usePolling: !!process.env.CHOKIDAR_USEPOLLING },
+      // En desarrollo, que el navegador nunca reutilice módulos viejos de una sesión anterior
+      headers: { "Cache-Control": "no-store" },
     },
     plugins: [react(), tailwindcss()],
     define: {

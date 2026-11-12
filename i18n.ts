@@ -15,6 +15,9 @@ i18n
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
+    supportedLngs: ["es", "en"],
+    nonExplicitSupportedLngs: true,
+    load: "languageOnly", // es-PE / es-419 -> /locales/es (evita pedir archivos que no existen)
     fallbackLng: "es", // Default to Spanish as requested by context (or 'en' if preferred)
     debug: import.meta.env.DEV,
 
