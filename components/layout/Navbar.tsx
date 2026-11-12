@@ -137,12 +137,12 @@ const Navbar: React.FC<NavbarProps> = ({
     ? {
         bar: "bg-[#f4f2ee] text-[#161514]",
         line: "bg-black/[0.09]",
-        link: "text-[#7a766f] hover:text-[#161514]",
+        link: "text-[#57534d] hover:text-[#161514]",
         active: "text-[#161514] font-medium",
         cta: "bg-[#1b1a19] text-white hover:bg-black",
         icon: "text-[#161514] border-black/10 hover:bg-black/5",
         menu: "bg-[#f4f2ee] text-[#161514]",
-        menuItem: "text-[#7a766f] hover:text-[#161514]",
+        menuItem: "text-[#57534d] hover:text-[#161514]",
       }
     : {
         bar: "bg-[#050505]/90 text-white",

@@ -77,7 +77,7 @@ export const ServiceCard: React.FC<{ service: Service; labelled?: boolean }> = (
         <ServiceIcon name={service.icon} />
       </span>
       <div>
-        <h3 className="hero-card__title">{service.title}</h3>
+        <p className="hero-card__title">{service.title}</p>
         <p className="hero-card__desc">
           {service.description[0]}
           <br />
