@@ -161,3 +161,24 @@ h4 {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ---- Móviles y pantallas táctiles: vidrio sin desenfoque ----
+   backdrop-filter obliga a recomponer lo que hay detrás en cada frame de scroll;
+   en teléfonos usamos fondos translúcidos sólidos (se ven casi igual). */
+@media (max-width: 719px), (hover: none) and (pointer: coarse) {
+  .hero-card, .hero__cue, .hm .dm, .hm .form, .hm.ck,
+  :is(.ptp, .ptp-layer) :is(.search, .lang, .panel, .scrim),
+  .about-chips li, .about-card, .glass-card {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  .hero-card { background: linear-gradient(145deg, rgba(255, 255, 255, .9), rgba(250, 249, 246, .8)) !important; }
+  .hero__cue { background: rgba(244, 242, 238, .95) !important; }
+  .hm .dm { background: linear-gradient(150deg, rgba(255, 255, 255, .94), rgba(250, 249, 246, .86)) !important; }
+  .hm .form { background: linear-gradient(145deg, rgba(255, 255, 255, .9), rgba(250, 249, 246, .78)) !important; }
+  .hm.ck { background: rgba(250, 249, 246, .97) !important; }
+  :is(.ptp, .ptp-layer) :is(.search, .lang) { background: rgba(255, 255, 255, .86) !important; }
+  :is(.ptp, .ptp-layer) .panel { background: rgba(252, 251, 249, .98) !important; }
+  .about-chips li { background: rgba(255, 255, 255, .85) !important; }
+  .about-card { background: rgba(255, 255, 255, .82) !important; }
+}

@@ -40,11 +40,20 @@ const ScrollCue: React.FC<{ reduceMotion: boolean }> = ({ reduceMotion }) => {
   const { phase } = useIntro();
   const [scrolled, setScrolled] = useState(false);
 
+  // Un centinela a 40px del inicio + IntersectionObserver: leer scrollY en cada
+  // evento de scroll fuerza layout síncrono y en móviles lentos se nota.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    if (typeof IntersectionObserver === "undefined") return;
+    const s = document.createElement("div");
+    s.setAttribute("aria-hidden", "true");
+    s.style.cssText = "position:absolute;top:40px;left:0;width:1px;height:1px;pointer-events:none";
+    document.body.appendChild(s);
+    const io = new IntersectionObserver(([e]) => setScrolled(e.boundingClientRect.top < 0));
+    io.observe(s);
+    return () => {
+      io.disconnect();
+      s.remove();
+    };
   }, []);
 
   const go = (e: React.MouseEvent<HTMLAnchorElement>) => {

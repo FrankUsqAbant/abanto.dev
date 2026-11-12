@@ -162,6 +162,8 @@ const ServiceOrbit: React.FC<ServiceOrbitProps> = ({
   const angle = useRef(0);
   const speed = useRef(0);
   const hovered = useRef(false);
+  /** Fuera de pantalla el anillo frena y deja de escribir estilos cada frame. */
+  const visible = useRef(true);
   // Ya orbita mientras las tarjetas llegan (arranque suave por la inercia).
   const running = phase !== "loading" && !reduceMotion;
   const runningRef = useRef(running);
@@ -178,10 +180,20 @@ const ServiceOrbit: React.FC<ServiceOrbitProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const ring = ringRef.current;
+    if (!ring || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => {
+      visible.current = e.isIntersecting;
+    });
+    io.observe(ring);
+    return () => io.disconnect();
+  }, []);
+
   useAnimationFrame((_, delta) => {
     if (reduceMotion) return;
     const dt = Math.min(delta, 64) / 1000;
-    const target = runningRef.current ? (hovered.current ? HOVER_SPEED : 1) : 0;
+    const target = runningRef.current && visible.current ? (hovered.current ? HOVER_SPEED : 1) : 0;
     // arranque y frenado suaves
     speed.current += (target - speed.current) * Math.min(1, dt * 2.2);
     if (Math.abs(speed.current) < 0.0005 && target === 0) return;

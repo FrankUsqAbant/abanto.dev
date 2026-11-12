@@ -122,6 +122,8 @@ const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
   const hold = useRef({ hover: false, focus: false, offscreen: true, paused: false });
   const drag = useRef<{ id: number; x: number; pos: number; lastX: number; lastT: number; v: number; moved: boolean } | null>(null);
   const suppressClick = useRef(false);
+  /** Reanuda el bucle de animación (se detiene solo cuando el carrusel está quieto). */
+  const wake = useRef<() => void>(() => {});
 
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -134,6 +136,7 @@ const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
     if (!el) return;
     const io = new IntersectionObserver(([e]) => {
       hold.current.offscreen = !e.isIntersecting;
+      wake.current();
     }, { threshold: 0.15 });
     io.observe(el);
     return () => io.disconnect();
@@ -145,6 +148,12 @@ const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
     let last = performance.now();
     const unit = () => (slotRefs.current[0]?.offsetWidth ?? 500) * gapNow();
     const mq = window.matchMedia(FLAT_MQ);
+
+    const settled = (h: typeof hold.current) =>
+      !drag.current &&
+      nudge.current === 0 &&
+      Math.abs(vel.current) < 1e-3 &&
+      (n <= 1 || h.hover || h.focus || h.offscreen || h.paused || document.hidden);
 
     const frame = (now: number) => {
       const dt = Math.min(now - last, 64) / 1000;
@@ -174,9 +183,21 @@ const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
         activeRef.current = a;
         setActive(a);
       }
+      // Quieto (pausado, fuera de pantalla o pestaña oculta): no gastar frames.
+      if (settled(h)) {
+        vel.current = 0;
+        raf = 0;
+        return;
+      }
+      raf = requestAnimationFrame(frame);
+    };
+    wake.current = () => {
+      if (raf) return;
+      last = performance.now();
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
+    document.addEventListener("visibilitychange", wake.current);
 
     // Arrastre con puntero (ratón y táctil)
     const stage = stageRef.current;
@@ -184,6 +205,7 @@ const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
       if (e.button !== 0 || (e.target as HTMLElement).closest("a,button")) return;
       drag.current = { id: e.pointerId, x: e.clientX, pos: pos.current, lastX: e.clientX, lastT: performance.now(), v: 0, moved: false };
       nudge.current = 0;
+      wake.current();
     };
     const move = (e: PointerEvent) => {
       const dr = drag.current;
@@ -219,6 +241,8 @@ const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
     window.addEventListener("pointercancel", up);
     return () => {
       cancelAnimationFrame(raf);
+      raf = 1; // evita que un wake tardío reanude un bucle desmontado
+      document.removeEventListener("visibilitychange", wake.current);
       stage?.removeEventListener("pointerdown", down);
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", up);
@@ -230,6 +254,7 @@ const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
     // empuje suave hasta la tarjeta siguiente/anterior
     const target = Math.round(pos.current + nudge.current) + step;
     nudge.current = target - pos.current;
+    wake.current();
   };
 
   return (
@@ -244,12 +269,16 @@ const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
       }}
       onPointerLeave={() => {
         hold.current.hover = false;
+        wake.current();
       }}
       onFocus={() => {
         hold.current.focus = true;
       }}
       onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) hold.current.focus = false;
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+          hold.current.focus = false;
+          wake.current();
+        }
       }}
       onKeyDown={(e) => {
         if (e.key === "ArrowRight") go(1);
@@ -293,6 +322,7 @@ const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
             aria-pressed={paused}
             onClick={() => {
               hold.current.paused = !paused;
+              wake.current();
               setPaused(!paused);
             }}
           >
