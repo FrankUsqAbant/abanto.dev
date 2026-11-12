@@ -5,15 +5,16 @@ import CalLink from "../../shared/CalLink";
 import { CONTACT_EMAIL, CONTACT_ID, SOCIALS } from "./homeLinks";
 
 type Field = "name" | "email" | "message";
-type Errors = Partial<Record<Field, string>>;
+type Errors = Partial<Record<Field | "consent", string>>;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-const validate = (v: Record<Field, string>): Errors => {
+const validate = (v: Record<Field, string>, consent: boolean): Errors => {
   const e: Errors = {};
   if (v.name.trim().length < 2) e.name = "Escribe tu nombre.";
   if (!EMAIL_RE.test(v.email.trim())) e.email = "Escribe un email válido, por ejemplo tu@empresa.com.";
   if (v.message.trim().length < 10) e.message = "Cuéntame un poco más (mínimo 10 caracteres).";
+  if (!consent) e.consent = "Necesito tu aceptación de la política de privacidad para responderte.";
   return e;
 };
 
@@ -58,12 +59,14 @@ const ContactSection: React.FC = () => {
   const [touched, setTouched] = useState(false);
   const [send, setSend] = useState<SendState>({ kind: "idle" });
   const [gotcha, setGotcha] = useState("");
+  const [consent, setConsent] = useState(false);
 
   const ids = {
     name: `${uid}-name`,
     email: `${uid}-email`,
     message: `${uid}-message`,
     gotcha: `${uid}-gotcha`,
+    consent: `${uid}-consent`,
     status: `${uid}-status`,
   };
 
@@ -73,16 +76,16 @@ const ContactSection: React.FC = () => {
     const next = { ...values, [field]: e.target.value };
     setValues(next);
     if (send.kind === "success" || send.kind === "error") setSend({ kind: "idle" });
-    if (touched) setErrors(validate(next));
+    if (touched) setErrors(validate(next, consent));
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (sending) return;
     setTouched(true);
-    const errs = validate(values);
+    const errs = validate(values, consent);
     setErrors(errs);
-    const first = (Object.keys(errs) as Field[])[0];
+    const first = (Object.keys(errs) as (Field | "consent")[])[0];
     if (first) {
       document.getElementById(ids[first])?.focus();
       return;
@@ -92,6 +95,7 @@ const ContactSection: React.FC = () => {
       name: values.name.trim(),
       email: values.email.trim(),
       message: values.message.trim(),
+      privacidad_aceptada: "Sí (política de privacidad del sitio)",
       _subject: `Nuevo mensaje desde el portfolio — ${values.name.trim()}`,
       _gotcha: gotcha,
     };
@@ -106,6 +110,7 @@ const ContactSection: React.FC = () => {
       if (res.ok) {
         setSend({ kind: "success" });
         setValues({ name: "", email: "", message: "" });
+        setConsent(false);
         setTouched(false);
         setErrors({});
       } else {
@@ -196,6 +201,25 @@ const ContactSection: React.FC = () => {
               <textarea rows={5} placeholder="Cuéntame sobre tu negocio y qué te gustaría automatizar…" {...fieldProps("message")} />
               {errors.message ? <small className="form__err" id={errorId("message")}>{errors.message}</small> : null}
             </label>
+            <div className="form__consent">
+              <input
+                id={ids.consent}
+                type="checkbox"
+                checked={consent}
+                required
+                aria-invalid={errors.consent ? true : undefined}
+                aria-describedby={errors.consent ? `${ids.consent}-error` : undefined}
+                onChange={(e) => {
+                  setConsent(e.target.checked);
+                  if (touched) setErrors(validate(values, e.target.checked));
+                }}
+              />
+              <label htmlFor={ids.consent}>
+                Acepto la{" "}
+                <a href="/privacidad" target="_blank" rel="noopener">política de privacidad</a>
+              </label>
+              {errors.consent ? <small className="form__err" id={`${ids.consent}-error`}>{errors.consent}</small> : null}
+            </div>
             {/* Honeypot anti-spam (Formspree): invisible para personas */}
             <div className="form__hp" aria-hidden="true">
               <label htmlFor={ids.gotcha}>No completes este campo</label>

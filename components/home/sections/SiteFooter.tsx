@@ -3,6 +3,7 @@ import type { View } from "../../../types";
 import CalLink from "../../shared/CalLink";
 import Reveal from "./Reveal";
 import { CONTACT_EMAIL, SOCIALS, scrollToSection, scrollToSectionWhenReady } from "./homeLinks";
+import { openConsentBanner } from "../../../lib/consent";
 
 interface SiteFooterProps {
   onNavigate: (view: View) => void;
@@ -93,7 +94,12 @@ const SiteFooter: React.FC<SiteFooterProps> = ({ onNavigate }) => {
 
           <div className="ft__bot">
             <span>© {new Date().getFullYear()} Frank Abanto</span>
-            <a href="/privacidad" onClick={go("privacidad")}>Privacidad</a>
+            <nav className="ft__legal" aria-label="Legal">
+              <a href="/privacidad" onClick={go("privacidad")}>Privacidad</a>
+              <a href="/terminos" onClick={go("terminos")}>Términos</a>
+              <a href="/cookies" onClick={go("cookies")}>Cookies</a>
+              <button type="button" onClick={openConsentBanner}>Configurar cookies</button>
+            </nav>
             <a className="ft__up" href="#top" onClick={toTop}>
               Volver arriba <span aria-hidden="true">↑</span>
             </a>

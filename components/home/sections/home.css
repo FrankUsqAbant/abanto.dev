@@ -421,7 +421,45 @@
 /* Privacidad */
 .hm.legal{background:var(--cream);padding:140px 0 90px}
 .hm .legal__in{max-width:680px}
-.hm .legal__date{margin:10px 0 26px;font-family:var(--mono);font-size:11px;color:var(--g2)}
+.hm.legal .legal__date{margin:10px 0 26px;font-family:var(--mono);font-size:11px;color:var(--g2)}
 .hm.legal h2{font-family:var(--serif);font-weight:400;font-size:24px;margin:26px 0 6px}
 .hm.legal p{color:var(--ink-2);font-size:15px;line-height:1.65}
 .hm.legal a{text-decoration:underline;text-underline-offset:3px}
+.hm.legal ul{margin:6px 0 0;padding-left:20px;list-style:disc;display:grid;gap:6px;color:var(--ink-2);font-size:15px;line-height:1.6}
+.hm.legal ul li::marker{color:var(--g3)}
+.hm .legal__tabs{display:flex;gap:6px;margin-bottom:22px}
+.hm .legal__tabs a{text-decoration:none!important;font-size:12.5px;padding:6px 12px;border-radius:999px;color:var(--g1);border:1px solid var(--line);background:rgba(255,255,255,.5)}
+.hm .legal__tabs a[aria-current="page"]{background:var(--ink);color:#f4f2ee;border-color:var(--ink)}
+.hm .legal__lead{font-size:16.5px!important;color:var(--ink)!important}
+.hm .legal__note{margin-top:40px;padding:14px 16px;border-radius:14px;border:1px dashed rgba(20,20,20,.2);font-size:13px!important;color:var(--g1)!important}
+.hm .legal__table{overflow-x:auto;margin-top:10px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.55)}
+.hm .legal__table table{width:100%;border-collapse:collapse;font-size:13.5px}
+.hm .legal__table th,.hm .legal__table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.hm .legal__table th{font-family:var(--mono);font-weight:400;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--g2)}
+.hm .legal__table tr:last-child td{border-bottom:0}
+.hm .legal__table code{font-family:var(--mono);font-size:12px}
+.hm .legal__btn{font:inherit;font-size:13px;margin-left:6px;padding:6px 12px;border-radius:999px;border:0;background:var(--ink);color:#f4f2ee;cursor:pointer}
+/* Pie: enlaces legales */
+.hm .ft__legal{display:flex;flex-wrap:wrap;gap:6px 16px}
+.hm .ft__legal button{font:inherit;font-size:12px;color:var(--g1);background:none;border:0;padding:0;cursor:pointer;transition:color .25s}
+.hm .ft__legal button:hover{color:var(--ink)}
+/* Formulario: consentimiento */
+.hm .form__consent{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;font-size:13px;color:var(--ink-2)}
+.hm .form .form__consent input{width:18px;height:18px;margin:0;padding:0;border-radius:4px;accent-color:var(--ink);cursor:pointer}
+.hm .form .form__consent input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.hm .form .form__consent label{display:block;margin:0;cursor:pointer}
+.hm .form__consent a{text-decoration:underline;text-underline-offset:3px}
+.hm .form__consent .form__err{grid-column:1/-1}
+/* Aviso de cookies */
+.hm.ck{position:fixed;left:50%;bottom:16px;z-index:80;width:min(680px,calc(100vw - 24px));translate:-50% 0;display:flex;align-items:center;gap:16px;padding:12px 12px 12px 18px;border-radius:18px;
+  background:linear-gradient(145deg,rgba(250,249,246,.9),rgba(244,242,238,.78));border:1px solid rgba(255,255,255,.95);box-shadow:0 24px 50px -24px rgba(0,0,0,.45),inset 0 0 0 1px rgba(20,20,20,.06);
+  backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);font-size:12.5px;line-height:1.45;color:var(--ink-2)}
+.hm.ck p{flex:1}
+.hm.ck a{text-decoration:underline;text-underline-offset:3px;color:var(--ink)}
+.hm .ck__btns{display:flex;gap:6px;flex:none}
+.hm .ck__btns button{font:inherit;font-size:12.5px;font-weight:500;padding:8px 14px;border-radius:999px;cursor:pointer;transition:transform .25s var(--ease)}
+.hm .ck__btns button:active{transform:scale(.96)}
+.hm .ck__no{background:transparent;border:1px solid rgba(20,20,20,.18);color:var(--ink)}
+.hm .ck__ok{background:var(--ink);border:1px solid var(--ink);color:#f4f2ee}
+.hm.ck :focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+@media (max-width:560px){.hm.ck{flex-direction:column;align-items:stretch;gap:10px;padding:14px}.hm .ck__btns button{flex:1}}

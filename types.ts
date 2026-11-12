@@ -1,4 +1,4 @@
-export type View = "home" | "aprende" | "privacidad" | "courses" | "about" | "theme";
+export type View = "home" | "aprende" | "privacidad" | "terminos" | "cookies" | "courses" | "about" | "theme";
 
 export interface BlogPost {
   id: string;

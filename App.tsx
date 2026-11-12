@@ -14,7 +14,10 @@ import "./components/home/sections/home.css";
 import PageTransition from "./components/layout/PageTransition";
 import Home from "./pages/Home";
 import Aprende from "./pages/Aprende";
-import Privacidad from "./pages/Privacidad";
+import Privacidad from "./pages/legal/Privacidad";
+import Terminos from "./pages/legal/Terminos";
+import Cookies from "./pages/legal/Cookies";
+import CookieBanner from "./components/shared/CookieBanner";
 import About from "./pages/About";
 import CommandCenter from "./components/features/CommandCenter";
 import { View } from "./types";
@@ -126,6 +129,22 @@ const App: React.FC = () => {
               }
             />
             <Route
+              path="/terminos"
+              element={
+                <PageTransition>
+                  <Terminos />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/cookies"
+              element={
+                <PageTransition>
+                  <Cookies />
+                </PageTransition>
+              }
+            />
+            <Route
               path="/about"
               element={
                 <PageTransition>
@@ -150,6 +169,8 @@ const App: React.FC = () => {
           handleNavigate(view === "home" ? "/" : `/${view}`)
         }
       />
+
+      <CookieBanner />
 
       {isCommandCenterOpen && (
         <CommandCenter

@@ -17,7 +17,13 @@ const usePageTitle = () => {
         title = `${t("navbar.home")} | FrankDev`;
         break;
       case path === "/privacidad":
-        title = "Privacidad | FrankDev";
+        title = "Política de privacidad | FrankDev";
+        break;
+      case path === "/terminos":
+        title = "Términos de uso | FrankDev";
+        break;
+      case path === "/cookies":
+        title = "Política de cookies | FrankDev";
         break;
       case path === "/about":
         title = `${t("navbar.about")} | FrankDev`;
