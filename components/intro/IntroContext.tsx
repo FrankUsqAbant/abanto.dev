@@ -104,8 +104,14 @@ const markIntroSeen = () => {
   }
 };
 
+/** En móvil (< 720px) el hero se muestra al instante: mejor LCP en redes lentas. */
+const isSmallScreen = (): boolean =>
+  typeof window !== "undefined" &&
+  typeof window.matchMedia === "function" &&
+  window.matchMedia("(max-width: 719px)").matches;
+
 const resolveMode = (enabled: boolean): IntroMode => {
-  if (!enabled || prefersReducedMotion()) return "off";
+  if (!enabled || prefersReducedMotion() || isSmallScreen()) return "off";
   return hasSeenIntro() ? "short" : "full";
 };
 

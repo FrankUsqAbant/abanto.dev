@@ -9,6 +9,7 @@ import {
 } from "../home/sections/homeLinks";
 import { useActiveSection } from "./useActiveSection";
 import CalLink from "../shared/CalLink";
+import Icon from "../shared/Icon";
 
 interface NavbarProps {
   currentView: View;
@@ -243,10 +244,7 @@ const Navbar: React.FC<NavbarProps> = ({
               aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
               className={`lg:hidden w-10 h-10 flex items-center justify-center rounded-full border transition-colors ${theme.icon}`}
             >
-              <i
-                className={`fas ${mobileMenuOpen ? "fa-times" : "fa-bars"} text-sm`}
-                aria-hidden="true"
-              ></i>
+              <Icon name={mobileMenuOpen ? "times" : "bars"} size={16} />
             </button>
           </div>
           </div>
@@ -313,7 +311,7 @@ const Navbar: React.FC<NavbarProps> = ({
               }}
               className={`h-12 rounded-full border text-sm ${theme.icon}`}
             >
-              <i className="fas fa-search mr-2 text-xs" aria-hidden="true"></i>
+              <Icon name="search" size={13} className="inline-block mr-2 -mt-0.5" />
               Buscar
             </button>
           </div>

@@ -41,9 +41,8 @@ const Cookies: React.FC = () => {
 
       <h2>3. Otros servicios sin cookies</h2>
       <ul>
-        <li>Las fuentes tipográficas se sirven desde este mismo sitio (no se usa Google Fonts).</li>
+        <li>Las fuentes tipográficas y los iconos se sirven desde este mismo sitio (sin Google Fonts ni CDN externos).</li>
         <li>La sección Proyectos pide la lista pública de repositorios y sus imágenes a GitHub (api.github.com y opengraph.githubassets.com), que no instalan cookies en este sitio.</li>
-        <li>La librería de iconos se descarga del CDN cdnjs (Cloudflare), que no instala cookies.</li>
         <li>El formulario de contacto se envía a Formspree solo al pulsar «Enviar»; no deja cookies en este sitio.</li>
       </ul>
 

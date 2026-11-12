@@ -475,3 +475,11 @@
 @keyframes gh-float{50%{transform:translateY(-8px)}}
 @media (max-width:720px){.hm .ghc__stage{height:600px}.hm .gh h3{font-size:26px}}
 @media (prefers-reduced-motion:reduce){.hm .gh *{animation:none!important}}
+
+/* ===================== 404 ===================== */
+.hm.nf{min-height:72vh;display:grid;place-items:center}
+.hm .nf__in{text-align:center;padding:96px 24px 120px;max-width:720px}
+.hm .nf__code{font-family:var(--serif);font-size:clamp(110px,22vw,200px);line-height:.8;margin:0 0 12px;color:transparent;-webkit-text-stroke:1px rgba(20,20,20,.22);letter-spacing:-.02em}
+.hm .nf__lead{margin:18px auto 0;max-width:460px;color:var(--g1);font-size:16px}
+.hm .nf__actions{margin-top:30px;display:flex;gap:22px;justify-content:center;align-items:center;flex-wrap:wrap}
+.hm .nf__path{margin-top:34px;font-family:var(--mono);font-size:11px;color:var(--g2);word-break:break-all}

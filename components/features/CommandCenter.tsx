@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { View } from '../../types';
+import Icon, { type IconName } from "../shared/Icon";
 
 interface CommandCenterProps {
   isOpen: boolean;
@@ -22,9 +23,9 @@ const CommandCenter: React.FC<CommandCenterProps> = ({ isOpen, onClose, onNaviga
   if (!isOpen) return null;
 
   const items = [
-    { id: 'home', icon: 'fa-house', label: 'Inicio', cat: 'Navegación' },
-    { id: 'aprende', icon: 'fa-graduation-cap', label: 'Aprende: tablas periódicas de web, IA y agentes', cat: 'Aprende' },
-    { id: 'about', icon: 'fa-user', label: 'Sobre mí', cat: 'Información' }
+    { id: 'home', icon: 'house' as IconName, label: 'Inicio', cat: 'Navegación' },
+    { id: 'aprende', icon: 'graduation' as IconName, label: 'Aprende: tablas periódicas de web, IA y agentes', cat: 'Aprende' },
+    { id: 'about', icon: 'user' as IconName, label: 'Sobre mí', cat: 'Información' }
   ].filter(i => 
     i.label.toLowerCase().includes(search.toLowerCase()) ||
     i.cat.toLowerCase().includes(search.toLowerCase()) ||
@@ -37,7 +38,7 @@ const CommandCenter: React.FC<CommandCenterProps> = ({ isOpen, onClose, onNaviga
       
       <div className="relative w-full max-w-2xl bg-[#0a0a0a] border border-white/10 rounded-3xl shadow-2xl overflow-hidden animate-fade-in">
         <div className="p-6 border-b border-white/5 flex items-center gap-4">
-          <i className="fas fa-search text-neutral-600"></i>
+          <Icon name="search" size={18} className="text-neutral-600 flex-none" />
           <input 
             autoFocus
             type="text" 
@@ -59,14 +60,14 @@ const CommandCenter: React.FC<CommandCenterProps> = ({ isOpen, onClose, onNaviga
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-xl bg-neutral-900 border border-white/5 flex items-center justify-center text-neutral-500 group-hover:text-blue-500 group-hover:border-blue-500/50 transition-all">
-                      <i className={`fas ${item.icon}`}></i>
+                      <Icon name={item.icon} size={18} />
                     </div>
                     <div>
                       <span className="font-bold text-neutral-300 group-hover:text-white block">{item.label}</span>
                       <span className="text-[9px] font-black text-neutral-600 uppercase tracking-widest">{item.cat}</span>
                     </div>
                   </div>
-                  <i className="fas fa-chevron-right text-[10px] text-neutral-700 group-hover:translate-x-1 transition-all"></i>
+                  <Icon name="chevronRight" size={12} className="text-neutral-700 group-hover:translate-x-1 transition-all" />
                 </button>
               ))
             ) : (

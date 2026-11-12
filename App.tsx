@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { Suspense, lazy, useState, useEffect, useRef } from "react";
 import {
   Routes,
   Route,
@@ -13,14 +13,20 @@ import SiteFooter from "./components/home/sections/SiteFooter";
 import "./components/home/sections/home.css";
 import PageTransition from "./components/layout/PageTransition";
 import Home from "./pages/Home";
-import Aprende from "./pages/Aprende";
-import Privacidad from "./pages/legal/Privacidad";
-import Terminos from "./pages/legal/Terminos";
-import Cookies from "./pages/legal/Cookies";
 import CookieBanner from "./components/shared/CookieBanner";
-import About from "./pages/About";
-import CommandCenter from "./components/features/CommandCenter";
 import { View } from "./types";
+
+// Rutas secundarias en archivos aparte: el inicio carga menos JavaScript.
+const Aprende = lazy(() => import("./pages/Aprende"));
+const About = lazy(() => import("./pages/About"));
+const Privacidad = lazy(() => import("./pages/legal/Privacidad"));
+const Terminos = lazy(() => import("./pages/legal/Terminos"));
+const Cookies = lazy(() => import("./pages/legal/Cookies"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const CommandCenter = lazy(() => import("./components/features/CommandCenter"));
+
+/** Mientras llega el código de la página: mismo fondo, sin salto. */
+const PageFallback: React.FC = () => <div className="min-h-[70vh]" aria-busy="true" />;
 import usePageTitle from "./hooks/usePageTitle";
 import { IntroProvider } from "./components/intro";
 
@@ -98,6 +104,7 @@ const App: React.FC = () => {
       <main className="flex-1 pt-20">
         {/* initial={false}: la primera página se ve de inmediato (sin depender de una animación) */}
         <AnimatePresence mode="wait" initial={false}>
+          <Suspense fallback={<PageFallback />}>
           <Routes location={location} key={routeKey}>
             <Route
               path="/"
@@ -158,9 +165,20 @@ const App: React.FC = () => {
             <Route path="/js-periodic" element={<Navigate to="/aprende/fundamentos-web" replace />} />
             <Route path="/python-periodic" element={<Navigate to="/aprende/backend" replace />} />
             <Route path="/element/:tag" element={<ElementRedirect />} />
-            {/* Cursos, Lecturas y Ejercicios se retiraron: /courses, /theme, /exercises… caen aquí */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Cursos, Lecturas y Ejercicios se retiraron: sus rutas llevan al inicio */}
+            {["/courses/*", "/theme", "/exercises/*", "/learning/*"].map((p) => (
+              <Route key={p} path={p} element={<Navigate to="/" replace />} />
+            ))}
+            <Route
+              path="*"
+              element={
+                <PageTransition>
+                  <NotFound />
+                </PageTransition>
+              }
+            />
           </Routes>
+          </Suspense>
         </AnimatePresence>
       </main>
 
@@ -173,6 +191,7 @@ const App: React.FC = () => {
       <CookieBanner />
 
       {isCommandCenterOpen && (
+        <Suspense fallback={null}>
         <CommandCenter
           isOpen={isCommandCenterOpen}
           onClose={() => setIsCommandCenterOpen(false)}
@@ -180,6 +199,7 @@ const App: React.FC = () => {
             handleNavigate(view === "home" ? "/" : `/${view}`)
           }
         />
+        </Suspense>
       )}
     </div>
     </IntroProvider>
