@@ -169,7 +169,7 @@ const Navbar: React.FC<NavbarProps> = ({
               e.preventDefault();
               handleNavClick("home");
             }}
-            className="ix-logo justify-self-start font-signature text-[30px] lg:text-[34px] leading-none pt-1 select-none"
+            className="ix-logo justify-self-start font-signature text-[25px] min-[400px]:text-[28px] sm:text-[30px] lg:text-[34px] leading-none pt-1 select-none"
             aria-label="Frank Abanto — Inicio"
             data-intro-logo=""
           >
@@ -227,6 +227,14 @@ const Navbar: React.FC<NavbarProps> = ({
             style={navDelay(NAV_LINKS_DELAY + navItems.length * NAV_LINK_STAGGER + 60)}
           >
           <div className="flex items-center gap-2">
+            {/* Móvil: píldora compacta, siempre a mano */}
+            <CalLink
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Agendar llamada de 30 minutos (Cal.com)"
+              className={`sm:hidden inline-flex items-center h-9 px-3.5 rounded-full text-[12px] font-medium whitespace-nowrap shadow-[0_8px_20px_-10px_rgba(0,0,0,0.5)] transition-colors duration-300 ${theme.cta}`}
+            >
+              Agendar llamada
+            </CalLink>
             <CalLink
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Agendar llamada de 30 minutos (Cal.com)"
