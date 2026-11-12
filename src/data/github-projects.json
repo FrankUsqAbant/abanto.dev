@@ -1,6 +1,18 @@
 {
-  "fetchedAt": "2026-11-12T14:23:39.392Z",
+  "fetchedAt": "2026-11-12T23:37:13.146Z",
   "repos": [
+    {
+      "name": "abanto.dev",
+      "full_name": "FrankUsqAbant/abanto.dev",
+      "description": "Portafolio de Frank Abanto: Software e IA hechos a tu medida.",
+      "topics": [],
+      "homepage": "https://abanto.pages.dev",
+      "language": "TypeScript",
+      "pushed_at": "2026-11-12T22:16:57Z",
+      "fork": false,
+      "archived": false,
+      "html_url": "https://github.com/FrankUsqAbant/abanto.dev"
+    },
     {
       "name": "chavez-originals",
       "full_name": "FrankUsqAbant/chavez-originals",
@@ -461,30 +473,6 @@
       "fork": false,
       "archived": false,
       "html_url": "https://github.com/FrankUsqAbant/bootstrap-wibsite"
-    },
-    {
-      "name": "proyecto-tech-practica",
-      "full_name": "FrankUsqAbant/proyecto-tech-practica",
-      "description": null,
-      "topics": [],
-      "homepage": null,
-      "language": "HTML",
-      "pushed_at": "2022-04-21T03:29:08Z",
-      "fork": false,
-      "archived": false,
-      "html_url": "https://github.com/FrankUsqAbant/proyecto-tech-practica"
-    },
-    {
-      "name": "demo-sitio-halo",
-      "full_name": "FrankUsqAbant/demo-sitio-halo",
-      "description": null,
-      "topics": [],
-      "homepage": "demo-sitio-halo-rho.vercel.app",
-      "language": "CSS",
-      "pushed_at": "2022-04-21T03:05:26Z",
-      "fork": false,
-      "archived": false,
-      "html_url": "https://github.com/FrankUsqAbant/demo-sitio-halo"
     }
   ]
 }

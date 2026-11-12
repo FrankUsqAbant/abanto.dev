@@ -82,10 +82,6 @@ const SERVICES: Service[] = [
   },
 ];
 
-const AudienceIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">{children}</svg>
-);
-
 const DemoSlot: React.FC<{ id: DemoId }> = ({ id }) => {
   const ref = useRef<HTMLDivElement>(null);
   const near = useInView(ref, { once: true, rootMargin: "600px 0px", threshold: 0 });
@@ -110,22 +106,11 @@ const ServicesSection: React.FC = () => (
           Lo que puedo <em>construir para ti.</em>
         </h2>
         <p className="sec-head__sub">
-          Seis servicios para vender más, responder mejor y dejar de hacer a mano lo que puede
+          Servicios para vender más, responder mejor y dejar de hacer a mano lo que puede
           hacerse solo.
         </p>
       </Reveal>
 
-      <Reveal className="svc-for" delay={60}>
-        <span className="svc-for__k">Para quién</span>
-        <ul className="svc-for__list">
-          {AUDIENCES.map((a) => (
-            <li key={a.id}>
-              <AudienceIcon>{a.icon}</AudienceIcon>
-              {a.label}
-            </li>
-          ))}
-        </ul>
-      </Reveal>
 
       <div className="svc-rows">
         {SERVICES.map((s, i) => (
