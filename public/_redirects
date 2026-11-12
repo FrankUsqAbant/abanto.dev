@@ -1,0 +1,11 @@
+# Cloudflare Pages. Sin un 404.html en la raíz, Pages trata el sitio como SPA:
+# cualquier ruta desconocida sirve index.html y React muestra la página 404
+# (con <meta name="robots" content="noindex">). No añadas "/* /index.html 200":
+# Pages lo marca como bucle infinito y lo ignora.
+
+# Rutas antiguas → nuevas (redirección real del servidor)
+/blog/*            /aprende/:splat              301
+/html-periodic     /aprende/fundamentos-web     301
+/js-periodic       /aprende/fundamentos-web     301
+/python-periodic   /aprende/backend             301
+/aprende           /aprende/fundamentos-web     302
