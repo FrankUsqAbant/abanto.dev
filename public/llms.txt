@@ -1,0 +1,31 @@
+# Frank Abanto — Software e IA hechos a tu medida
+
+> Sitio de Frank Abanto, desarrollador de software e IA en Perú. Construye páginas web, agentes y chatbots de IA, automatizaciones, integraciones, dashboards y atención al cliente con IA para pequeños negocios, emprendedores, empresas medianas y profesionales independientes. Todo el contenido está en español. Los proyectos que muestra son prácticas, demos y herramientas propias (no trabajos para clientes).
+
+## Páginas principales
+
+- [Inicio](https://abanto.dev/): servicios con demos interactivas, proyectos y laboratorio (desde GitHub), proceso de trabajo, preguntas frecuentes y contacto.
+- [Sobre mí](https://abanto.dev/about): quién es Frank, cómo trabaja y con qué herramientas.
+- [Aprende](https://abanto.dev/aprende/fundamentos-web): tablas periódicas educativas con fichas de conceptos.
+
+## Aprende (tablas periódicas)
+
+- https://abanto.dev/aprende/agentes-automatizacion
+- https://abanto.dev/aprende/backend
+- https://abanto.dev/aprende/datos
+- https://abanto.dev/aprende/frameworks
+- https://abanto.dev/aprende/fundamentos-web
+- https://abanto.dev/aprende/herramientas
+- https://abanto.dev/aprende/ia-aplicada
+
+## Contacto
+
+- Correo: usquizafranquer@gmail.com
+- Llamada de 30 minutos: https://cal.com/franquer-abanto-i45gjj/30min
+- GitHub: https://github.com/FrankUsqAbant
+
+## Legal
+
+- [Política de privacidad](https://abanto.dev/privacidad)
+- [Términos de uso](https://abanto.dev/terminos)
+- [Política de cookies](https://abanto.dev/cookies)

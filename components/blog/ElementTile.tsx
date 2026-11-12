@@ -22,15 +22,18 @@ const ElementTile: React.FC<ElementTileProps> = ({ item, cat, dim, selected, ord
       className={`tile c-${item.c}${cat?.id === "obsolete" ? " c-obsolete" : ""}${dim ? " is-dim" : ""}${selected ? " is-sel" : ""}`}
       style={s}
       data-k={item.k}
-      aria-label={`${item.n}. ${item.name}: ${item.d}. Categoría ${cat?.name ?? item.c}.`}
       aria-haspopup="dialog"
       title={`${item.label} · ${item.d}`}
       onClick={(e) => onOpen(item, e.currentTarget)}
     >
       <span className="tile__fx" aria-hidden="true" />
-      <span className="tile__n" aria-hidden="true">{item.n}</span>
-      <span className="tile__s" aria-hidden="true">{item.s}</span>
-      <span className="tile__t" aria-hidden="true">{item.label}</span>
+      {/* El nombre accesible empieza por el texto visible (WCAG 2.5.3) y suma la descripción. */}
+      <span className="tile__n">{item.n}</span>
+      <span className="sr-only">. </span>
+      <span className="tile__s">{item.s}</span>
+      <span className="sr-only"> · </span>
+      <span className="tile__t">{item.label}</span>
+      <span className="sr-only">{`: ${item.d.replace(/\.$/, "")}. Categoría ${cat?.name ?? item.c}.`}</span>
     </button>
   );
 };
