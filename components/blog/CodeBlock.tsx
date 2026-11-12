@@ -19,14 +19,33 @@ const tokenRe = (lang: Lang) => {
   return new RegExp(`(${comment})|("(?:\\\\.|[^"\\\\])*"|'(?:\\\\.|[^'\\\\])*'|\`(?:\\\\.|[^\`\\\\])*\`)|(\\b\\d+(?:\\.\\d+)?\\b)|([A-Za-z_][\\w-]*)`, "g");
 };
 
+interface Seg {
+  t: string;
+  c?: string;
+}
+
+/** Agrupa los fragmentos resaltados en líneas (cada una entra en secuencia). */
+const toLines = (segs: Seg[]): React.ReactNode[] => {
+  const lines: Seg[][] = [[]];
+  for (const s of segs) {
+    s.t.split("\n").forEach((part, j) => {
+      if (j > 0) lines.push([]);
+      if (part) lines[lines.length - 1].push({ t: part, c: s.c });
+    });
+  }
+  return lines.map((line, n) => (
+    <span key={n} className="cl" style={{ "--l": Math.min(n, 18) } as React.CSSProperties}>
+      {line.map((s, k) => (s.c ? <span key={k} className={s.c}>{s.t}</span> : <React.Fragment key={k}>{s.t}</React.Fragment>))}
+    </span>
+  ));
+};
+
 /** Resaltado simple: produce nodos React (nunca HTML crudo). */
 const highlight = (src: string, lang: Lang): React.ReactNode[] => {
-  const out: React.ReactNode[] = [];
+  const segs: Seg[] = [];
   let last = 0;
-  let i = 0;
   const push = (text: string, cls?: string) => {
-    if (!text) return;
-    out.push(cls ? <span key={i++} className={cls}>{text}</span> : <React.Fragment key={i++}>{text}</React.Fragment>);
+    if (text) segs.push({ t: text, c: cls });
   };
   if (lang === "html") {
     const re = /(<!--[\s\S]*?-->)|(<\/?)([a-zA-Z][\w-]*)|([a-zA-Z_:@][\w:.-]*)(=)("[^"]*"|'[^']*')/g;
@@ -39,7 +58,7 @@ const highlight = (src: string, lang: Lang): React.ReactNode[] => {
       last = re.lastIndex;
     }
     push(src.slice(last));
-    return out;
+    return toLines(segs);
   }
   if (lang === "css") {
     const re = /(\/\*[\s\S]*?\*\/)|([\w-]+)(\s*:)(?![^{]*\{)|("[^"]*"|'[^']*')|(#[0-9a-fA-F]{3,8}\b|\b\d+(?:\.\d+)?(?:px|rem|em|%|s|ms|deg|fr|vh|vw)?\b)/g;
@@ -53,7 +72,7 @@ const highlight = (src: string, lang: Lang): React.ReactNode[] => {
       last = re.lastIndex;
     }
     push(src.slice(last));
-    return out;
+    return toLines(segs);
   }
   const kw = new Set(KEYWORDS[lang]);
   const re = tokenRe(lang);
@@ -69,7 +88,7 @@ const highlight = (src: string, lang: Lang): React.ReactNode[] => {
     last = re.lastIndex;
   }
   push(src.slice(last));
-  return out;
+  return toLines(segs);
 };
 
 interface CodeBlockProps {
@@ -104,7 +123,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ code, lang, file }) => {
         </button>
         <span className="sr-only" aria-live="polite">{copied === "ok" ? "Código copiado al portapapeles" : ""}</span>
       </div>
-      <pre tabIndex={0} aria-label={`Ejemplo de código (${file})`}><code>{highlight(code, lang)}</code></pre>
+      <pre key={code} tabIndex={0} aria-label={`Ejemplo de código (${file})`}><code>{highlight(code, lang)}</code></pre>
     </div>
   );
 };

@@ -27,6 +27,7 @@ const ElementTile: React.FC<ElementTileProps> = ({ item, cat, dim, selected, ord
       title={`${item.label} · ${item.d}`}
       onClick={(e) => onOpen(item, e.currentTarget)}
     >
+      <span className="tile__fx" aria-hidden="true" />
       <span className="tile__n" aria-hidden="true">{item.n}</span>
       <span className="tile__s" aria-hidden="true">{item.s}</span>
       <span className="tile__t" aria-hidden="true">{item.label}</span>

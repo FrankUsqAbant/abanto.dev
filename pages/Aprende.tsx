@@ -6,6 +6,9 @@ import ElementTile from "../components/blog/ElementTile";
 import ElementPanel from "../components/blog/ElementPanel";
 import TableIcon from "../components/blog/TableIcon";
 import { CONTACT_EMAIL } from "../components/home/sections/homeLinks";
+import { Ambient, CountUp, HintRotator } from "../components/blog/fx/HeaderFx";
+import { useGridFx } from "../components/blog/fx/useGridFx";
+import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import "../components/blog/blog.css";
 
 const useMediaQuery = (q: string) => {
@@ -54,6 +57,7 @@ const Aprende: React.FC = () => {
   const [cat, setCat] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
+  const wrapRef = useRef<HTMLElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
   const grouped = useMediaQuery("(max-width: 1023px)");
 
@@ -62,7 +66,7 @@ const Aprende: React.FC = () => {
   // Carga diferida de la tabla y (en segundo plano) de sus fichas.
   useEffect(() => {
     let alive = true;
-    setData(null);
+    // La tabla anterior se mantiene hasta que llega la nueva (transición sin salto).
     setDetails(null);
     setLoadError(false);
     setCat(null);
@@ -96,8 +100,9 @@ const Aprende: React.FC = () => {
   }, []);
 
   const catMap = useMemo(() => new Map<string, PCategory>((data?.categories ?? []).map((c) => [c.id, c])), [data]);
-  const selected = useMemo(() => (el && data ? data.items.find((x) => x.k === el) ?? null : null), [el, data]);
-  const notFound = !!(el && data && !selected);
+  const ready = !!data && data.id === tableId;
+  const selected = useMemo(() => (el && data && data.id === tableId ? data.items.find((x) => x.k === el) ?? null : null), [el, data, tableId]);
+  const notFound = !!(el && ready && !selected);
 
   const q = norm(query);
   const matches = useCallback(
@@ -106,6 +111,9 @@ const Aprende: React.FC = () => {
   );
   const isDim = useCallback((x: PItem) => (cat !== null && x.c !== cat) || !matches(x), [cat, matches]);
   const matchCount = data ? data.items.filter((x) => !isDim(x)).length : 0;
+  const filtering = cat !== null || !!q;
+
+  useGridFx(wrapRef, { idle: !el && !filtering, dep: data?.id });
 
   const openItem = useCallback(
     (item: PItem, opener?: HTMLElement) => {
@@ -152,7 +160,8 @@ const Aprende: React.FC = () => {
   );
   const cols = data?.cols ?? 18;
   const gridStyle = { "--cols": cols } as React.CSSProperties;
-  const order = (x: PItem) => Math.round(x.col * 1.2 + x.r);
+  // Cascada diagonal desde arriba a la izquierda.
+  const order = (x: PItem) => x.col + x.r;
 
   const onSearchKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -178,19 +187,22 @@ const Aprende: React.FC = () => {
   );
 
   return (
-    <div className="ptp">
+    <MotionConfig reducedMotion="user">
+    <div className={`ptp${filtering ? " is-filtering" : ""}${q ? " is-searching" : ""}`}>
+      <Ambient tint={data?.id ?? ""} colors={(data?.categories ?? []).slice(0, 3).map((c) => c.color)} />
       <div className="ptp__grain" aria-hidden="true" />
       <main className="pt" aria-labelledby="pt-title">
         <section className="pt-head wrap-w">
           <div className="pt-head__l">
             <p className="eyebrow">Aprende · Herramienta interactiva</p>
-            <h1 className="pt-title" id="pt-title">
-              La tabla periódica <em>{meta.titleEm}</em>
+            <h1 className="pt-title" id="pt-title" key={tableId}>
+              <span className="pt-mask"><span className="pt-rise">La tabla periódica</span></span>{" "}
+              <span className="pt-mask"><em className="pt-rise pt-rise--2">{meta.titleEm}</em></span>
             </h1>
           </div>
           <div className="pt-head__r">
             <p className="pt-sub">
-              <b>{data ? items.length : "…"}</b> {meta.noun} organizados por categoría. Toca cualquiera para ver qué hace, cómo se usa y con qué se relaciona.
+              <CountUp value={ready ? items.length : null} /> {meta.noun} organizados por categoría. Toca cualquiera para ver qué hace, cómo se usa y con qué se relaciona.
             </p>
             <label className="search">
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4 4" /></svg>
@@ -211,10 +223,11 @@ const Aprende: React.FC = () => {
               {q || cat ? `${matchCount} resultados` : ""}
             </p>
             <div className="stats">
-              <span><b>{data ? data.categories.length : "…"}</b> categorías</span>
+              <span><CountUp value={ready && data ? data.categories.length : null} /> categorías</span>
               {obsolete ? <span><b>{obsolete}</b> obsoletos</span> : null}
-              <span><b>{TABLES.length}</b> tecnologías</span>
+              <span><b>{TABLES.length}</b> tablas</span>
             </div>
+            <HintRotator />
           </div>
         </section>
 
@@ -228,8 +241,9 @@ const Aprende: React.FC = () => {
                 aria-pressed={t.id === tableId}
                 onClick={() => t.id !== tableId && navigate(`/aprende/${t.id}`)}
               >
+                {t.id === tableId ? <motion.span layoutId="pt-lang-pill" className="pill" transition={PILL} aria-hidden="true" /> : null}
                 <TableIcon icon={t.icon} />
-                {t.label}
+                <span className="lang__lb">{t.label}</span>
               </button>
             ))}
           </div>
@@ -242,6 +256,7 @@ const Aprende: React.FC = () => {
                 style={{ "--cc": "#141414" } as React.CSSProperties}
                 onClick={() => setCat(null)}
               >
+                {cat === null ? <motion.span layoutId="pt-cat-pill" className="pill" transition={PILL} aria-hidden="true" /> : null}
                 <i aria-hidden="true" />Todos <em>{items.length}</em>
               </button>
               {(data?.categories ?? []).map((c) => (
@@ -253,6 +268,7 @@ const Aprende: React.FC = () => {
                   style={{ "--cc": c.color } as React.CSSProperties}
                   onClick={() => setCat(cat === c.id ? null : c.id)}
                 >
+                  {cat === c.id ? <motion.span layoutId="pt-cat-pill" className="pill" transition={PILL} aria-hidden="true" /> : null}
                   <i aria-hidden="true" />{c.name} <em>{c.count}</em>
                 </button>
               ))}
@@ -260,11 +276,12 @@ const Aprende: React.FC = () => {
           </div>
         </section>
 
-        <section className="table-wrap wrap-w" aria-label={`Tabla periódica ${meta.titleEm}`} aria-busy={!data}>
+        <section ref={wrapRef} className="table-wrap wrap-w" aria-label={`Tabla periódica ${meta.titleEm}`} aria-busy={!ready}>
           {loadError ? <p className="pt-notice" role="alert">No se pudo cargar la tabla. Recarga la página.</p> : null}
           {!data && !loadError ? <div className="pt-loading" aria-hidden="true" /> : null}
+          <AnimatePresence mode="popLayout" initial={false}>
           {data && !grouped ? (
-            <div key={tableId} className="pt-anim">
+            <motion.div key={data.id} className="pt-anim" exit={EXIT}>
               <div className="ptable-g" style={{ ...gridStyle, gridTemplateRows: `repeat(${Math.min(7, data.rows)}, var(--row))` }}>
                 {keyItem ? (
                   <div className="key" style={{ gridColumn: `3 / ${data.keyEnd ?? cols - 5}` }}>
@@ -299,10 +316,10 @@ const Aprende: React.FC = () => {
                   </div>
                 </div>
               ) : null}
-            </div>
+            </motion.div>
           ) : null}
           {data && grouped ? (
-            <div key={tableId} className="mgroups pt-anim">
+            <motion.div key={`g-${data.id}`} className="mgroups pt-anim" exit={EXIT}>
               {data.categories.map((c) => {
                 const list = items.filter((x) => x.c === c.id);
                 const groupDim = cat !== null && cat !== c.id;
@@ -313,8 +330,9 @@ const Aprende: React.FC = () => {
                   </section>
                 );
               })}
-            </div>
+            </motion.div>
           ) : null}
+          </AnimatePresence>
           <p className="table-foot">
             <span className="mono">Fuente</span> {meta.source} ·{" "}
             <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Error en la tabla periódica ${meta.titleEm}`)}`}>¿Encontraste un error? Escríbeme ↗</a>
@@ -335,7 +353,11 @@ const Aprende: React.FC = () => {
         />
       ) : null}
     </div>
+    </MotionConfig>
   );
 };
+
+const PILL = { type: "spring", stiffness: 420, damping: 38, mass: 0.8 } as const;
+const EXIT = { opacity: 0, scale: 0.985, transition: { duration: 0.22, ease: [0.4, 0, 1, 1] } } as const;
 
 export default Aprende;

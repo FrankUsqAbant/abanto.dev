@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef } from "react";
+import React, { useEffect, useId, useLayoutEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import type { PCategory, PDetail, PItem } from "./types";
 import type { TableMeta } from "./tables";
@@ -46,6 +46,7 @@ const ElementPanel: React.FC<ElementPanelProps> = ({ table, item, detail, detail
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
+  const tileRef = useRef<HTMLDivElement>(null);
   const cat = categories.get(item.c);
 
   // Foco inicial, Escape y trampa de foco.
@@ -80,6 +81,50 @@ const ElementPanel: React.FC<ElementPanelProps> = ({ table, item, detail, detail
     };
   }, [onClose]);
 
+  // Morph de la celda de la tabla a la ficha (solo al abrir, escritorio, sin reduced-motion).
+  useLayoutEffect(() => {
+    const target = tileRef.current;
+    const panel = panelRef.current;
+    if (!target || !panel) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce), (max-width: 720px)").matches) return;
+    const src = document.querySelector<HTMLElement>(`.ptp .tile[data-k="${CSS.escape(item.k)}"]`);
+    if (!src) return;
+    const a = src.getBoundingClientRect();
+    const b = target.getBoundingClientRect();
+    if (!a.width || !b.width) return;
+    const pt = getComputedStyle(panel).transform;
+    const m = new DOMMatrixReadOnly(pt === "none" ? undefined : pt);
+    const dx = b.left - m.e - a.left;
+    const dy = b.top - m.f - a.top;
+    const end = `translate(${dx}px, ${dy}px) scale(${b.width / a.width}, ${b.height / a.height})`;
+    const layer = document.createElement("div");
+    layer.className = "ptp-layer";
+    const ghost = src.cloneNode(true) as HTMLElement;
+    ghost.classList.remove("is-hov", "is-feat", "is-sel");
+    ghost.removeAttribute("id");
+    Object.assign(ghost.style, {
+      position: "fixed", left: `${a.left}px`, top: `${a.top}px`, width: `${a.width}px`, height: `${a.height}px`,
+      margin: "0", zIndex: "90", pointerEvents: "none", animation: "none", transformOrigin: "0 0",
+    });
+    layer.appendChild(ghost);
+    document.body.appendChild(layer);
+    const opts: KeyframeAnimationOptions = { duration: 640, easing: "cubic-bezier(.2,.7,.1,1)" };
+    const anim = ghost.animate(
+      [{ transform: "none", opacity: 1 }, { transform: end, opacity: 1, offset: 0.72 }, { transform: end, opacity: 0 }],
+      opts,
+    );
+    const show = target.animate([{ opacity: 0 }, { opacity: 0, offset: 0.62 }, { opacity: 1 }], opts);
+    const done = () => layer.remove();
+    anim.onfinish = done;
+    anim.oncancel = done;
+    return () => {
+      anim.cancel();
+      show.cancel();
+    };
+    // Solo al montar: los cambios de ficha (relacionados) no hacen morph.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Al cambiar de elemento (relacionados), vuelve arriba.
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: 0 });
@@ -105,8 +150,9 @@ const ElementPanel: React.FC<ElementPanelProps> = ({ table, item, detail, detail
           ✕
         </button>
         <div ref={bodyRef} className="panel__in">
+          <div className="pd-body" key={item.k}>
           <div className="pd-top">
-            <div className="pd-tile" style={tileStyle} aria-hidden="true">
+            <div ref={tileRef} className="pd-tile" style={tileStyle} aria-hidden="true">
               <span className="tile__n">{item.n}</span>
               <span className="pd-s">{item.s}</span>
               <span className="tile__t">{item.label}</span>
@@ -132,7 +178,7 @@ const ElementPanel: React.FC<ElementPanelProps> = ({ table, item, detail, detail
           </section>
 
           {detail?.biz ? (
-            <section className="pd-sec pd-biz" aria-label="Para tu negocio">
+            <section className="pd-sec pd-biz" style={tileStyle} aria-label="Para tu negocio">
               <h3 className="mono">Para tu negocio</h3>
               <p><RichText text={detail.biz} /></p>
             </section>
@@ -193,6 +239,7 @@ const ElementPanel: React.FC<ElementPanelProps> = ({ table, item, detail, detail
               <span className="sr-only"> (se abre en otra pestaña)</span>
             </a>
           ) : null}
+          </div>
         </div>
       </div>
     </div>,
