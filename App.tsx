@@ -25,6 +25,7 @@ import ElementDetail from "./pages/ElementDetail";
 import CommandCenter from "./components/features/CommandCenter";
 import { View } from "./types";
 import usePageTitle from "./hooks/usePageTitle";
+import { IntroProvider } from "./components/intro";
 
 const App: React.FC = () => {
   usePageTitle(); // Dynamic title management
@@ -61,6 +62,7 @@ const App: React.FC = () => {
   };
 
   return (
+    <IntroProvider enabled={location.pathname === "/"}>
     <div className="min-h-screen bg-[#050505] flex flex-col selection:bg-blue-600/30">
       <Navbar
         currentView={
@@ -75,7 +77,8 @@ const App: React.FC = () => {
       />
 
       <main className="flex-1 pt-20">
-        <AnimatePresence mode="wait">
+        {/* initial={false}: la primera página se ve de inmediato (sin depender de una animación) */}
+        <AnimatePresence mode="wait" initial={false}>
           <Routes location={location} key={location.pathname}>
             <Route
               path="/"
@@ -210,6 +213,7 @@ const App: React.FC = () => {
         />
       )}
     </div>
+    </IntroProvider>
   );
 };
 

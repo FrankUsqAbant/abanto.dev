@@ -72,23 +72,21 @@
   letter-spacing: -0.012em;
   color: var(--ink);
 }
-.hero-reveal {
+.hero__title-line {
   display: block;
-  overflow: hidden;
   /* espacio extra para descendentes (g, p) e itálica */
   padding: 0 0.08em 0.08em;
   margin-bottom: -0.08em;
-}
-.hero-reveal__inner {
-  display: inline-block;
-  will-change: transform;
 }
 .hero__title-italic {
   font-style: italic;
 }
 
+.hero__lead-wrap {
+  margin-top: 18px;
+}
 .hero__lead {
-  margin: 18px auto 0;
+  margin: 0 auto;
   max-width: 34em;
   font-size: 15px;
   line-height: 1.7;
@@ -426,8 +424,10 @@
   .hero__br {
     display: inline;
   }
-  .hero__lead {
+  .hero__lead-wrap {
     margin-top: calc(var(--s) * 14);
+  }
+  .hero__lead {
     max-width: none;
     font-size: calc(var(--s) * 10.4);
   }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "../../types";
+import { BuildReveal, useIntro } from "../intro";
 
 interface NavbarProps {
   currentView: View;
@@ -32,6 +33,7 @@ const Navbar: React.FC<NavbarProps> = ({
   onOpenSearch,
 }) => {
   const { t } = useTranslation();
+  const { logoVisible } = useIntro();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // En Inicio el encabezado es claro (sobre el hero crema);
@@ -118,35 +120,46 @@ const Navbar: React.FC<NavbarProps> = ({
               e.preventDefault();
               handleNavClick("home");
             }}
-            className="justify-self-start font-signature text-[30px] lg:text-[34px] leading-none pt-1 select-none"
+            className={`justify-self-start font-signature text-[30px] lg:text-[34px] leading-none pt-1 select-none ${
+              logoVisible ? "" : "opacity-0"
+            }`}
             aria-label="Frank Abanto — Inicio"
+            data-intro-logo=""
           >
             Frank Abanto
           </a>
 
           {/* Navegación central */}
           <ul className="hidden md:flex items-center gap-7 lg:gap-9">
-            {navItems.map((item) => {
+            {navItems.map((item, i) => {
               const active = currentView === item.id;
               return (
                 <li key={item.id}>
-                  <button
-                    type="button"
-                    onClick={() => handleNavClick(item.id)}
-                    aria-current={active ? "page" : undefined}
-                    className={`text-[13px] tracking-[0.005em] transition-colors duration-300 ${
-                      active ? theme.active : theme.link
-                    }`}
-                  >
-                    <span className={labelClass}>{item.label}</span>
-                  </button>
+                  <BuildReveal order={2 + i} variant="text" inline>
+                    <button
+                      type="button"
+                      onClick={() => handleNavClick(item.id)}
+                      aria-current={active ? "page" : undefined}
+                      className={`text-[13px] tracking-[0.005em] transition-colors duration-300 ${
+                        active ? theme.active : theme.link
+                      }`}
+                    >
+                      <span className={labelClass}>{item.label}</span>
+                    </button>
+                  </BuildReveal>
                 </li>
               );
             })}
           </ul>
 
           {/* Acciones */}
-          <div className="justify-self-end flex items-center gap-2">
+          <BuildReveal
+            order={7}
+            variant="pill"
+            label="<Nav.Cta />"
+            className="justify-self-end"
+          >
+          <div className="flex items-center gap-2">
             <a
               href={`/#${CONTACT_ID}`}
               onClick={handleContactClick}
@@ -170,6 +183,7 @@ const Navbar: React.FC<NavbarProps> = ({
               ></i>
             </button>
           </div>
+          </BuildReveal>
 
           {/* Línea divisoria */}
           <span

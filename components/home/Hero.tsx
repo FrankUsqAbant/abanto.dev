@@ -7,6 +7,13 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
+import {
+  BuildReveal,
+  IntroLoader,
+  TypewriterHeadline,
+  reached,
+  useIntro,
+} from "../intro";
 import "./Hero.css";
 
 /* ------------------------------------------------------------------ */
@@ -152,6 +159,19 @@ interface GlassCardProps {
   reduceMotion: boolean;
 }
 
+const HERO_PHOTO = "/images/frank-hero.webp";
+
+/** Orden de construcción de cada pieza del hero (el navbar usa 2–7). */
+const BUILD_ORDER = {
+  eyebrow: 0,
+  lead: 1,
+  primary: 2,
+  secondary: 3,
+  cards: 4, // 4–7
+  bottomLeft: 8,
+  bottomRight: 9,
+} as const;
+
 const GlassCard: React.FC<GlassCardProps> = ({
   card,
   order,
@@ -171,10 +191,13 @@ const GlassCard: React.FC<GlassCardProps> = ({
       }`}
       style={reduceMotion ? undefined : { x, y }}
     >
-      <motion.div
-        initial={reduceMotion ? false : { opacity: 0, y: 40, scale: 0.96 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 1.1, delay: 1.0 + order * 0.14, ease: EASE_OUT }}
+      <BuildReveal
+        order={BUILD_ORDER.cards + order}
+        variant="card"
+        label={`<Card ${card.id} />`}
+        skeletonStyle={{
+          transform: `perspective(900px) rotateY(${card.tilt}deg) rotateX(4deg)`,
+        }}
       >
         <motion.div
           animate={reduceMotion ? undefined : { y: [0, -7, 0] }}
@@ -226,32 +249,10 @@ const GlassCard: React.FC<GlassCardProps> = ({
             </footer>
           </motion.article>
         </motion.div>
-      </motion.div>
+      </BuildReveal>
     </motion.div>
   );
 };
-
-/* ------------------------------------------------------------------ */
-/* Línea con revelado (máscara)                                        */
-/* ------------------------------------------------------------------ */
-
-const RevealLine: React.FC<{
-  children: React.ReactNode;
-  delay: number;
-  className?: string;
-  reduceMotion: boolean;
-}> = ({ children, delay, className, reduceMotion }) => (
-  <span className="hero-reveal">
-    <motion.span
-      className={`hero-reveal__inner ${className ?? ""}`}
-      initial={reduceMotion ? false : { y: "110%", opacity: 0 }}
-      animate={{ y: "0%", opacity: 1 }}
-      transition={{ duration: 1.1, delay, ease: EASE_OUT }}
-    >
-      {children}
-    </motion.span>
-  </span>
-);
 
 /* ------------------------------------------------------------------ */
 /* Hero                                                                */
@@ -281,14 +282,10 @@ const Hero: React.FC = () => {
     rawY.set(0);
   }, [rawX, rawY]);
 
-  const fadeUp = (delay: number) =>
-    reduceMotion
-      ? { initial: false as const }
-      : {
-          initial: { opacity: 0, y: 18 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.9, delay, ease: EASE_OUT },
-        };
+  const { phase, mode, skipped } = useIntro();
+  const photoShown = reached(phase, "photo");
+  const animatePhoto = mode === "full" && !skipped;
+  const building = phase === "building" && mode === "full";
 
   return (
     <section
@@ -302,40 +299,59 @@ const Hero: React.FC = () => {
       <div className="hero__frame">
         {/* Texto central */}
         <div className="hero__content">
-          <motion.p className="hero__eyebrow" {...fadeUp(0.15)}>
-            Menos tareas. Más posibilidades.
-          </motion.p>
+          <BuildReveal
+            order={BUILD_ORDER.eyebrow}
+            variant="chip"
+            label="<Eyebrow />"
+            inline
+          >
+            <p className="hero__eyebrow">Menos tareas. Más posibilidades.</p>
+          </BuildReveal>
 
-          <h1 id="hero-title" className="hero__title">
-            <RevealLine delay={0.3} reduceMotion={reduceMotion}>
-              Construimos sistemas de IA
-            </RevealLine>
-            <RevealLine
-              delay={0.45}
-              reduceMotion={reduceMotion}
-              className="hero__title-italic"
+          <TypewriterHeadline
+            id="hero-title"
+            className="hero__title"
+            lineClassName="hero__title-line"
+            lines={[
+              { text: "Construimos sistemas de IA" },
+              { text: "que operan tu negocio.", className: "hero__title-italic" },
+            ]}
+          />
+
+          <BuildReveal
+            order={BUILD_ORDER.lead}
+            variant="lines"
+            label="<Lead />"
+            inline
+            className="hero__lead-wrap"
+          >
+            <p className="hero__lead">
+              Conectamos tus herramientas, automatizamos tus procesos y
+              convertimos <br className="hero__br" />
+              la inteligencia artificial en tu mejor equipo. Tú te enfocas en
+              crecer.
+            </p>
+          </BuildReveal>
+
+          <div className="hero__actions">
+            <BuildReveal
+              order={BUILD_ORDER.primary}
+              variant="pill"
+              label="<Button primary />"
+              inline
             >
-              que operan tu negocio.
-            </RevealLine>
-          </h1>
-
-          <motion.p className="hero__lead" {...fadeUp(0.7)}>
-            Conectamos tus herramientas, automatizamos tus procesos y
-            convertimos <br className="hero__br" />
-            la inteligencia artificial en tu mejor equipo. Tú te enfocas en
-            crecer.
-          </motion.p>
-
-          <motion.div className="hero__actions" {...fadeUp(0.85)}>
-            <a href="#contacto" className="hero__btn">
-              Hablemos de tu negocio
-              <ArrowUpRight className="hero__btn-icon" />
-            </a>
-            <a href="#github-ecosystem" className="hero__link">
-              Explorar soluciones
-              <ArrowDown className="hero__link-icon" />
-            </a>
-          </motion.div>
+              <a href="#contacto" className="hero__btn">
+                Hablemos de tu negocio
+                <ArrowUpRight className="hero__btn-icon" />
+              </a>
+            </BuildReveal>
+            <BuildReveal order={BUILD_ORDER.secondary} variant="pill" inline>
+              <a href="#github-ecosystem" className="hero__link">
+                Explorar soluciones
+                <ArrowDown className="hero__link-icon" />
+              </a>
+            </BuildReveal>
+          </div>
         </div>
 
         {/* Escenario: foto + tarjetas */}
@@ -343,12 +359,20 @@ const Hero: React.FC = () => {
           <motion.div
             className="hero__photo"
             style={reduceMotion ? undefined : { x: photoX }}
-            initial={reduceMotion ? false : { opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.4, delay: 0.55, ease: EASE_OUT }}
+            initial={false}
+            animate={
+              photoShown
+                ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+                : { opacity: 0, y: 48, scale: 1.03, filter: "blur(18px)" }
+            }
+            transition={
+              animatePhoto
+                ? { duration: 1.0, ease: EASE_OUT }
+                : { duration: 0 }
+            }
           >
             <picture>
-              <source srcSet="/images/frank-hero.webp" type="image/webp" />
+              <source srcSet={HERO_PHOTO} type="image/webp" />
               <img
                 src="/images/frank-hero.png"
                 alt="Frank Abanto con chaqueta negra y lentes de sol"
@@ -375,16 +399,37 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Pie del hero */}
-      <motion.div className="hero__bottom" {...fadeUp(1.4)}>
-        <p className="hero__bottom-left">
-          Diseñados para tu negocio.
-          <br />
-          Conectados a tu forma de trabajar.
-        </p>
-        <p className="hero__bottom-right">
-          Inteligencia que se convierte en acción.
-        </p>
-      </motion.div>
+      <div className="hero__bottom">
+        <BuildReveal
+          order={BUILD_ORDER.bottomLeft}
+          variant="lines"
+          as="div"
+          inline
+        >
+          <p className="hero__bottom-left">
+            Diseñados para tu negocio.
+            <br />
+            Conectados a tu forma de trabajar.
+          </p>
+        </BuildReveal>
+        <BuildReveal order={BUILD_ORDER.bottomRight} variant="text" inline>
+          <p className="hero__bottom-right">
+            Inteligencia que se convierte en acción.
+          </p>
+        </BuildReveal>
+      </div>
+
+      {/* Intro: firma de carga, escaneo e indicador de construcción */}
+      <IntroLoader images={[HERO_PHOTO]} />
+      {building ? (
+        <>
+          <div className="intro-scan" aria-hidden="true" />
+          <div className="intro-status" aria-hidden="true">
+            <i />
+            IA construyendo la interfaz…
+          </div>
+        </>
+      ) : null}
     </section>
   );
 };
