@@ -81,6 +81,11 @@ const Card: React.FC<{ project: Project; active: boolean }> = ({ project, active
 const LOOP_S = 50;
 /** Separación entre tarjetas: fracción del ancho de una tarjeta. */
 const GAP = 0.62;
+/** Móvil (< 720px): pista plana, sin inclinación, tarjetas casi contiguas. */
+const FLAT_GAP = 1.05;
+const FLAT_MQ = "(max-width: 719px)";
+const isFlat = () => typeof window !== "undefined" && window.matchMedia(FLAT_MQ).matches;
+const gapNow = () => (isFlat() ? FLAT_GAP : GAP);
 
 const wrap = (d: number, n: number) => {
   let r = ((d % n) + n) % n;
@@ -89,14 +94,19 @@ const wrap = (d: number, n: number) => {
 };
 
 /** Coloca cada tarjeta según su distancia (continua) a la posición actual. */
-const place = (el: HTMLElement, d: number) => {
+const place = (el: HTMLElement, d: number, flat: boolean) => {
   const ad = Math.abs(d);
   const s = el.style;
-  s.transform = `translate3d(${(d * GAP * 100).toFixed(3)}%,0,0) scale(${(1 - Math.min(ad, 2) * 0.13).toFixed(4)}) rotateY(${(Math.max(-1, Math.min(1, d)) * -22).toFixed(2)}deg)`;
-  s.opacity = (ad <= 1 ? 1 - ad * 0.22 : ad <= 2 ? 0.78 * (2 - ad) : 0).toFixed(3);
+  if (flat) {
+    s.transform = `translate3d(${(d * FLAT_GAP * 100).toFixed(3)}%,0,0)`;
+    s.opacity = (ad <= 1 ? 1 - ad * 0.15 : ad <= 1.6 ? 0.85 * ((1.6 - ad) / 0.6) : 0).toFixed(3);
+  } else {
+    s.transform = `translate3d(${(d * GAP * 100).toFixed(3)}%,0,0) scale(${(1 - Math.min(ad, 2) * 0.13).toFixed(4)}) rotateY(${(Math.max(-1, Math.min(1, d)) * -22).toFixed(2)}deg)`;
+    s.opacity = (ad <= 1 ? 1 - ad * 0.22 : ad <= 2 ? 0.78 * (2 - ad) : 0).toFixed(3);
+  }
   s.zIndex = String(Math.round(100 - ad * 10));
-  s.pointerEvents = ad < 1.6 ? "auto" : "none";
-  s.visibility = ad > 2.05 ? "hidden" : "visible";
+  s.pointerEvents = ad < (flat ? 0.6 : 1.6) ? "auto" : "none";
+  s.visibility = ad > (flat ? 1.65 : 2.05) ? "hidden" : "visible";
 };
 
 const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
@@ -133,7 +143,8 @@ const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
     if (n === 0) return;
     let raf = 0;
     let last = performance.now();
-    const unit = () => (slotRefs.current[0]?.offsetWidth ?? 500) * GAP;
+    const unit = () => (slotRefs.current[0]?.offsetWidth ?? 500) * gapNow();
+    const mq = window.matchMedia(FLAT_MQ);
 
     const frame = (now: number) => {
       const dt = Math.min(now - last, 64) / 1000;
@@ -156,7 +167,7 @@ const Carousel: React.FC<{ projects: Project[] }> = ({ projects }) => {
       pos.current = ((pos.current % n) + n) % n;
 
       slotRefs.current.forEach((el, i) => {
-        if (el) place(el, wrap(i - pos.current, n));
+        if (el) place(el, wrap(i - pos.current, n), mq.matches);
       });
       const a = Math.round(pos.current) % n;
       if (a !== activeRef.current) {

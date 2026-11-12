@@ -161,6 +161,7 @@
 
 .hm{
   position: relative;
+  overflow-x: clip; /* nada decorativo debe ensanchar la página en móvil */
   background: var(--cream);
   color: var(--ink);
   font-family: var(--sans);
@@ -427,7 +428,8 @@
 @media (max-width:560px){.hm.ck{flex-direction:column;align-items:stretch;gap:10px;padding:14px}.hm .ck__btns button{flex:1}}
 
 /* ===================== PROYECTOS (GitHub) ===================== */
-.hm .ghc{position:relative;outline:none}
+.hm .ghc{position:relative;outline:none;overflow-x:clip;overflow-y:visible}
+@media (max-width:719px){.hm .ghc{margin-inline:calc(50% - 50vw)}.hm .ghc__stage{perspective:none}.hm .ghc__slot{width:min(400px,calc(100vw - 48px))}}
 .hm .ghc__stage{position:relative;height:640px;perspective:1600px;display:grid;place-items:center;cursor:grab;user-select:none}
 .hm .ghc__stage:active{cursor:grabbing}
 .hm .ghc__slot{position:absolute;width:min(520px,84vw);will-change:transform,opacity;backface-visibility:hidden}
