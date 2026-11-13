@@ -50,7 +50,6 @@ const headers = `/*
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=(), display-capture=(), accelerometer=(), gyroscope=(), magnetometer=(), midi=(), bluetooth=()
   Cross-Origin-Opener-Policy: same-origin
   Content-Security-Policy: ${csp}
-  Cache-Control: public, max-age=0, must-revalidate
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
