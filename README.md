@@ -18,38 +18,108 @@
 
 ## Qué incluye
 
-- **Portafolio y servicios**: páginas web, automatizaciones e IA, cada servicio con una demo interactiva.
-- **Proyectos y laboratorio**: se sincronizan solos desde mis repositorios de GitHub al compilar.
-- **Aprende**: guías en formato tabla periódica (fundamentos web y más), con vista previa en vivo.
-- **Agenda de llamadas** integrada y paleta de comandos con `Ctrl/⌘ + K`.
-- **Responsive y ligero**: animaciones con carga diferida, SEO y sitemap generados automáticamente.
+<table>
+  <tr>
+    <td width="33%" valign="top" align="center">
+      <br />
+      🖥️
+      <br />
+      <strong>Servicios</strong>
+      <br />
+      Páginas web, automatizaciones e IA, cada uno con una demo interactiva.
+      <br /><br />
+    </td>
+    <td width="33%" valign="top" align="center">
+      <br />
+      🗂️
+      <br />
+      <strong>Proyectos</strong>
+      <br />
+      Repositorios de GitHub sincronizados al compilar. Son práctica y piezas personales.
+      <br /><br />
+    </td>
+    <td width="33%" valign="top" align="center">
+      <br />
+      📚
+      <br />
+      <strong>Aprende</strong>
+      <br />
+      Siete tablas periódicas, de los fundamentos web a los agentes de IA, con vista previa en vivo.
+      <br /><br />
+    </td>
+  </tr>
+  <tr>
+    <td width="33%" valign="top" align="center">
+      <br />
+      📅
+      <br />
+      <strong>Agenda y contacto</strong>
+      <br />
+      Formulario (Formspree) y llamadas con Cal.com, solo si aceptas cookies de terceros.
+      <br /><br />
+    </td>
+    <td width="33%" valign="top" align="center">
+      <br />
+      ⌨️
+      <br />
+      <strong>Paleta de comandos</strong>
+      <br />
+      Acceso rápido a secciones y páginas con <code>Ctrl</code> / <code>⌘ + K</code>.
+      <br /><br />
+    </td>
+    <td width="33%" valign="top" align="center">
+      <br />
+      🔒
+      <br />
+      <strong>SEO y seguridad</strong>
+      <br />
+      Metadatos, sitemap y cabeceras de seguridad en Cloudflare Pages.
+      <br /><br />
+    </td>
+  </tr>
+</table>
 
-## Inicio rápido
+## Cómo funciona
 
-```bash
-npm install
-npm run dev      # http://localhost:5173
-npm run build    # genera dist/
+```mermaid
+flowchart TD
+  Nav[Navbar · Inicio, Aprende, Sobre mí] --> Home[Inicio]
+  Nav --> Learn[Aprende]
+  Nav --> Me[Sobre mí]
+  Nav --> Legal[Privacidad, Términos y Cookies]
+
+  Home --> H1[Intro y hero]
+  Home --> H2[Servicios con demos]
+  Home --> H3[Proyectos y laboratorio]
+  Home --> H4[Proceso, FAQ y contacto]
+
+  Learn --> T[7 tablas: web, frameworks, backend, datos, IA, agentes, herramientas]
+
+  H3 -. al compilar .-> Data[GitHub API + projects.json + capturas]
+  H4 -. con consentimiento .-> Cal[Cal.com]
+  H4 --> Form[Formspree]
+
+  Src[Vite] --> Pages[Cloudflare Pages + cabeceras de seguridad]
 ```
 
-## Estructura
+---
 
-```
-src/
-  components/   UI por sección (home, intro, blog, layout, shared)
-  pages/        Rutas: Home, Aprende, About, legales
-  lib/          SEO, consentimiento, GitHub, agenda
-  data/         Proyectos y contenido de Aprende
-public/         Imágenes, íconos, sitemap
-scripts/        Sincronizar GitHub, sitemap, capturas
-docs/           Vista previa del README
-```
+<div align="center">
 
 ## Contacto
 
-[![Email](https://img.shields.io/badge/Email-usquizafranquer@gmail.com-EA4335?logo=gmail&logoColor=white)](mailto:usquizafranquer@gmail.com)
-[![YouTube](https://img.shields.io/badge/YouTube-@abantofrank12-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/@abantofrank12)
-[![GitHub](https://img.shields.io/badge/GitHub-FrankUsqAbant-181717?logo=github&logoColor=white)](https://github.com/FrankUsqAbant)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-frankabanto-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/frankabanto)
-[![Instagram](https://img.shields.io/badge/Instagram-@abantofrank12-E4405F?logo=instagram&logoColor=white)](https://www.instagram.com/abantofrank12)
-[![X](https://img.shields.io/badge/X-@FrankUsqAbanto-000?logo=x&logoColor=white)](https://x.com/FrankUsqAbanto)
+[![Sitio](https://img.shields.io/badge/sitio-abanto.pages.dev-111111?style=for-the-badge)](https://abanto.pages.dev)
+&nbsp;
+[![Email](https://img.shields.io/badge/Email-usquizafranquer@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:usquizafranquer@gmail.com)
+&nbsp;
+[![YouTube](https://img.shields.io/badge/YouTube-@abantofrank12-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@abantofrank12)
+&nbsp;
+[![Instagram](https://img.shields.io/badge/Instagram-@abantofrank12-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/abantofrank12)
+&nbsp;
+[![GitHub](https://img.shields.io/badge/GitHub-FrankUsqAbant-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/FrankUsqAbant)
+&nbsp;
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-in/frankabanto-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/frankabanto)
+&nbsp;
+[![X](https://img.shields.io/badge/X-@FrankUsqAbanto-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/FrankUsqAbanto)
+
+</div>
