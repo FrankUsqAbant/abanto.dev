@@ -48,8 +48,8 @@ docs/           Vista previa del README
 ## Contacto
 
 [![Email](https://img.shields.io/badge/Email-usquizafranquer@gmail.com-EA4335?logo=gmail&logoColor=white)](mailto:usquizafranquer@gmail.com)
-[![YouTube](https://img.shields.io/badge/YouTube-@frankabanto-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/@frankabanto)
+[![YouTube](https://img.shields.io/badge/YouTube-@abantofrank12-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/@abantofrank12)
 [![GitHub](https://img.shields.io/badge/GitHub-FrankUsqAbant-181717?logo=github&logoColor=white)](https://github.com/FrankUsqAbant)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-frankabanto-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/frankabanto)
-[![Instagram](https://img.shields.io/badge/Instagram-@frankabanto-E4405F?logo=instagram&logoColor=white)](https://www.instagram.com/frankabanto)
+[![Instagram](https://img.shields.io/badge/Instagram-@abantofrank12-E4405F?logo=instagram&logoColor=white)](https://www.instagram.com/abantofrank12)
 [![X](https://img.shields.io/badge/X-@FrankUsqAbanto-000?logo=x&logoColor=white)](https://x.com/FrankUsqAbanto)
