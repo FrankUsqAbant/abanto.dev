@@ -13,7 +13,7 @@ export const SOCIALS: SocialLink[] = [
   { name: "YouTube", handle: "@abantofrank12", href: "https://www.youtube.com/@abantofrank12" },
   { name: "GitHub", handle: "FrankUsqAbant", href: "https://github.com/FrankUsqAbant" },
   { name: "LinkedIn", handle: "in/frankabanto", href: "https://www.linkedin.com/in/frankabanto" },
-  { name: "Instagram", handle: "@abantofrank12", href: "https://www.instagram.com/abantofrank12" },
+  { name: "Instagram", handle: "@abanto.dev", href: "https://www.instagram.com/abanto.dev" },
   { name: "X", handle: "@FrankUsqAbanto", href: "https://x.com/FrankUsqAbanto" },
 ];
 

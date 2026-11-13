@@ -5,7 +5,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=(), display-capture=(), accelerometer=(), gyroscope=(), magnetometer=(), midi=(), bluetooth=()
   Cross-Origin-Opener-Policy: same-origin
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'sha256-P27D9iGp2bJsAvyWbJC5pa/bHE+CP5IeaNpmvRaMLjA=' https://app.cal.com https://cal.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://opengraph.githubassets.com https://app.cal.com https://cal.com; font-src 'self'; connect-src 'self' https://api.github.com https://formspree.io https://app.cal.com https://cal.com; frame-src https://app.cal.com https://cal.com; worker-src 'self' blob:; form-action 'self' https://formspree.io; manifest-src 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'sha256-HDE+7fbbwGP4Mj+DuqF++4JMXKxWZwkOAMbkfsy7XtE=' https://app.cal.com https://cal.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://opengraph.githubassets.com https://app.cal.com https://cal.com; font-src 'self'; connect-src 'self' https://api.github.com https://formspree.io https://app.cal.com https://cal.com; frame-src https://app.cal.com https://cal.com; worker-src 'self' blob:; form-action 'self' https://formspree.io; manifest-src 'self'; upgrade-insecure-requests
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
