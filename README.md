@@ -18,66 +18,12 @@
 
 ## Qué incluye
 
-<table>
-  <tr>
-    <td width="33%" valign="top" align="center">
-      <br />
-      🖥️
-      <br />
-      <strong>Servicios</strong>
-      <br />
-      Páginas web, automatizaciones e IA, cada uno con una demo interactiva.
-      <br /><br />
-    </td>
-    <td width="33%" valign="top" align="center">
-      <br />
-      🗂️
-      <br />
-      <strong>Proyectos</strong>
-      <br />
-      Repositorios de GitHub sincronizados al compilar. Son práctica y piezas personales.
-      <br /><br />
-    </td>
-    <td width="33%" valign="top" align="center">
-      <br />
-      📚
-      <br />
-      <strong>Aprende</strong>
-      <br />
-      Siete tablas periódicas, de los fundamentos web a los agentes de IA, con vista previa en vivo.
-      <br /><br />
-    </td>
-  </tr>
-  <tr>
-    <td width="33%" valign="top" align="center">
-      <br />
-      📅
-      <br />
-      <strong>Agenda y contacto</strong>
-      <br />
-      Formulario (Formspree) y llamadas con Cal.com, solo si aceptas cookies de terceros.
-      <br /><br />
-    </td>
-    <td width="33%" valign="top" align="center">
-      <br />
-      ⌨️
-      <br />
-      <strong>Paleta de comandos</strong>
-      <br />
-      Acceso rápido a secciones y páginas con <code>Ctrl</code> / <code>⌘ + K</code>.
-      <br /><br />
-    </td>
-    <td width="33%" valign="top" align="center">
-      <br />
-      🔒
-      <br />
-      <strong>SEO y seguridad</strong>
-      <br />
-      Metadatos, sitemap y cabeceras de seguridad en Cloudflare Pages.
-      <br /><br />
-    </td>
-  </tr>
-</table>
+- 🖥️ **Servicios** — Páginas web, automatizaciones e IA, cada uno con una demo interactiva.
+- 🗂️ **Proyectos** — Repositorios de GitHub sincronizados al compilar. Son práctica y piezas personales.
+- 📚 **Aprende** — Siete tablas periódicas, de los fundamentos web a los agentes de IA, con vista previa en vivo.
+- 📅 **Agenda y contacto** — Formulario (Formspree) y llamadas con Cal.com, solo si aceptas cookies de terceros.
+- ⌨️ **Paleta de comandos** — Acceso rápido a secciones y páginas con `Ctrl` / `⌘ + K`.
+- 🔒 **SEO y seguridad** — Metadatos, sitemap y cabeceras de seguridad en Cloudflare Pages.
 
 ## Cómo funciona
 
@@ -102,24 +48,11 @@ flowchart TD
   Src[Vite] --> Pages[Cloudflare Pages + cabeceras de seguridad]
 ```
 
----
-
-<div align="center">
-
 ## Contacto
 
-[![Sitio](https://img.shields.io/badge/sitio-abanto.pages.dev-111111?style=for-the-badge)](https://abanto.pages.dev)
-&nbsp;
-[![Email](https://img.shields.io/badge/Email-usquizafranquer@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:usquizafranquer@gmail.com)
-&nbsp;
-[![YouTube](https://img.shields.io/badge/YouTube-@abantofrank12-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@abantofrank12)
-&nbsp;
-[![Instagram](https://img.shields.io/badge/Instagram-@abantofrank12-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/abantofrank12)
-&nbsp;
-[![GitHub](https://img.shields.io/badge/GitHub-FrankUsqAbant-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/FrankUsqAbant)
-&nbsp;
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-in/frankabanto-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/frankabanto)
-&nbsp;
-[![X](https://img.shields.io/badge/X-@FrankUsqAbanto-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/FrankUsqAbanto)
-
-</div>
+[![Email](https://img.shields.io/badge/Email-usquizafranquer@gmail.com-EA4335?logo=gmail&logoColor=white)](mailto:usquizafranquer@gmail.com)
+[![YouTube](https://img.shields.io/badge/YouTube-@abantofrank12-FF0000?logo=youtube&logoColor=white)](https://www.youtube.com/@abantofrank12)
+[![GitHub](https://img.shields.io/badge/GitHub-FrankUsqAbant-181717?logo=github&logoColor=white)](https://github.com/FrankUsqAbant)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-frankabanto-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/frankabanto)
+[![Instagram](https://img.shields.io/badge/Instagram-@abantofrank12-E4405F?logo=instagram&logoColor=white)](https://www.instagram.com/abantofrank12)
+[![X](https://img.shields.io/badge/X-@FrankUsqAbanto-000?logo=x&logoColor=white)](https://x.com/FrankUsqAbanto)
