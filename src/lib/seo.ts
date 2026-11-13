@@ -1,5 +1,5 @@
 /** Metadatos por página (SPA): título, descripción, canónica y Open Graph. */
-export const SITE_URL = "https://abanto.dev";
+export const SITE_URL = "https://abanto.pages.dev";
 export const SITE_NAME = "Frank Abanto";
 export const DEFAULT_TITLE = "Frank Abanto — Software e IA hechos a tu medida";
 export const DEFAULT_DESCRIPTION =

@@ -2,7 +2,7 @@
 // cada uno de sus elementos (src/data/periodic/<tabla>.json).
 import { readdir, readFile, writeFile } from "node:fs/promises";
 
-const SITE = "https://abanto.dev";
+const SITE = "https://abanto.pages.dev";
 const ROOT = new URL("..", import.meta.url);
 const dir = new URL("src/data/periodic/", ROOT);
 const today = new Date().toISOString().slice(0, 10);

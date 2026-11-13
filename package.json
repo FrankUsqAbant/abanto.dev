@@ -1,5 +1,6 @@
 {
   "name": "frank-abanto-site",
+  "homepage": "https://abanto.pages.dev",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,6 +8,7 @@
     "dev": "vite",
     "prebuild": "node scripts/fetch-github-projects.mjs && node scripts/generate-sitemap.mjs",
     "build": "vite build",
+    "postbuild": "node scripts/write-headers.mjs",
     "preview": "vite preview",
     "github:sync": "node scripts/fetch-github-projects.mjs",
     "projects:shots": "node scripts/project-shots.mjs",

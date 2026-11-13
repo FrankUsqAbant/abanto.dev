@@ -1,8 +1,9 @@
-<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M50 5L89.4019 27.5V72.5L50 95L10.5981 72.5V27.5L50 5Z" fill="#050505" stroke="#0099ff" stroke-width="6"/>
-  <line x1="25" y1="45" x2="35" y2="45" stroke="#0099ff" stroke-width="2" />
-  <line x1="65" y1="45" x2="75" y2="45" stroke="#0099ff" stroke-width="2" />
-  <circle cx="30" cy="40" r="2" fill="#0099ff" />
-  <circle cx="70" cy="40" r="2" fill="#0099ff" />
-  <text x="50" y="58" text-anchor="middle" fill="#0099ff" style="font-family: monospace; font-weight: 900; font-size: 32px; letter-spacing: -1px;">FA</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="8" fill="#F4F2EE"/>
+  <svg x="1.5" y="1.5" width="29" height="29" viewBox="0 0 128 128"><g>
+    <!-- F con remates serif suaves -->
+    <path fill="#141414" d="M16 22h62.2v8.8H31.6v19.2h35.2v7.8H31.6V97.6H16.0V22zm-2.4 0h2.4v8.8h-6.2V22h6.2zM16 97.6h15.6V106H9.8v-8.4H16z"/>
+    <!-- A oliva, casi a la misma altura de mayúsculas -->
+    <path fill="#5B7B5A" fill-rule="evenodd" d="M86.2 24.2 114.4 106h-11.6l-5.3-13.6H76.2l-5.3 13.6H59.4l26.6-81.8h.2zm-10 50.2h20.6L86.4 48.6z"/>
+  </g></svg>
 </svg>
